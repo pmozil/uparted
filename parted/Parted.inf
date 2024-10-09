@@ -1,0 +1,50 @@
+## @file
+#  Parted.inf
+#
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+##
+
+[Defines]
+  INF_VERSION                 = 0x00010016
+  BASE_NAME                   = Parted
+  FILE_GUID                   = aa31153e-377b-4916-8237-e92c79ebf157
+  MODULE_TYPE                 = UEFI_APPLICATION
+  VERSION_STRING              = 0.1
+  ENTRY_POINT                 = ShellCEntryLib
+
+#
+#  VALID_ARCHITECTURES        = X64
+#
+
+[Packages]
+  StdLib/StdLib.dec
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+
+[LibraryClasses]
+  UefiLib
+  DebugLib
+  LibC
+  LibString
+  LibStdio
+  LibMath
+  LibWchar
+  LibGen
+  LibNetUtil
+  DevMedia
+  PciLib
+  #BsdSocketLib
+  #EfiSocketLib
+
+[BuildOptions]
+  GCC:*_*_*_CC_FLAGS = -Wno-unused-function -Wno-format -Wno-error -fno-strict-aliasing -I$(EDK2_LIBC_PATH)/AppPkg/Applications/Parted/ -I$(EDK2_LIBC_PATH)/AppPkg/Applications/Parted/include/ -I$(EDK2_LIBC_PATH)/AppPkg/Applications/Parted/lib/ -I$(EDK2_LIBC_PATH)/AppPkg/Applications/Parted/libparted/
+
+[Sources]
+    parted/command.c
+    parted/jsonwrt.c
+    parted/strlist.c
+    parted/table.c
+    parted/ui.c
+# parted/parted.c
