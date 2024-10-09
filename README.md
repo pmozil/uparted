@@ -2,6 +2,9 @@
 
 This repo is a port of uparted to UEFI, including the scripts to build it.
 
+## Requirements
+
+libuuid libuuid-devel nasm acpica-tools
 
 ## Building
 
