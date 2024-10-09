@@ -98,3 +98,6 @@ dkms.conf
 # End of https://www.toptal.com/developers/gitignore/api/c++
 
 *.Po
+
+edk2/*
+edk2-libc/*
