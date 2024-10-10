@@ -24,7 +24,7 @@
 #include "argmatch.h"
 #include "closeout.h"
 #include "command.h"
-#include "configmake.h"
+// #include "configmake.h"
 #include "progname.h"
 #include "table.h"
 #include "ui.h"

@@ -605,7 +605,7 @@
 
 /* Define to 1 if you have the declaration of '__fpending', and to 0 if you
    don't. */
-#define HAVE_DECL___FPENDING 1
+#define HAVE_DECL___FPENDING 0
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #define HAVE_DLFCN_H 1
@@ -733,7 +733,7 @@
 /* #undef HAVE_LIBPARTED */
 
 /* have readline */
-/* #undef HAVE_LIBREADLINE */
+#undef HAVE_LIBREADLINE
 
 /* Define to 1 if the bcrypt library is guaranteed to be present. */
 /* #undef HAVE_LIB_BCRYPT */
@@ -857,10 +857,10 @@
 #define HAVE_RAWMEMCHR 1
 
 /* Define to 1 if you have the <readline/history.h> header file. */
-/* #undef HAVE_READLINE_HISTORY_H */
+#undef HAVE_READLINE_HISTORY_H
 
 /* Define to 1 if you have the <readline/readline.h> header file. */
-/* #undef HAVE_READLINE_READLINE_H */
+#undef HAVE_READLINE_READLINE_H
 
 /* Define to 1 if you have the 'readlink' function. */
 #define HAVE_READLINK 1
@@ -935,7 +935,7 @@
 #define HAVE_STDINT_H 1
 
 /* Define to 1 if you have the <stdio_ext.h> header file. */
-#define HAVE_STDIO_EXT_H 1
+#define HAVE_STDIO_EXT_H 0
 
 /* Define to 1 if you have the <stdio.h> header file. */
 #define HAVE_STDIO_H 1

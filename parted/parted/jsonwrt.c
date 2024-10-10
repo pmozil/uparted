@@ -7,6 +7,8 @@
  * Written by Karel Zak <kzak@redhat.com>
  */
 
+#include "config.h"
+
 #include "jsonwrt.h"
 #include <assert.h>
 #include <c-ctype.h>

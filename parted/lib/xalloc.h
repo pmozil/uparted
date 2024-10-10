@@ -9,12 +9,7 @@
 
 typedef size_t idx_t;
 
-void xalloc_die() {
-    printf("No memory left\n");
-
-    exit(EXIT_FAILURE);
-}
-
+void xalloc_die();
 void *xmalloc(size_t s);
 void *ximalloc(idx_t s);
 void *xinmalloc(idx_t n, idx_t s);
