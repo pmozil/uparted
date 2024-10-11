@@ -49,5 +49,5 @@
     parted/strlist.c
     parted/table.c
     parted/ui.c
-    parted/strnlen.c
+    parted/strutils.c
     parted/parted.c

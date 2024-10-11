@@ -29,7 +29,7 @@
 #include <wchar.h>
 
 #include "strlist.h"
-#include "strnlen.h"
+#include "strutils.h"
 #include "xalloc.h"
 
 #ifdef ENABLE_NLS

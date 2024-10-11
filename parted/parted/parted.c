@@ -18,12 +18,14 @@
 */
 
 #include <config.h>
+#include <stdarg.h>
 #include <stdbool.h>
 #include <uuid/uuid.h>
 
 #include "argmatch.h"
 #include "closeout.h"
 #include "command.h"
+#include "strutils.h"
 // #include "configmake.h"
 #include "progname.h"
 #include "table.h"
@@ -94,7 +96,7 @@ static char const *const align_args[] = {"none", "cylinder", "minimal",
 
 static int const align_types[] = {ALIGNMENT_NONE, ALIGNMENT_CYLINDER,
                                   ALIGNMENT_MINIMAL, ALIGNMENT_OPTIMAL};
-ARGMATCH_VERIFY(align_args, align_types);
+// ARGMATCH_VERIFY(align_args, align_types);
 
 typedef struct {
     time_t last_update;
@@ -1863,10 +1865,11 @@ static bool partition_align_check(PedDisk const *disk, PedPartition const *part,
     /* If it isn't aligned and the caller wants an explanation,
        show them the math.  */
     if (!ok && align_err) {
-        if (asprintf(align_err, "%llds %% %llds != %llds", part->geom.start,
-                     pa->grain_size, pa->offset) < 0) {
-            *align_err = NULL;
-        }
+        align_err = NULL;
+        // if (asprintf(align_err, "%llds %% %llds != %llds", part->geom.start,
+        //              pa->grain_size, pa->offset) < 0) {
+        //     *align_err = NULL;
+        // }
     }
     free(pa);
     return ok;
