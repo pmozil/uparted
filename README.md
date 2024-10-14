@@ -47,16 +47,18 @@ Or
 To launch, you need to install OVMF, and export the path to it, like this:
 
 ```sh
-export OVMF_PATH=/usr/share/edk2-ovmf/x64/OVMF.fd
+export OVMF_PATH=<path_to_ovmf>
 ```
 
-And then
+If you installed the ovmf system-wide, it may be located at `/usr/share/edk2-ovmf/x64/OVMF.fd`. You can also compile and install it manually, using `build --platform=OvmfPkg/OvmfPkgX64.dsc --arch=X64 --buildtarget=RELEASE --tagname=GCC5`. Then replace the path with `Build/OvmfX64/RELEASE_GCC5/FV/OVMF_CODE.fd`.
+
+Then run
 
 ```sh
 ./scripts/run_qemu.sh <PATH_TO_EFI_EXEC_OUTPUT_DIR>
 ```
 
-Like this:
+like this:
 
 ```sh
 ./scripts/run_qemu.sh ./Build/AppPkg/DEBUG_GCC/X64/
@@ -64,7 +66,7 @@ Like this:
 
 Where
 ```sh
-[petro@shire uparted]$ ls ./Build/AppPkg/DEBUG_GCC/X64/
+$ ls ./Build/AppPkg/DEBUG_GCC/X64/
 AppPkg               GetHostByDns.debug   Hello.efi                    RecvDgram.debug
 ArithChk.debug       GetHostByDns.efi     Main.debug                   RecvDgram.efi
 ArithChk.efi         GetHostByName.debug  Main.efi                     SetHostName.debug
