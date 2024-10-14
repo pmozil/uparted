@@ -5,7 +5,8 @@ if [ -z $OVMF_PATH ]; then
     exit;
 fi
 
-qemu-system-x86_64 -drive if=pflash,format=raw,file=$OVMF_PATH \
+qemu-system-x86_64 -enable-kvm \
+    -drive if=pflash,format=raw,file=$OVMF_PATH \
     -drive format=raw,file=fat:rw:$1 \
     -nographic \
     -net none
