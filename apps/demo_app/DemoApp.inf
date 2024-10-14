@@ -1,0 +1,27 @@
+## @file
+#   A demo app printing disk info
+#
+
+[Defines]
+  INF_VERSION                    = 0x00010006
+  BASE_NAME                      = DemoApp
+  FILE_GUID                      = 537f1ebd-657f-4eb4-b882-cd6451803f2e
+  MODULE_TYPE                    = UEFI_APPLICATION
+  VERSION_STRING                 = 0.1
+  ENTRY_POINT                    = ShellCEntryLib
+
+#
+#  VALID_ARCHITECTURES           = IA32 X64
+#
+
+[Sources]
+  DemoApp.c
+
+[Packages]
+  StdLib/StdLib.dec
+  MdePkg/MdePkg.dec
+  ShellPkg/ShellPkg.dec
+
+[LibraryClasses]
+  LibC
+  LibStdio
