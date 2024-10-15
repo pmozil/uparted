@@ -25,3 +25,6 @@
 [LibraryClasses]
   LibC
   LibStdio
+
+[Protocols]
+    gEfiBlockIoProtocolGuid
