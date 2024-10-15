@@ -10,11 +10,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-EFI_STATUS GetPartitionNames(OUT EFI_DEVICE_PATH_PROTOCOL ***partitions,
+EFI_STATUS GetPartitionNames(OUT EFI_DEVICE_PATH_PROTOCOL ***disks,
                              OUT UINTN *partitionCount) {
     EFI_STATUS status = EFI_SUCCESS;
 
-    if (partitions == NULL || partitionCount == NULL) {
+    if (disks == NULL || partitionCount == NULL) {
         puts("GetPartitionNames: invalid parameters");
         return EFI_INVALID_PARAMETER;
     }
@@ -40,9 +40,9 @@ EFI_STATUS GetPartitionNames(OUT EFI_DEVICE_PATH_PROTOCOL ***partitions,
         }
     }
 
-    *partitions = (EFI_DEVICE_PATH_PROTOCOL **)malloc(
+    *disks = (EFI_DEVICE_PATH_PROTOCOL **)malloc(
         *partitionCount * sizeof(EFI_DEVICE_PATH_PROTOCOL *));
-    if (*partitions == NULL) {
+    if (*disks == NULL) {
         puts("GetPartitionNames: no memory(");
         return EFI_OUT_OF_RESOURCES;
     }
@@ -54,7 +54,7 @@ EFI_STATUS GetPartitionNames(OUT EFI_DEVICE_PATH_PROTOCOL ***partitions,
         while (path != NULL && !IsDevicePathEndType(path)) {
             if (DevicePathType(path) == MEDIA_DEVICE_PATH &&
                 DevicePathSubType(path) == MEDIA_HARDDRIVE_DP) {
-                (*partitions)[curIdx++] = path;
+                (*disks)[curIdx++] = path;
             }
             path = NextDevicePathNode(path);
         }
@@ -63,26 +63,26 @@ EFI_STATUS GetPartitionNames(OUT EFI_DEVICE_PATH_PROTOCOL ***partitions,
 }
 
 int main(IN int Argc, IN char **Argv) {
-    EFI_DEVICE_PATH_PROTOCOL **partitions = NULL;
+    EFI_DEVICE_PATH_PROTOCOL **disks = NULL;
     UINTN n_part = 0;
-    EFI_STATUS status = GetPartitionNames(&partitions, &n_part);
+    EFI_STATUS status = GetPartitionNames(&disks, &n_part);
 
     if (EFI_ERROR(status)) {
-        puts("Error getting partitions\n");
+        puts("Error getting disks\n");
         return status;
     }
 
-    if (partitions == NULL) {
+    if (disks == NULL) {
         puts("Error - out of memory!");
         return status;
     }
 
     for (UINTN i = 0; i < n_part; i++) {
         Print(L"Device Path %d - %s\n", i,
-              ConvertDevicePathToText(partitions[i], FALSE, TRUE));
+              ConvertDevicePathToText(disks[i], FALSE, TRUE));
     }
 
-    free(partitions);
+    free(disks);
 
     return 0;
 }

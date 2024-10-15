@@ -8,5 +8,6 @@ fi
 qemu-system-x86_64 -enable-kvm \
     -drive if=pflash,format=raw,file=$OVMF_PATH \
     -drive format=raw,file=fat:rw:$1 \
+    -drive format=raw,file=./data/image.img \
     -nographic \
     -net none
