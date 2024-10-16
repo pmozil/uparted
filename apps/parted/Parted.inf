@@ -44,6 +44,10 @@
 [Sources]
     lib/closeout.c
     lib/close-stream.c
+    libparted/disk.c
+    libparted/device.c
+    libparted/timer.c
+    libparted/libparted.c
     parted/command.c
     parted/jsonwrt.c
     parted/strlist.c
