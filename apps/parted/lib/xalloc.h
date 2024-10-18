@@ -28,4 +28,5 @@ void *xmemdup(void const *p, size_t s);
 void *ximemdup(void const *p, idx_t s);
 char *ximemdup0(void const *p, idx_t s);
 char *xstrdup(char const *str);
+
 #endif

@@ -42,8 +42,11 @@
   GCC:*_*_*_CC_FLAGS = -Wno-unused-function -Wno-format -Wno-error -fno-strict-aliasing -I$(EDK2_LIBC_PATH)/AppPkg/Applications/Parted/ -I$(EDK2_LIBC_PATH)/AppPkg/Applications/Parted/include/ -I$(EDK2_LIBC_PATH)/AppPkg/Applications/Parted/lib/ -I$(EDK2_LIBC_PATH)/AppPkg/Applications/Parted/libparted/
 
 [Sources]
+    lib/version-etc.c
     lib/closeout.c
     lib/close-stream.c
+    lib/xalloc.c
+    libparted/exception.c
     libparted/disk.c
     libparted/device.c
     libparted/timer.c
