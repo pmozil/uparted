@@ -20,17 +20,17 @@
 #ifndef _EXT2_H
 #define _EXT2_H
 
-#include <parted/parted.h>
 #include <parted/debug.h>
+#include <parted/parted.h>
 #include <sys/types.h>
 
 #include <inttypes.h>
 
 #if ENABLE_NLS
-#  include <libintl.h>
-#  define _(String) dgettext (PACKAGE, String)
+#include <libintl.h>
+#define _(String) dgettext(PACKAGE, String)
 #else
-#  define _(String) (String)
+#define _(String) (String)
 #endif /* ENABLE_NLS */
 
 typedef u_int32_t blk_t;
@@ -41,39 +41,38 @@ typedef u_int32_t blk_t;
 #include "ext2_fs.h"
 #endif
 
-struct ext2_fs
-{
-	struct ext2_dev_handle		 *devhandle;
+struct ext2_fs {
+  struct ext2_dev_handle *devhandle;
 
-	struct ext2_super_block		  sb;
-	struct ext2_group_desc		 *gd;
-	struct ext2_buffer_cache	 *bc;
-	int				  metadirty;			/* 0:all sb&gd copies clean
-									   1:all sb&gd copies dirty
-									   2:only first sb&gd copy clean */
+  struct ext2_super_block sb;
+  struct ext2_group_desc *gd;
+  struct ext2_buffer_cache *bc;
+  int metadirty; /* 0:all sb&gd copies clean
+                    1:all sb&gd copies dirty
+                    2:only first sb&gd copy clean */
 
-	int				  dynamic_version;
-	int				  sparse;			/* sparse superblocks */
-	int				  has_journal;			/* journal */
-	int				  has_internal_journal;
+  int dynamic_version;
+  int sparse;      /* sparse superblocks */
+  int has_journal; /* journal */
+  int has_internal_journal;
 
-	int				  blocksize;
-	int				  logsize;
-	blk_t				  adminblocks;
-	blk_t				  gdblocks;
-	blk_t				  itoffset;
-	blk_t				  inodeblocks;
-	int				  numgroups;
-	int				  r_frac;			/* reserved % of blocks */
+  int blocksize;
+  int logsize;
+  blk_t adminblocks;
+  blk_t gdblocks;
+  blk_t itoffset;
+  blk_t inodeblocks;
+  int numgroups;
+  int r_frac; /* reserved % of blocks */
 
-	unsigned char			 *relocator_pool;
-	unsigned char			 *relocator_pool_end;
+  unsigned char *relocator_pool;
+  unsigned char *relocator_pool_end;
 
-	int				 opt_debug;
-	int				 opt_safe;
-	int				 opt_verbose;
+  int opt_debug;
+  int opt_safe;
+  int opt_verbose;
 
-	void				 *journal;
+  void *journal;
 };
 
 #endif

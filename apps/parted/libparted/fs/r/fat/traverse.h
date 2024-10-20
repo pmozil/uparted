@@ -22,54 +22,55 @@
 
 #include "fatio.h"
 
-typedef struct _FatTraverseInfo		FatTraverseInfo;
+typedef struct _FatTraverseInfo FatTraverseInfo;
 
 struct _FatTraverseInfo {
-	PedFileSystem*		fs;
-	char*			dir_name;
+  PedFileSystem *fs;
+  char *dir_name;
 
-	int			is_legacy_root_dir;
-	int			dirty;
-	int			eof;
+  int is_legacy_root_dir;
+  int dirty;
+  int eof;
 
-	FatDirEntry*		dir_entries;
-	int			current_entry;
-	FatCluster		this_buffer, next_buffer;
-	int			buffer_size;
+  FatDirEntry *dir_entries;
+  int current_entry;
+  FatCluster this_buffer, next_buffer;
+  int buffer_size;
 };
 
-extern int fat_traverse_entries_per_buffer (FatTraverseInfo* trav_info);
+extern int fat_traverse_entries_per_buffer(FatTraverseInfo *trav_info);
 
 /* starts traversal at an arbitary cluster.  if start_cluster==0, then uses
    root directory */
-extern FatTraverseInfo* fat_traverse_begin (PedFileSystem* fs,
-					    FatCluster start_cluster,
-					    const char* dir_name);
+extern FatTraverseInfo *fat_traverse_begin(PedFileSystem *fs,
+                                           FatCluster start_cluster,
+                                           const char *dir_name);
 
-extern int fat_traverse_complete (FatTraverseInfo* trav_info);
+extern int fat_traverse_complete(FatTraverseInfo *trav_info);
 
-extern FatTraverseInfo* fat_traverse_directory (FatTraverseInfo* trav_info,
-						FatDirEntry* parent);
+extern FatTraverseInfo *fat_traverse_directory(FatTraverseInfo *trav_info,
+                                               FatDirEntry *parent);
 
-extern void fat_traverse_mark_dirty (FatTraverseInfo* trav_info);
+extern void fat_traverse_mark_dirty(FatTraverseInfo *trav_info);
 
-extern FatDirEntry* fat_traverse_next_dir_entry (FatTraverseInfo* trav_info);
+extern FatDirEntry *fat_traverse_next_dir_entry(FatTraverseInfo *trav_info);
 
-extern FatCluster fat_dir_entry_get_first_cluster (FatDirEntry* dir_entry,
-						   PedFileSystem* fs);
+extern FatCluster fat_dir_entry_get_first_cluster(FatDirEntry *dir_entry,
+                                                  PedFileSystem *fs);
 
-extern void fat_dir_entry_set_first_cluster (FatDirEntry* dir_entry,
-					PedFileSystem* fs, FatCluster cluster);
+extern void fat_dir_entry_set_first_cluster(FatDirEntry *dir_entry,
+                                            PedFileSystem *fs,
+                                            FatCluster cluster);
 
-extern uint32_t fat_dir_entry_get_length (FatDirEntry* dir_entry);
+extern uint32_t fat_dir_entry_get_length(FatDirEntry *dir_entry);
 
-extern int fat_dir_entry_is_null_term (const FatDirEntry* dir_entry);
-extern int fat_dir_entry_is_file (FatDirEntry* dir_entry);
-extern int fat_dir_entry_is_system_file (FatDirEntry* dir_entry);
-extern int fat_dir_entry_is_directory (FatDirEntry* dir_entry);
-extern void fat_dir_entry_get_name (const FatDirEntry* dir_entry, char* result);
-extern int fat_dir_entry_is_active (FatDirEntry* dir_entry);
-extern int fat_dir_entry_has_first_cluster (FatDirEntry* dir_entry,
-					    PedFileSystem* fs);
+extern int fat_dir_entry_is_null_term(const FatDirEntry *dir_entry);
+extern int fat_dir_entry_is_file(FatDirEntry *dir_entry);
+extern int fat_dir_entry_is_system_file(FatDirEntry *dir_entry);
+extern int fat_dir_entry_is_directory(FatDirEntry *dir_entry);
+extern void fat_dir_entry_get_name(const FatDirEntry *dir_entry, char *result);
+extern int fat_dir_entry_is_active(FatDirEntry *dir_entry);
+extern int fat_dir_entry_has_first_cluster(FatDirEntry *dir_entry,
+                                           PedFileSystem *fs);
 
 #endif /* TRAVERSE_H_INCLUDED */

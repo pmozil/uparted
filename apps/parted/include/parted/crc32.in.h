@@ -29,7 +29,7 @@
  * The polynomial used is 0xedb88320.
  */
 
-extern uint32_t __efi_crc32 (const void *buf, unsigned long len,
-			     uint32_t seed) _GL_ATTRIBUTE_PURE;
+extern uint32_t __efi_crc32(const void *buf, unsigned long len,
+                            uint32_t seed) _GL_ATTRIBUTE_PURE;
 
 #endif /* _CRC32_H */

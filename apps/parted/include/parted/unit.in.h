@@ -32,7 +32,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-#define PED_SECTOR_SIZE_DEFAULT   512LL
+#define PED_SECTOR_SIZE_DEFAULT 512LL
 #define PED_KILOBYTE_SIZE 1000LL
 #define PED_MEGABYTE_SIZE 1000000LL
 #define PED_GIGABYTE_SIZE 1000000000LL
@@ -46,47 +46,45 @@
  * Human-friendly unit for representation of a location within device
  */
 typedef enum {
-	PED_UNIT_SECTOR,
-	PED_UNIT_BYTE,
-	PED_UNIT_KILOBYTE,
-	PED_UNIT_MEGABYTE,
-	PED_UNIT_GIGABYTE,
-	PED_UNIT_TERABYTE,
-	PED_UNIT_COMPACT,
-	PED_UNIT_CYLINDER,
-	PED_UNIT_CHS,
-	PED_UNIT_PERCENT,
-	PED_UNIT_KIBIBYTE,
-	PED_UNIT_MEBIBYTE,
-	PED_UNIT_GIBIBYTE,
-	PED_UNIT_TEBIBYTE
+  PED_UNIT_SECTOR,
+  PED_UNIT_BYTE,
+  PED_UNIT_KILOBYTE,
+  PED_UNIT_MEGABYTE,
+  PED_UNIT_GIGABYTE,
+  PED_UNIT_TERABYTE,
+  PED_UNIT_COMPACT,
+  PED_UNIT_CYLINDER,
+  PED_UNIT_CHS,
+  PED_UNIT_PERCENT,
+  PED_UNIT_KIBIBYTE,
+  PED_UNIT_MEBIBYTE,
+  PED_UNIT_GIBIBYTE,
+  PED_UNIT_TEBIBYTE
 } PedUnit;
 
 #define PED_UNIT_FIRST PED_UNIT_SECTOR
 #define PED_UNIT_LAST PED_UNIT_TEBIBYTE
 
-extern long long ped_unit_get_size (const PedDevice* dev, PedUnit unit);
-extern const char *ped_unit_get_name (PedUnit unit)
-  _GL_ATTRIBUTE_CONST;
-extern PedUnit ped_unit_get_by_name (const char* unit_name) _GL_ATTRIBUTE_PURE;
+extern long long ped_unit_get_size(const PedDevice *dev, PedUnit unit);
+extern const char *ped_unit_get_name(PedUnit unit) _GL_ATTRIBUTE_CONST;
+extern PedUnit ped_unit_get_by_name(const char *unit_name) _GL_ATTRIBUTE_PURE;
 
-extern void ped_unit_set_default (PedUnit unit);
-extern PedUnit ped_unit_get_default ();
+extern void ped_unit_set_default(PedUnit unit);
+extern PedUnit ped_unit_get_default();
 
-extern char* ped_unit_format_byte (const PedDevice* dev, PedSector byte);
-extern char* ped_unit_format_custom_byte (const PedDevice* dev, PedSector byte,
-					  PedUnit unit);
+extern char *ped_unit_format_byte(const PedDevice *dev, PedSector byte);
+extern char *ped_unit_format_custom_byte(const PedDevice *dev, PedSector byte,
+                                         PedUnit unit);
 
-extern char* ped_unit_format (const PedDevice* dev, PedSector sector);
-extern char* ped_unit_format_custom (const PedDevice* dev, PedSector sector,
-				     PedUnit unit);
+extern char *ped_unit_format(const PedDevice *dev, PedSector sector);
+extern char *ped_unit_format_custom(const PedDevice *dev, PedSector sector,
+                                    PedUnit unit);
 
-extern int ped_unit_parse (const char* str, const PedDevice* dev,
-                           PedSector* sector,
-			   PedGeometry** range);
-extern int ped_unit_parse_custom (const char* str, const PedDevice* dev,
-				  PedUnit unit, PedSector* sector,
-				  PedGeometry** range);
+extern int ped_unit_parse(const char *str, const PedDevice *dev,
+                          PedSector *sector, PedGeometry **range);
+extern int ped_unit_parse_custom(const char *str, const PedDevice *dev,
+                                 PedUnit unit, PedSector *sector,
+                                 PedGeometry **range);
 
 #endif /* PED_UNIT_H_INCLUDED */
 

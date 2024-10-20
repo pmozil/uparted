@@ -19,25 +19,25 @@
 #define PED_ARCH_LINUX_H_INCLUDED
 
 #if HAVE_BLKID_BLKID_H
-#  include <blkid/blkid.h>
+#include <blkid/blkid.h>
 #endif
 
-#define LINUX_SPECIFIC(dev)	((LinuxSpecific*) (dev)->arch_specific)
+#define LINUX_SPECIFIC(dev) ((LinuxSpecific *)(dev)->arch_specific)
 
-typedef	struct _LinuxSpecific	LinuxSpecific;
+typedef struct _LinuxSpecific LinuxSpecific;
 
 struct _LinuxSpecific {
-	int	fd;
-	int	major;
-	int	minor;
-	char*	dmtype;         /**< device map target type */
+  int fd;
+  int major;
+  int minor;
+  char *dmtype; /**< device map target type */
 #if defined __s390__ || defined __s390x__
-	unsigned int real_sector_size;
-	unsigned int devno;
+  unsigned int real_sector_size;
+  unsigned int devno;
 #endif
 #if USE_BLKID
-        blkid_probe probe;
-        blkid_topology topology;
+  blkid_probe probe;
+  blkid_topology topology;
 #endif
 };
 

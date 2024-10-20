@@ -20,82 +20,66 @@
 #ifndef PED_CONSTRAINT_H_INCLUDED
 #define PED_CONSTRAINT_H_INCLUDED
 
-typedef struct _PedConstraint	PedConstraint;
+typedef struct _PedConstraint PedConstraint;
 
 #include <parted/device.h>
 #include <parted/geom.h>
 #include <parted/natmath.h>
 
 struct _PedConstraint {
-	PedAlignment*	start_align;
-	PedAlignment*	end_align;
-	PedGeometry*	start_range;
-	PedGeometry*	end_range;
-	PedSector	min_size;
-	PedSector	max_size;
+  PedAlignment *start_align;
+  PedAlignment *end_align;
+  PedGeometry *start_range;
+  PedGeometry *end_range;
+  PedSector min_size;
+  PedSector max_size;
 };
 
-extern int
-ped_constraint_init (
-	PedConstraint* constraint,
-	const PedAlignment* start_align,
-	const PedAlignment* end_align,
-	const PedGeometry* start_range,
-	const PedGeometry* end_range,
-	PedSector min_size,
-	PedSector max_size);
+extern int ped_constraint_init(PedConstraint *constraint,
+                               const PedAlignment *start_align,
+                               const PedAlignment *end_align,
+                               const PedGeometry *start_range,
+                               const PedGeometry *end_range, PedSector min_size,
+                               PedSector max_size);
 
-extern PedConstraint*
-ped_constraint_new (
-	const PedAlignment* start_align,
-	const PedAlignment* end_align,
-	const PedGeometry* start_range,
-	const PedGeometry* end_range,
-	PedSector min_size,
-	PedSector max_size);
+extern PedConstraint *ped_constraint_new(const PedAlignment *start_align,
+                                         const PedAlignment *end_align,
+                                         const PedGeometry *start_range,
+                                         const PedGeometry *end_range,
+                                         PedSector min_size,
+                                         PedSector max_size);
 
-extern PedConstraint*
-ped_constraint_new_from_min_max (
-	const PedGeometry* min,
-	const PedGeometry* max);
+extern PedConstraint *ped_constraint_new_from_min_max(const PedGeometry *min,
+                                                      const PedGeometry *max);
 
-extern PedConstraint*
-ped_constraint_new_from_min (const PedGeometry* min);
+extern PedConstraint *ped_constraint_new_from_min(const PedGeometry *min);
 
-extern PedConstraint*
-ped_constraint_new_from_max (const PedGeometry* max);
+extern PedConstraint *ped_constraint_new_from_max(const PedGeometry *max);
 
-extern PedConstraint*
-ped_constraint_duplicate (const PedConstraint* constraint);
+extern PedConstraint *ped_constraint_duplicate(const PedConstraint *constraint);
 
-extern void
-ped_constraint_done (PedConstraint* constraint);
+extern void ped_constraint_done(PedConstraint *constraint);
 
-extern void
-ped_constraint_destroy (PedConstraint* constraint);
+extern void ped_constraint_destroy(PedConstraint *constraint);
 
-extern PedConstraint*
-ped_constraint_intersect (const PedConstraint* a, const PedConstraint* b);
+extern PedConstraint *ped_constraint_intersect(const PedConstraint *a,
+                                               const PedConstraint *b);
 
-extern PedGeometry*
-ped_constraint_solve_max (const PedConstraint* constraint);
+extern PedGeometry *ped_constraint_solve_max(const PedConstraint *constraint);
 
-extern PedGeometry*
-ped_constraint_solve_nearest (
-	const PedConstraint* constraint, const PedGeometry* geom);
+extern PedGeometry *
+ped_constraint_solve_nearest(const PedConstraint *constraint,
+                             const PedGeometry *geom);
 
-extern int
-ped_constraint_is_solution (const PedConstraint* constraint,
-			    const PedGeometry* geom)
+extern int ped_constraint_is_solution(const PedConstraint *constraint,
+                                      const PedGeometry *geom)
 #if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 96)
-  __attribute ((__pure__))
+    __attribute((__pure__))
 #endif
-;
+    ;
 
-extern PedConstraint*
-ped_constraint_any (const PedDevice* dev);
+extern PedConstraint *ped_constraint_any(const PedDevice *dev);
 
-extern PedConstraint*
-ped_constraint_exact (const PedGeometry* geom);
+extern PedConstraint *ped_constraint_exact(const PedGeometry *geom);
 
 #endif /* PED_CONSTRAINT_H_INCLUDED */

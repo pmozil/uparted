@@ -24,23 +24,23 @@ typedef enum _FatClusterFlag FatClusterFlag;
 typedef struct _FatClusterInfo FatClusterInfo;
 
 enum _FatClusterFlag {
-	FAT_FLAG_FREE=0,
-	FAT_FLAG_FILE=1,
-	FAT_FLAG_DIRECTORY=2,
-	FAT_FLAG_BAD=3
+  FAT_FLAG_FREE = 0,
+  FAT_FLAG_FILE = 1,
+  FAT_FLAG_DIRECTORY = 2,
+  FAT_FLAG_BAD = 3
 };
 
-struct __attribute__ ((packed)) _FatClusterInfo {
-	unsigned int    units_used:6;   /* 1 unit = cluster_size / 64 */
-	FatClusterFlag  flag:2;
+struct __attribute__((packed)) _FatClusterInfo {
+  unsigned int units_used : 6; /* 1 unit = cluster_size / 64 */
+  FatClusterFlag flag : 2;
 };
 
-extern int fat_collect_cluster_info (PedFileSystem *fs);
-extern FatClusterFlag fat_get_cluster_flag (PedFileSystem* fs,
-					    FatCluster cluster);
-extern PedSector fat_get_cluster_usage (PedFileSystem* fs, FatCluster cluster);
-extern FatClusterFlag fat_get_fragment_flag (PedFileSystem* fs,
-					     FatFragment frag);
-extern int fat_is_fragment_active (PedFileSystem* fs, FatFragment frag);
+extern int fat_collect_cluster_info(PedFileSystem *fs);
+extern FatClusterFlag fat_get_cluster_flag(PedFileSystem *fs,
+                                           FatCluster cluster);
+extern PedSector fat_get_cluster_usage(PedFileSystem *fs, FatCluster cluster);
+extern FatClusterFlag fat_get_fragment_flag(PedFileSystem *fs,
+                                            FatFragment frag);
+extern int fat_is_fragment_active(PedFileSystem *fs, FatFragment frag);
 
 #endif /* COUNT_H_INCLUDED */

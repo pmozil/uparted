@@ -18,60 +18,53 @@
 
 #include <config.h>
 
-#include <parted/parted.h>
 #include <parted/endian.h>
+#include <parted/parted.h>
 
 /* Located 64k inside the partition (start of the first btrfs superblock) */
 #define BTRFS_MAGIC 0x4D5F53665248425FULL /* ascii _BHRfS_M, no null */
 #define BTRFS_CSUM_SIZE 32
 #define BTRFS_FSID_SIZE 16
 
+static PedGeometry *btrfs_probe(PedGeometry *geom) {
+  union {
+    struct {
+      /* Just enough of the btrfs_super_block to get the magic */
+      uint8_t csum[BTRFS_CSUM_SIZE];
+      uint8_t fsid[BTRFS_FSID_SIZE];
+      uint64_t bytenr;
+      uint64_t flags;
+      uint64_t magic;
+    } sb;
+    int8_t sector[8192];
+  } buf;
+  PedSector offset = (64 * 1024) / geom->dev->sector_size;
 
-static PedGeometry*
-btrfs_probe (PedGeometry* geom)
-{
-        union {
-            struct {
-                /* Just enough of the btrfs_super_block to get the magic */
-                uint8_t csum[BTRFS_CSUM_SIZE];
-                uint8_t fsid[BTRFS_FSID_SIZE];
-                uint64_t bytenr;
-                uint64_t flags;
-                uint64_t magic;
-            } sb;
-            int8_t      sector[8192];
-        } buf;
-        PedSector offset = (64*1024)/geom->dev->sector_size;
+  if (geom->length < offset + 1)
+    return 0;
+  if (!ped_geometry_read(geom, &buf, offset, 1))
+    return 0;
 
-        if (geom->length < offset+1)
-                return 0;
-        if (!ped_geometry_read (geom, &buf, offset, 1))
-                return 0;
-
-        if (PED_LE64_TO_CPU(buf.sb.magic) == BTRFS_MAGIC) {
-                return ped_geometry_new (geom->dev, geom->start, geom->length);
-        }
-        return NULL;
+  if (PED_LE64_TO_CPU(buf.sb.magic) == BTRFS_MAGIC) {
+    return ped_geometry_new(geom->dev, geom->start, geom->length);
+  }
+  return NULL;
 }
 
 static PedFileSystemOps btrfs_ops = {
-        probe:          btrfs_probe,
+  probe : btrfs_probe,
 };
 
 static PedFileSystemType btrfs_type = {
-        next:   NULL,
-        ops:    &btrfs_ops,
-        name:   "btrfs",
+  next : NULL,
+  ops : &btrfs_ops,
+  name : "btrfs",
 };
 
-void
-ped_file_system_btrfs_init ()
-{
-        ped_file_system_type_register (&btrfs_type);
+void ped_file_system_btrfs_init() {
+  ped_file_system_type_register(&btrfs_type);
 }
 
-void
-ped_file_system_btrfs_done ()
-{
-        ped_file_system_type_unregister (&btrfs_type);
+void ped_file_system_btrfs_done() {
+  ped_file_system_type_unregister(&btrfs_type);
 }

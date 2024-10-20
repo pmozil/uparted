@@ -17,4 +17,4 @@
 
 #include <stdio.h>
 
-int close_stream (FILE *stream);
+int close_stream(FILE *stream);

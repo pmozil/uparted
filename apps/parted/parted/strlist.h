@@ -23,44 +23,44 @@
 #include <wchar.h>
 
 #ifndef ENABLE_NLS
-#	define L_(str) str
-#       ifdef wchar_t
-#               undef wchar_t
-#       endif
-#       define wchar_t char
+#define L_(str) str
+#ifdef wchar_t
+#undef wchar_t
+#endif
+#define wchar_t char
 #endif
 
 typedef struct _StrList StrList;
 struct _StrList {
-	StrList*	next;
-	const wchar_t*	str;
+  StrList *next;
+  const wchar_t *str;
 };
 
-extern char* language;
-extern char* gettext_charset;
-extern char* term_charset;
+extern char *language;
+extern char *gettext_charset;
+extern char *term_charset;
 
-extern StrList* str_list_create (const char* first, ...);
-extern StrList* str_list_create_unique (const char* first, ...);
-extern void str_list_destroy (StrList* list);
-extern void str_list_destroy_node (StrList* list);
+extern StrList *str_list_create(const char *first, ...);
+extern StrList *str_list_create_unique(const char *first, ...);
+extern void str_list_destroy(StrList *list);
+extern void str_list_destroy_node(StrList *list);
 
-extern StrList* str_list_duplicate (const StrList* list);
-extern StrList* str_list_duplicate_node (const StrList* list);
-extern StrList* str_list_insert (StrList* list, const char* str);
-extern StrList* str_list_append (StrList* list, const char* str);
-extern StrList* str_list_append_unique (StrList* list, const char* str);
-extern StrList* str_list_join (StrList* a, StrList* b);
-extern char* str_list_convert (const StrList* list);
-extern char* str_list_convert_node (const StrList* list);
+extern StrList *str_list_duplicate(const StrList *list);
+extern StrList *str_list_duplicate_node(const StrList *list);
+extern StrList *str_list_insert(StrList *list, const char *str);
+extern StrList *str_list_append(StrList *list, const char *str);
+extern StrList *str_list_append_unique(StrList *list, const char *str);
+extern StrList *str_list_join(StrList *a, StrList *b);
+extern char *str_list_convert(const StrList *list);
+extern char *str_list_convert_node(const StrList *list);
 
-extern void str_list_print (const StrList* list, FILE *fp);
-extern void str_list_print_wrap (const StrList* list, int line_length,
-				 int offset, int indent, FILE *fp);
-extern int str_list_match_any (const StrList* list, const char* str);
-extern int str_list_match_node (const StrList* list, const char* str);
-extern StrList* str_list_match (const StrList* list, const char* str);
+extern void str_list_print(const StrList *list, FILE *fp);
+extern void str_list_print_wrap(const StrList *list, int line_length,
+                                int offset, int indent, FILE *fp);
+extern int str_list_match_any(const StrList *list, const char *str);
+extern int str_list_match_node(const StrList *list, const char *str);
+extern StrList *str_list_match(const StrList *list, const char *str);
 
-extern int str_list_length (const StrList* list) _GL_ATTRIBUTE_PURE;
+extern int str_list_length(const StrList *list) _GL_ATTRIBUTE_PURE;
 
 #endif /* STRLIST_H_INCLUDED */

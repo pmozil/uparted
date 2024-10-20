@@ -20,16 +20,14 @@
 #ifndef _PROBE_H
 #define _PROBE_H
 
-#include <parted/parted.h>
-#include <parted/endian.h>
 #include <parted/debug.h>
+#include <parted/endian.h>
+#include <parted/parted.h>
 
 #include "hfs.h"
 
-int
-hfsc_can_use_geom (PedGeometry* geom);
+int hfsc_can_use_geom(PedGeometry *geom);
 
-PedGeometry*
-hfs_and_wrapper_probe (PedGeometry* geom);
+PedGeometry *hfs_and_wrapper_probe(PedGeometry *geom);
 
 #endif /* _PROBE_H */

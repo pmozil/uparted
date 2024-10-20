@@ -17,18 +17,18 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
 #ifndef CLOSEOUT_H
-# define CLOSEOUT_H 1
+#define CLOSEOUT_H 1
 
-# ifdef __cplusplus
+#ifdef __cplusplus
 extern "C" {
-# endif
+#endif
 
-void close_stdout_set_file_name (const char *file);
-void close_stdout_set_ignore_EPIPE (bool ignore);
-void close_stdout (void);
+void close_stdout_set_file_name(const char *file);
+void close_stdout_set_ignore_EPIPE(bool ignore);
+void close_stdout(void);
 
-# ifdef __cplusplus
+#ifdef __cplusplus
 }
-# endif
+#endif
 
 #endif

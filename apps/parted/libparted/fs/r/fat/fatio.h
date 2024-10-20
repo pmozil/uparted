@@ -22,28 +22,28 @@
 
 #include "fat.h"
 
-extern int fat_read_fragments (PedFileSystem* fs, char* buf, FatFragment frag,
-			       FatFragment count);
-extern int fat_write_fragments (PedFileSystem* fs, char* buf, FatFragment frag,
-			        FatFragment count);
-extern int fat_write_sync_fragments (PedFileSystem* fs, char* buf,
-				     FatFragment frag, FatFragment count);
+extern int fat_read_fragments(PedFileSystem *fs, char *buf, FatFragment frag,
+                              FatFragment count);
+extern int fat_write_fragments(PedFileSystem *fs, char *buf, FatFragment frag,
+                               FatFragment count);
+extern int fat_write_sync_fragments(PedFileSystem *fs, char *buf,
+                                    FatFragment frag, FatFragment count);
 
-extern int fat_read_fragment (PedFileSystem* fs, char* buf, FatFragment frag);
-extern int fat_write_fragment (PedFileSystem* fs, char* buf, FatFragment frag);
-extern int fat_write_sync_fragment (PedFileSystem* fs, char* buf,
-				    FatFragment frag);
+extern int fat_read_fragment(PedFileSystem *fs, char *buf, FatFragment frag);
+extern int fat_write_fragment(PedFileSystem *fs, char *buf, FatFragment frag);
+extern int fat_write_sync_fragment(PedFileSystem *fs, char *buf,
+                                   FatFragment frag);
 
-extern int fat_read_clusters (PedFileSystem* fs, char* buf, FatCluster cluster,
-			      FatCluster count);
-extern int fat_write_clusters (PedFileSystem* fs, char* buf, FatCluster cluster,
-			       FatCluster count);
-extern int fat_write_sync_clusters (PedFileSystem* fs, char* buf,
-				    FatCluster cluster, FatCluster count);
+extern int fat_read_clusters(PedFileSystem *fs, char *buf, FatCluster cluster,
+                             FatCluster count);
+extern int fat_write_clusters(PedFileSystem *fs, char *buf, FatCluster cluster,
+                              FatCluster count);
+extern int fat_write_sync_clusters(PedFileSystem *fs, char *buf,
+                                   FatCluster cluster, FatCluster count);
 
-extern int fat_read_cluster (PedFileSystem* fs, char *buf, FatCluster cluster);
-extern int fat_write_cluster (PedFileSystem* fs, char *buf, FatCluster cluster);
-extern int fat_write_sync_cluster (PedFileSystem* fs, char *buf,
-				   FatCluster cluster);
+extern int fat_read_cluster(PedFileSystem *fs, char *buf, FatCluster cluster);
+extern int fat_write_cluster(PedFileSystem *fs, char *buf, FatCluster cluster);
+extern int fat_write_sync_cluster(PedFileSystem *fs, char *buf,
+                                  FatCluster cluster);
 
 #endif /* FATIO_H_INCLUDED */

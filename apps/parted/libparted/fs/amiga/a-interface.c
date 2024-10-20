@@ -17,12 +17,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #include <config.h>
 
-#include <parted/parted.h>
 #include <parted/debug.h>
 #include <parted/endian.h>
+#include <parted/parted.h>
 
 extern PedFileSystemType _affs0_type;
 extern PedFileSystemType _affs1_type;
@@ -43,46 +42,44 @@ extern PedFileSystemType _asfs_type;
 extern PedFileSystemType _apfs1_type;
 extern PedFileSystemType _apfs2_type;
 
-void ped_file_system_amiga_init ()
-{
-	ped_file_system_type_register (&_affs0_type);
-	ped_file_system_type_register (&_affs1_type);
-	ped_file_system_type_register (&_affs2_type);
-	ped_file_system_type_register (&_affs3_type);
-	ped_file_system_type_register (&_affs4_type);
-	ped_file_system_type_register (&_affs5_type);
-	ped_file_system_type_register (&_affs6_type);
-	ped_file_system_type_register (&_affs7_type);
-	ped_file_system_type_register (&_amufs_type);
-	ped_file_system_type_register (&_amufs0_type);
-	ped_file_system_type_register (&_amufs1_type);
-	ped_file_system_type_register (&_amufs2_type);
-	ped_file_system_type_register (&_amufs3_type);
-	ped_file_system_type_register (&_amufs4_type);
-	ped_file_system_type_register (&_amufs5_type);
-	ped_file_system_type_register (&_asfs_type);
-	ped_file_system_type_register (&_apfs1_type);
-	ped_file_system_type_register (&_apfs2_type);
+void ped_file_system_amiga_init() {
+  ped_file_system_type_register(&_affs0_type);
+  ped_file_system_type_register(&_affs1_type);
+  ped_file_system_type_register(&_affs2_type);
+  ped_file_system_type_register(&_affs3_type);
+  ped_file_system_type_register(&_affs4_type);
+  ped_file_system_type_register(&_affs5_type);
+  ped_file_system_type_register(&_affs6_type);
+  ped_file_system_type_register(&_affs7_type);
+  ped_file_system_type_register(&_amufs_type);
+  ped_file_system_type_register(&_amufs0_type);
+  ped_file_system_type_register(&_amufs1_type);
+  ped_file_system_type_register(&_amufs2_type);
+  ped_file_system_type_register(&_amufs3_type);
+  ped_file_system_type_register(&_amufs4_type);
+  ped_file_system_type_register(&_amufs5_type);
+  ped_file_system_type_register(&_asfs_type);
+  ped_file_system_type_register(&_apfs1_type);
+  ped_file_system_type_register(&_apfs2_type);
 }
 
-void ped_file_system_amiga_done ()
-{
-	ped_file_system_type_unregister (&_affs0_type);
-	ped_file_system_type_unregister (&_affs1_type);
-	ped_file_system_type_unregister (&_affs2_type);
-	ped_file_system_type_unregister (&_affs3_type);
-	ped_file_system_type_unregister (&_affs4_type);
-	ped_file_system_type_unregister (&_affs5_type);
-	ped_file_system_type_unregister (&_affs6_type);
-	ped_file_system_type_unregister (&_affs7_type);
-	ped_file_system_type_unregister (&_amufs_type);
-	ped_file_system_type_unregister (&_amufs0_type);
-	ped_file_system_type_unregister (&_amufs1_type);
-	ped_file_system_type_unregister (&_amufs2_type);
-	ped_file_system_type_unregister (&_amufs3_type);
-	ped_file_system_type_unregister (&_amufs4_type);
-	ped_file_system_type_unregister (&_amufs5_type);
-	ped_file_system_type_unregister (&_asfs_type);
-	ped_file_system_type_unregister (&_apfs1_type);
-	ped_file_system_type_unregister (&_apfs2_type);
+void ped_file_system_amiga_done() {
+  ped_file_system_type_unregister(&_affs0_type);
+  ped_file_system_type_unregister(&_affs1_type);
+  ped_file_system_type_unregister(&_affs2_type);
+  ped_file_system_type_unregister(&_affs3_type);
+  ped_file_system_type_unregister(&_affs4_type);
+  ped_file_system_type_unregister(&_affs5_type);
+  ped_file_system_type_unregister(&_affs6_type);
+  ped_file_system_type_unregister(&_affs7_type);
+  ped_file_system_type_unregister(&_amufs_type);
+  ped_file_system_type_unregister(&_amufs0_type);
+  ped_file_system_type_unregister(&_amufs1_type);
+  ped_file_system_type_unregister(&_amufs2_type);
+  ped_file_system_type_unregister(&_amufs3_type);
+  ped_file_system_type_unregister(&_amufs4_type);
+  ped_file_system_type_unregister(&_amufs5_type);
+  ped_file_system_type_unregister(&_asfs_type);
+  ped_file_system_type_unregister(&_apfs1_type);
+  ped_file_system_type_unregister(&_apfs2_type);
 }

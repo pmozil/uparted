@@ -14,18 +14,17 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
-#include <stddef.h>
 #include <parted/disk.h>
+#include <stddef.h>
 
-int ptt_write_sector (PedDisk const *disk, void const *buf, size_t buflen);
-int ptt_read_sector (PedDevice const *dev, PedSector sector_num, void **buf);
-int ptt_read_sectors (PedDevice const *dev, PedSector start_sector,
-		      PedSector n_sectors, void **buf);
-int ptt_clear_sectors (PedDevice *dev, PedSector start, PedSector count);
-int ptt_geom_clear_sectors (PedGeometry *geom, PedSector start,
-			    PedSector count);
-int ptt_partition_max_start_len (char const *label_type,
-                const PedPartition *part);
+int ptt_write_sector(PedDisk const *disk, void const *buf, size_t buflen);
+int ptt_read_sector(PedDevice const *dev, PedSector sector_num, void **buf);
+int ptt_read_sectors(PedDevice const *dev, PedSector start_sector,
+                     PedSector n_sectors, void **buf);
+int ptt_clear_sectors(PedDevice *dev, PedSector start, PedSector count);
+int ptt_geom_clear_sectors(PedGeometry *geom, PedSector start, PedSector count);
+int ptt_partition_max_start_len(char const *label_type,
+                                const PedPartition *part);
 
-int ptt_partition_max_start_sector (char const *pt_type, PedSector *max);
-int ptt_partition_max_length (char const *pt_type, PedSector *max);
+int ptt_partition_max_start_sector(char const *pt_type, PedSector *max);
+int ptt_partition_max_length(char const *pt_type, PedSector *max);

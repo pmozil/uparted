@@ -16,9 +16,9 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
 #ifndef QUOTE_H_
-# define QUOTE_H_ 1
+#define QUOTE_H_ 1
 
-# include <stddef.h>
+#include <stddef.h>
 
 /* The quoting options used by quote_n and quote.  Its type is incomplete,
    so it's useful only in expressions like '&quote_quoting_options'.  */
@@ -28,19 +28,19 @@ extern struct quoting_options quote_quoting_options;
    ARGSIZE), allocated in slot N, suitable for diagnostics.  If
    ARGSIZE is SIZE_MAX, use the string length of the argument for
    ARGSIZE.  */
-char const *quote_n_mem (int n, char const *arg, size_t argsize);
+char const *quote_n_mem(int n, char const *arg, size_t argsize);
 
 /* Return an unambiguous printable representation of ARG (of size
    ARGSIZE), suitable for diagnostics.  If ARGSIZE is SIZE_MAX, use
    the string length of the argument for ARGSIZE.  */
-char const *quote_mem (char const *arg, size_t argsize);
+char const *quote_mem(char const *arg, size_t argsize);
 
 /* Return an unambiguous printable representation of ARG, allocated in
    slot N, suitable for diagnostics.  */
-char const *quote_n (int n, char const *arg);
+char const *quote_n(int n, char const *arg);
 
 /* Return an unambiguous printable representation of ARG, suitable for
    diagnostics.  */
-char const *quote (char const *arg);
+char const *quote(char const *arg);
 
 #endif /* !QUOTE_H_ */

@@ -20,18 +20,15 @@
 #ifndef _RELOC_PLUS_H
 #define _RELOC_PLUS_H
 
-#include <parted/parted.h>
-#include <parted/endian.h>
 #include <parted/debug.h>
+#include <parted/endian.h>
+#include <parted/parted.h>
 
 #include "hfs.h"
 
-int
-hfsplus_update_vh (PedFileSystem *fs);
+int hfsplus_update_vh(PedFileSystem *fs);
 
-int
-hfsplus_pack_free_space_from_block (PedFileSystem *fs, unsigned int fblock,
-				    PedTimer* timer, unsigned int to_free);
-
+int hfsplus_pack_free_space_from_block(PedFileSystem *fs, unsigned int fblock,
+                                       PedTimer *timer, unsigned int to_free);
 
 #endif /* _RELOC_PLUS_H */

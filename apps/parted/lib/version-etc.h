@@ -17,15 +17,14 @@
 /* Written by Jim Meyering. */
 
 #ifndef VERSION_ETC_H
-# define VERSION_ETC_H 1
+#define VERSION_ETC_H 1
 
-# include <stdarg.h>
-# include <stdio.h>
+#include <stdarg.h>
+#include <stdio.h>
 
-# ifdef __cplusplus
-extern "C"
-{
-# endif
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 extern const char version_etc_copyright[];
 
@@ -45,34 +44,32 @@ extern const char version_etc_copyright[];
    The functions differ in the way they are passed author names: */
 
 /* N_AUTHORS names are supplied in array AUTHORS.  */
-extern void version_etc_arn (FILE *stream,
-                             const char *command_name, const char *package,
-                             const char *version,
-                             const char * const * authors, size_t n_authors);
+extern void version_etc_arn(FILE *stream, const char *command_name,
+                            const char *package, const char *version,
+                            const char *const *authors, size_t n_authors);
 
 /* Names are passed in the NULL-terminated array AUTHORS.  */
-extern void version_etc_ar (FILE *stream,
-                            const char *command_name, const char *package,
-                            const char *version, const char * const * authors);
+extern void version_etc_ar(FILE *stream, const char *command_name,
+                           const char *package, const char *version,
+                           const char *const *authors);
 
 /* Names are passed in the NULL-terminated va_list.  */
-extern void version_etc_va (FILE *stream,
-                            const char *command_name, const char *package,
-                            const char *version, va_list authors);
+extern void version_etc_va(FILE *stream, const char *command_name,
+                           const char *package, const char *version,
+                           va_list authors);
 
 /* Names are passed as separate arguments, with an additional
    NULL argument at the end.  */
-extern void version_etc (FILE *stream,
-                         const char *command_name, const char *package,
-                         const char *version,
-                         /* const char *author1, ..., NULL */ ...)
-  _GL_ATTRIBUTE_SENTINEL ((0));
+extern void version_etc(FILE *stream, const char *command_name,
+                        const char *package, const char *version,
+                        /* const char *author1, ..., NULL */...)
+    _GL_ATTRIBUTE_SENTINEL((0));
 
 /* Display the usual "Report bugs to" stanza.  */
-extern void emit_bug_reporting_address (void);
+extern void emit_bug_reporting_address(void);
 
-# ifdef __cplusplus
+#ifdef __cplusplus
 }
-# endif
+#endif
 
 #endif /* VERSION_ETC_H */

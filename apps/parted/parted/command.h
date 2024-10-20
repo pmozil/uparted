@@ -20,29 +20,28 @@
 #ifndef COMMAND_H_INCLUDED
 #define COMMAND_H_INCLUDED
 
-#include <parted/parted.h>
 #include "strlist.h"
+#include <parted/parted.h>
 
 typedef struct {
-	StrList*	names;
-	int		(*method) (PedDevice** dev, PedDisk** diskp);
-	StrList*	summary;
-	StrList*	help;
-        int             non_interactive:1;
+  StrList *names;
+  int (*method)(PedDevice **dev, PedDisk **diskp);
+  StrList *summary;
+  StrList *help;
+  int non_interactive : 1;
 } Command;
 
-extern Command* command_create (const StrList* names,
-				int (*method) (PedDevice** dev, PedDisk** diskp),
-				const StrList* summary,
-				const StrList* help,
-                                int non_interactive);
-extern void command_destroy (Command* cmd);
-void command_register (Command** list, Command* cmd);
+extern Command *command_create(const StrList *names,
+                               int (*method)(PedDevice **dev, PedDisk **diskp),
+                               const StrList *summary, const StrList *help,
+                               int non_interactive);
+extern void command_destroy(Command *cmd);
+void command_register(Command **list, Command *cmd);
 
-extern Command* command_get (Command** list, char* name);
-extern StrList* command_get_names (Command** list);
-extern void command_print_summary (Command* cmd);
-extern void command_print_help (Command* cmd);
-extern int command_run (Command* cmd, PedDevice** dev, PedDisk** diskp);
+extern Command *command_get(Command **list, char *name);
+extern StrList *command_get_names(Command **list);
+extern void command_print_summary(Command *cmd);
+extern void command_print_help(Command *cmd);
+extern int command_run(Command *cmd, PedDevice **dev, PedDisk **diskp);
 
 #endif /* COMMAND_H_INCLUDED */

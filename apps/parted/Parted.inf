@@ -46,6 +46,11 @@
     lib/closeout.c
     lib/close-stream.c
     lib/xalloc.c
+    libparted/architecture.c
+    libparted/arch/uefi.c
+    libparted/cs/constraint.c
+    libparted/cs/geom.c
+    libparted/cs/natmath.c
     libparted/exception.c
     libparted/disk.c
     libparted/device.c

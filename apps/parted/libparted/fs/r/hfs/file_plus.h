@@ -20,42 +20,35 @@
 #ifndef _FILE_PLUS_H
 #define _FILE_PLUS_H
 
-#include <parted/parted.h>
-#include <parted/endian.h>
 #include <parted/debug.h>
+#include <parted/endian.h>
+#include <parted/parted.h>
 
 #include "hfs.h"
 
-HfsPPrivateFile*
-hfsplus_file_open (PedFileSystem *fs, HfsPNodeID CNID,
-		   HfsPExtDataRec ext_desc, PedSector sect_nb);
+HfsPPrivateFile *hfsplus_file_open(PedFileSystem *fs, HfsPNodeID CNID,
+                                   HfsPExtDataRec ext_desc, PedSector sect_nb);
 
-void
-hfsplus_file_close (HfsPPrivateFile* file);
+void hfsplus_file_close(HfsPPrivateFile *file);
 
-int
-hfsplus_file_read(HfsPPrivateFile* file, void *buf,
-		  PedSector sector, unsigned int nb);
+int hfsplus_file_read(HfsPPrivateFile *file, void *buf, PedSector sector,
+                      unsigned int nb);
 
-int
-hfsplus_file_write(HfsPPrivateFile* file, void *buf,
-		  PedSector sector, unsigned int nb);
+int hfsplus_file_write(HfsPPrivateFile *file, void *buf, PedSector sector,
+                       unsigned int nb);
 
 /* Read the nth sector of a file */
 /* return 0 on error */
-static __inline__ int
-hfsplus_file_read_sector (HfsPPrivateFile* file, void *buf, PedSector sector)
-{
-	return hfsplus_file_read(file, buf, sector, 1);
+static __inline__ int hfsplus_file_read_sector(HfsPPrivateFile *file, void *buf,
+                                               PedSector sector) {
+  return hfsplus_file_read(file, buf, sector, 1);
 }
 
 /* Write the nth sector of a file */
 /* return 0 on error */
-static __inline__ int
-hfsplus_file_write_sector (HfsPPrivateFile* file, void *buf, PedSector sector)
-{
-	return hfsplus_file_write(file, buf, sector, 1);
+static __inline__ int hfsplus_file_write_sector(HfsPPrivateFile *file,
+                                                void *buf, PedSector sector) {
+  return hfsplus_file_write(file, buf, sector, 1);
 }
-
 
 #endif /* _FILE_PLUS_H */

@@ -22,49 +22,46 @@
 
 #include "count.h"
 
-enum _FatDirection {
-	FAT_DIR_FORWARD,
-	FAT_DIR_BACKWARD
-};
+enum _FatDirection { FAT_DIR_FORWARD, FAT_DIR_BACKWARD };
 typedef enum _FatDirection FatDirection;
 
 struct _FatOpContext {
-	PedFileSystem*		old_fs;
-	PedFileSystem*		new_fs;
+  PedFileSystem *old_fs;
+  PedFileSystem *new_fs;
 
-	PedSector		frag_sectors;	/* should equal old_fs and
-						   new_fs's frag_sectors */
+  PedSector frag_sectors; /* should equal old_fs and
+                             new_fs's frag_sectors */
 
-	FatDirection		start_move_dir;
-	FatFragment		start_move_delta;
+  FatDirection start_move_dir;
+  FatFragment start_move_delta;
 
-	FatFragment		buffer_offset;
-	FatFragment		buffer_frags;
-	FatFragment*		buffer_map;
+  FatFragment buffer_offset;
+  FatFragment buffer_frags;
+  FatFragment *buffer_map;
 
-	FatFragment		frags_duped;
+  FatFragment frags_duped;
 
-	FatFragment*		remap;
+  FatFragment *remap;
 
-	FatCluster		new_root_dir [32];
+  FatCluster new_root_dir[32];
 };
 typedef struct _FatOpContext FatOpContext;
 
-extern FatOpContext* fat_op_context_new (PedFileSystem* new_fs,
-					 PedFileSystem* old_fs);
+extern FatOpContext *fat_op_context_new(PedFileSystem *new_fs,
+                                        PedFileSystem *old_fs);
 
-extern void fat_op_context_destroy (FatOpContext* ctx);
+extern void fat_op_context_destroy(FatOpContext *ctx);
 
-extern FatFragment fat_op_context_map_static_fragment (const FatOpContext* ctx,
-						       FatFragment frag);
-extern FatCluster fat_op_context_map_static_cluster (const FatOpContext* ctx,
-						     FatCluster clst);
+extern FatFragment fat_op_context_map_static_fragment(const FatOpContext *ctx,
+                                                      FatFragment frag);
+extern FatCluster fat_op_context_map_static_cluster(const FatOpContext *ctx,
+                                                    FatCluster clst);
 
-extern FatFragment fat_op_context_map_fragment (const FatOpContext* ctx,
-					        FatFragment frag);
-extern FatCluster fat_op_context_map_cluster (const FatOpContext* ctx,
-					      FatCluster clst);
+extern FatFragment fat_op_context_map_fragment(const FatOpContext *ctx,
+                                               FatFragment frag);
+extern FatCluster fat_op_context_map_cluster(const FatOpContext *ctx,
+                                             FatCluster clst);
 
-extern int fat_op_context_create_initial_fat (FatOpContext* ctx);
+extern int fat_op_context_create_initial_fat(FatOpContext *ctx);
 
 #endif /* PED_FAT_CONTEXT_H_INCLUDED */

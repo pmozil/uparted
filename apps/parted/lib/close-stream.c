@@ -24,7 +24,7 @@
 #include "fpending.h"
 
 #if USE_UNLOCKED_IO
-# include "unlocked-io.h"
+#include "unlocked-io.h"
 #endif
 
 /* Close STREAM.  Return 0 if successful, EOF (setting errno)
@@ -51,12 +51,10 @@
    that writes to STREAM -- just let the internal stream state record
    the failure.  That's what the ferror test is checking below.  */
 
-int
-close_stream (FILE *stream)
-{
-  const bool some_pending = (__fpending (stream) != 0);
-  const bool prev_fail = (ferror (stream) != 0);
-  const bool fclose_fail = (fclose (stream) != 0);
+int close_stream(FILE *stream) {
+  const bool some_pending = (__fpending(stream) != 0);
+  const bool prev_fail = (ferror(stream) != 0);
+  const bool fclose_fail = (fclose(stream) != 0);
 
   /* Return an error indication if there was a previous failure or if
      fclose failed, with one exception: ignore an fclose failure if
@@ -66,12 +64,11 @@ close_stream (FILE *stream)
      closed) and doesn't generate any output (hence no previous error
      and nothing to be flushed).  */
 
-  if (prev_fail || (fclose_fail && (some_pending || errno != EBADF)))
-    {
-      if (! fclose_fail)
-        errno = 0;
-      return EOF;
-    }
+  if (prev_fail || (fclose_fail && (some_pending || errno != EBADF))) {
+    if (!fclose_fail)
+      errno = 0;
+    return EOF;
+  }
 
   return 0;
 }

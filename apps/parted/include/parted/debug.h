@@ -24,64 +24,57 @@
 
 #ifdef DEBUG
 
-typedef void (PedDebugHandler) ( const int level, const char* file, int line,
-                                 const char* function, const char* msg );
+typedef void(PedDebugHandler)(const int level, const char *file, int line,
+                              const char *function, const char *msg);
 
-extern void ped_debug_set_handler (PedDebugHandler* handler);
-extern void ped_debug ( const int level, const char* file, int line,
-                        const char* function, const char* msg, ... );
+extern void ped_debug_set_handler(PedDebugHandler *handler);
+extern void ped_debug(const int level, const char *file, int line,
+                      const char *function, const char *msg, ...);
 
-extern void __attribute__((__noreturn__))
-ped_assert ( const char* cond_text,
-                         const char* file, int line, const char* function );
+extern void __attribute__((__noreturn__)) ped_assert(const char *cond_text,
+                                                     const char *file, int line,
+                                                     const char *function);
 
 #if defined __GNUC__ && !defined __JSFTRACE__
 
-#define PED_DEBUG(level, ...) \
-        ped_debug ( level, __FILE__, __LINE__, __PRETTY_FUNCTION__, \
-                    __VA_ARGS__ )
+#define PED_DEBUG(level, ...)                                                  \
+  ped_debug(level, __FILE__, __LINE__, __PRETTY_FUNCTION__, __VA_ARGS__)
 
-#define PED_ASSERT(cond)					\
-	do {							\
-		if (!(cond)) {					\
-			ped_assert (				\
-			  #cond,				\
-			  __FILE__,				\
-			  __LINE__,				\
-			  __PRETTY_FUNCTION__ );		\
-		}						\
-	} while (0)
+#define PED_ASSERT(cond)                                                       \
+  do {                                                                         \
+    if (!(cond)) {                                                             \
+      ped_assert(#cond, __FILE__, __LINE__, __PRETTY_FUNCTION__);              \
+    }                                                                          \
+  } while (0)
 
 #else /* !__GNUC__ */
 
 /* function because variadic macros are C99 */
-static void PED_DEBUG (int level, ...)
-{
-        va_list         va_args;
+static void PED_DEBUG(int level, ...) {
+  va_list va_args;
 
-        va_start (va_args, level);
-        ped_debug ( level, "unknown file", 0, "unknown function", va_args );
-        va_end (va_args);
+  va_start(va_args, level);
+  ped_debug(level, "unknown file", 0, "unknown function", va_args);
+  va_end(va_args);
 }
 
-#define PED_ASSERT(cond)					\
-	do {							\
-		if (!(cond)) {					\
-			ped_assert (				\
-			  #cond,				\
-			  "unknown",				\
-			  0,					\
-			  "unknown");				\
-		}						\
-	} while (0)
+#define PED_ASSERT(cond)                                                       \
+  do {                                                                         \
+    if (!(cond)) {                                                             \
+      ped_assert(#cond, "unknown", 0, "unknown");                              \
+    }                                                                          \
+  } while (0)
 
 #endif /* __GNUC__ */
 
 #else /* !DEBUG */
 
-#define PED_ASSERT(cond)		do {} while (0)
-#define PED_DEBUG(level, ...)           do {} while (0)
-
+#define PED_ASSERT(cond)                                                       \
+  do {                                                                         \
+  } while (0)
+#define PED_DEBUG(level, ...)                                                  \
+  do {                                                                         \
+  } while (0)
 
 #endif /* DEBUG */
 

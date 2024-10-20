@@ -20,23 +20,19 @@
 #ifndef _FILE_H
 #define _FILE_H
 
-#include <parted/parted.h>
-#include <parted/endian.h>
 #include <parted/debug.h>
+#include <parted/endian.h>
+#include <parted/parted.h>
 
 #include "hfs.h"
 
-HfsPrivateFile*
-hfs_file_open (PedFileSystem *fs, uint32_t CNID,
-	       HfsExtDataRec ext_desc, PedSector sect_nb);
+HfsPrivateFile *hfs_file_open(PedFileSystem *fs, uint32_t CNID,
+                              HfsExtDataRec ext_desc, PedSector sect_nb);
 
-void
-hfs_file_close (HfsPrivateFile* file);
+void hfs_file_close(HfsPrivateFile *file);
 
-int
-hfs_file_read_sector (HfsPrivateFile* file, void *buf, PedSector sector);
+int hfs_file_read_sector(HfsPrivateFile *file, void *buf, PedSector sector);
 
-int
-hfs_file_write_sector (HfsPrivateFile* file, void *buf, PedSector sector);
+int hfs_file_write_sector(HfsPrivateFile *file, void *buf, PedSector sector);
 
 #endif /* _FILE_H */

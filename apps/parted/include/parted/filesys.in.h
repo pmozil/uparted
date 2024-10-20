@@ -27,26 +27,26 @@
 #ifndef PED_FILESYS_H_INCLUDED
 #define PED_FILESYS_H_INCLUDED
 
-typedef struct _PedFileSystem		PedFileSystem;
-typedef struct _PedFileSystemType	PedFileSystemType;
-typedef struct _PedFileSystemAlias	PedFileSystemAlias;
-typedef const struct _PedFileSystemOps	PedFileSystemOps;
+typedef struct _PedFileSystem PedFileSystem;
+typedef struct _PedFileSystemType PedFileSystemType;
+typedef struct _PedFileSystemAlias PedFileSystemAlias;
+typedef const struct _PedFileSystemOps PedFileSystemOps;
 
-#include <parted/geom.h>
 #include <parted/constraint.h>
+#include <parted/geom.h>
 #include <parted/timer.h>
 
 struct _PedFileSystemOps {
-	PedGeometry* (*probe) (PedGeometry* geom);
+  PedGeometry *(*probe)(PedGeometry *geom);
 };
 
 /**
  * Structure describing type of file system
  */
 struct _PedFileSystemType {
-	PedFileSystemType*	next;
-	const char* const	name;		/**< name of the file system type */
-	PedFileSystemOps* const	ops;
+  PedFileSystemType *next;
+  const char *const name; /**< name of the file system type */
+  PedFileSystemOps *const ops;
 };
 
 /**
@@ -55,53 +55,49 @@ struct _PedFileSystemType {
  * and does not probe aliases separately.
  */
 struct _PedFileSystemAlias {
-	PedFileSystemAlias*	next;
-	PedFileSystemType*	fs_type;
-	const char*		alias;
-	int			deprecated;
+  PedFileSystemAlias *next;
+  PedFileSystemType *fs_type;
+  const char *alias;
+  int deprecated;
 };
-
 
 /**
  * Structure describing file system
  */
 struct _PedFileSystem {
-	PedFileSystemType*	type;		/**< the file system type */
-	PedGeometry*		geom;		/**< where the file system actually is */
-	int			checked;	/**< 1 if the file system has been checked.
-						      0 otherwise. */
+  PedFileSystemType *type; /**< the file system type */
+  PedGeometry *geom;       /**< where the file system actually is */
+  int checked;             /**< 1 if the file system has been checked.
+                                 0 otherwise. */
 
-	void*			type_specific;
-
+  void *type_specific;
 };
 
-extern void ped_file_system_type_register (PedFileSystemType* type);
-extern void ped_file_system_type_unregister (PedFileSystemType* type);
+extern void ped_file_system_type_register(PedFileSystemType *type);
+extern void ped_file_system_type_unregister(PedFileSystemType *type);
 
-extern void ped_file_system_alias_register (PedFileSystemType* type,
-					    const char* alias, int deprecated);
-extern void ped_file_system_alias_unregister (PedFileSystemType* type,
-					      const char* alias);
+extern void ped_file_system_alias_register(PedFileSystemType *type,
+                                           const char *alias, int deprecated);
+extern void ped_file_system_alias_unregister(PedFileSystemType *type,
+                                             const char *alias);
 
-extern PedFileSystemType* ped_file_system_type_get (const char* name);
-extern PedFileSystemType*
-ped_file_system_type_get_next (const PedFileSystemType* fs_type)
-  _GL_ATTRIBUTE_PURE;
+extern PedFileSystemType *ped_file_system_type_get(const char *name);
+extern PedFileSystemType *ped_file_system_type_get_next(
+    const PedFileSystemType *fs_type) _GL_ATTRIBUTE_PURE;
 
-extern PedFileSystemAlias*
-ped_file_system_alias_get_next (const PedFileSystemAlias* fs_alias)
-  _GL_ATTRIBUTE_PURE;
+extern PedFileSystemAlias *ped_file_system_alias_get_next(
+    const PedFileSystemAlias *fs_alias) _GL_ATTRIBUTE_PURE;
 
-extern PedFileSystemType* ped_file_system_probe (PedGeometry* geom);
-extern PedGeometry* ped_file_system_probe_specific (
-			const PedFileSystemType* fs_type,
-			PedGeometry* geom);
+extern PedFileSystemType *ped_file_system_probe(PedGeometry *geom);
+extern PedGeometry *
+ped_file_system_probe_specific(const PedFileSystemType *fs_type,
+                               PedGeometry *geom);
 
-PedFileSystem *ped_file_system_open (PedGeometry *geom);
-int ped_file_system_close (PedFileSystem *fs);
-int ped_file_system_resize (PedFileSystem *fs, PedGeometry *geom,
-			    PedTimer *timer);
-PedConstraint *ped_file_system_get_resize_constraint (const PedFileSystem *fs);
+PedFileSystem *ped_file_system_open(PedGeometry *geom);
+int ped_file_system_close(PedFileSystem *fs);
+int ped_file_system_resize(PedFileSystem *fs, PedGeometry *geom,
+                           PedTimer *timer);
+PedConstraint *ped_file_system_get_resize_constraint(const PedFileSystem *fs);
 
 #endif /* PED_FILESYS_H_INCLUDED */
 

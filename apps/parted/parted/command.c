@@ -31,96 +31,96 @@ Command *command_create(const StrList *names,
                         int (*method)(PedDevice **dev, PedDisk **diskp),
                         const StrList *summary, const StrList *help,
                         const int non_interactive) {
-    Command *cmd;
+  Command *cmd;
 
-    cmd = malloc(sizeof(Command));
+  cmd = malloc(sizeof(Command));
 
-    if (non_interactive)
-        cmd->non_interactive = 1;
-    else
-        cmd->non_interactive = 0;
+  if (non_interactive)
+    cmd->non_interactive = 1;
+  else
+    cmd->non_interactive = 0;
 
-    cmd->names = (StrList *)names;
-    cmd->method = method;
-    cmd->summary = (StrList *)summary;
-    cmd->help = (StrList *)help;
+  cmd->names = (StrList *)names;
+  cmd->method = method;
+  cmd->summary = (StrList *)summary;
+  cmd->help = (StrList *)help;
 
-    return cmd;
+  return cmd;
 }
 
 void command_destroy(Command *cmd) {
-    str_list_destroy(cmd->names);
-    str_list_destroy(cmd->summary);
-    str_list_destroy(cmd->help);
-    free(cmd);
+  str_list_destroy(cmd->names);
+  str_list_destroy(cmd->summary);
+  str_list_destroy(cmd->help);
+  free(cmd);
 }
 
 void command_register(Command **list, Command *cmd) {
-    int i;
+  int i;
 
-    for (i = 0; list[i]; i++)
-        ;
+  for (i = 0; list[i]; i++)
+    ;
 
-    list[i] = cmd;
-    list[i + 1] = (Command *)NULL;
+  list[i] = cmd;
+  list[i + 1] = (Command *)NULL;
 }
 
 Command *command_get(Command **list, char *name) {
-    int i;
-    int partial_match = -1;
-    int ambiguous = 0;
+  int i;
+  int partial_match = -1;
+  int ambiguous = 0;
 
-    if (!name)
-        return NULL;
+  if (!name)
+    return NULL;
 
-    for (i = 0; list[i]; i++) {
-        switch (str_list_match_any(list[i]->names, name)) {
-        case 2:
-            return list[i];
+  for (i = 0; list[i]; i++) {
+    switch (str_list_match_any(list[i]->names, name)) {
+    case 2:
+      return list[i];
 
-        case 1:
-            if (!ambiguous) {
-                if (partial_match == -1) {
-                    partial_match = i;
-                } else {
-                    partial_match = -1;
-                    ambiguous = 1;
-                }
-            }
+    case 1:
+      if (!ambiguous) {
+        if (partial_match == -1) {
+          partial_match = i;
+        } else {
+          partial_match = -1;
+          ambiguous = 1;
         }
+      }
     }
+  }
 
-    if (partial_match == -1)
-        return NULL;
-    else
-        return list[partial_match];
+  if (partial_match == -1)
+    return NULL;
+  else
+    return list[partial_match];
 }
 
 StrList *command_get_names(Command **list) {
-    Command **walk;
-    StrList *result = NULL;
+  Command **walk;
+  StrList *result = NULL;
 
-    for (walk = list; *walk; walk++)
-        result = str_list_join(result, str_list_duplicate((*walk)->names));
-    return result;
+  for (walk = list; *walk; walk++)
+    result = str_list_join(result, str_list_duplicate((*walk)->names));
+  return result;
 }
 
 void command_print_summary(Command *cmd) {
-    if (cmd->summary == NULL)
-        return;
-    fputs("  ", stdout);
-    str_list_print_wrap(cmd->summary, screen_width(), 2, 8, stdout);
-    putchar('\n');
+  if (cmd->summary == NULL)
+    return;
+  fputs("  ", stdout);
+  str_list_print_wrap(cmd->summary, screen_width(), 2, 8, stdout);
+  putchar('\n');
 }
 
 void command_print_help(Command *cmd) {
-    command_print_summary(cmd);
-    if (cmd->help) {
-        fputs("\n\t", stdout);
-        str_list_print_wrap(cmd->help, screen_width(), 8, 8, stdout);
-    }
+  command_print_summary(cmd);
+  if (cmd->help) {
+    fputs("\n\t", stdout);
+    str_list_print_wrap(cmd->help, screen_width(), 8, 8, stdout);
+  }
 }
 
 int command_run(Command *cmd, PedDevice **dev, PedDisk **diskp) {
-    return cmd->method(dev, diskp);
+  return cmd->method(dev, diskp);
 }

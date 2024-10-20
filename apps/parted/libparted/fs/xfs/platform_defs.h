@@ -34,29 +34,29 @@
 #ifndef __XFS_PLATFORM_DEFS_H__
 #define __XFS_PLATFORM_DEFS_H__
 
-#include <stdio.h>
-#include <stdarg.h>
 #include <assert.h>
 #include <endian.h>
 #include <fcntl.h>
+#include <stdarg.h>
 #include <stddef.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include <sys/param.h>
 #include <sys/types.h>
+#include <unistd.h>
 
 #if (__GLIBC__ <= 2) && (__GLIBC_MINOR__ <= 1)
-# define constpp	const char * const *
+#define constpp const char *const *
 #else
-# define constpp	char * const *
+#define constpp char *const *
 #endif
 
-typedef loff_t		xfs_off_t;
-typedef uint64_t	xfs_ino_t;
-typedef uint32_t	xfs_dev_t;
-typedef int64_t         xfs_daddr_t;
-typedef char*		xfs_caddr_t;
+typedef loff_t xfs_off_t;
+typedef uint64_t xfs_ino_t;
+typedef uint32_t xfs_dev_t;
+typedef int64_t xfs_daddr_t;
+typedef char *xfs_caddr_t;
 
 /* long and pointer must be either 32 bit or 64 bit */
 /* #undef HAVE_64BIT_LONG */
@@ -67,43 +67,43 @@ typedef char*		xfs_caddr_t;
 /* Check if __psint_t is set to something meaningful */
 /* #undef HAVE___PSINT_T */
 #ifndef HAVE___PSINT_T
-# ifdef HAVE_32BIT_PTR
+#ifdef HAVE_32BIT_PTR
 typedef int __psint_t;
-# elif defined HAVE_64BIT_PTR
-#  ifdef HAVE_64BIT_LONG
+#elif defined HAVE_64BIT_PTR
+#ifdef HAVE_64BIT_LONG
 typedef long __psint_t;
-#  else
+#else
 /* This is a very strange architecture, which has 64 bit pointers but
  * not 64 bit longs. So, I'd just punt here and assume long long is Ok */
 typedef long long __psint_t;
-#  endif
-# else
-#  error Unknown pointer size
-# endif
+#endif
+#else
+#error Unknown pointer size
+#endif
 #endif
 
 /* Check if __psunsigned_t is set to something meaningful */
 /* #undef HAVE___PSUNSIGNED_T */
 #ifndef HAVE___PSUNSIGNED_T
-# ifdef HAVE_32BIT_PTR
+#ifdef HAVE_32BIT_PTR
 typedef unsigned int __psunsigned_t;
-# elif defined HAVE_64BIT_PTR
-#  ifdef HAVE_64BIT_LONG
+#elif defined HAVE_64BIT_PTR
+#ifdef HAVE_64BIT_LONG
 typedef long __psunsigned_t;
-#  else
+#else
 /* This is a very strange architecture, which has 64 bit pointers but
  * not 64 bit longs. So, I'd just punt here and assume long long is Ok */
 typedef unsigned long long __psunsigned_t;
-#  endif
-# else
-#  error Unknown pointer size
-# endif
+#endif
+#else
+#error Unknown pointer size
+#endif
 #endif
 
 #ifdef DEBUG
-# define ASSERT		assert
+#define ASSERT assert
 #else
-# define ASSERT(EX)	((void) 0)
+#define ASSERT(EX) ((void)0)
 #endif
 
-#endif	/* __XFS_PLATFORM_DEFS_H__ */
+#endif /* __XFS_PLATFORM_DEFS_H__ */

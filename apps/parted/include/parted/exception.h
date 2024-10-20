@@ -33,12 +33,12 @@ typedef struct _PedException PedException;
  * Exception type
  */
 enum _PedExceptionType {
-	PED_EXCEPTION_INFORMATION=1,
-	PED_EXCEPTION_WARNING=2,
-	PED_EXCEPTION_ERROR=3,
-	PED_EXCEPTION_FATAL=4,
-	PED_EXCEPTION_BUG=5,
-	PED_EXCEPTION_NO_FEATURE=6,
+  PED_EXCEPTION_INFORMATION = 1,
+  PED_EXCEPTION_WARNING = 2,
+  PED_EXCEPTION_ERROR = 3,
+  PED_EXCEPTION_FATAL = 4,
+  PED_EXCEPTION_BUG = 5,
+  PED_EXCEPTION_NO_FEATURE = 6,
 };
 typedef enum _PedExceptionType PedExceptionType;
 
@@ -46,30 +46,29 @@ typedef enum _PedExceptionType PedExceptionType;
  * Option for resolving the exception
  */
 enum _PedExceptionOption {
-	/* individual options */
-	PED_EXCEPTION_UNHANDLED=0,
-	PED_EXCEPTION_FIX=1,
-	PED_EXCEPTION_YES=2,
-	PED_EXCEPTION_NO=4,
-	PED_EXCEPTION_OK=8,
-	PED_EXCEPTION_RETRY=16,
-	PED_EXCEPTION_IGNORE=32,
-	PED_EXCEPTION_CANCEL=64,
+  /* individual options */
+  PED_EXCEPTION_UNHANDLED = 0,
+  PED_EXCEPTION_FIX = 1,
+  PED_EXCEPTION_YES = 2,
+  PED_EXCEPTION_NO = 4,
+  PED_EXCEPTION_OK = 8,
+  PED_EXCEPTION_RETRY = 16,
+  PED_EXCEPTION_IGNORE = 32,
+  PED_EXCEPTION_CANCEL = 64,
 
-	/* combinations of individual options */
-	PED_EXCEPTION_OK_CANCEL = PED_EXCEPTION_OK + PED_EXCEPTION_CANCEL,
-	PED_EXCEPTION_YES_NO = PED_EXCEPTION_YES + PED_EXCEPTION_NO,
-	PED_EXCEPTION_YES_NO_CANCEL =
-		PED_EXCEPTION_YES_NO + PED_EXCEPTION_CANCEL,
-	PED_EXCEPTION_IGNORE_CANCEL =
-		PED_EXCEPTION_IGNORE + PED_EXCEPTION_CANCEL,
-	PED_EXCEPTION_RETRY_CANCEL = PED_EXCEPTION_RETRY + PED_EXCEPTION_CANCEL,
-	PED_EXCEPTION_RETRY_IGNORE_CANCEL =
-		PED_EXCEPTION_RETRY + PED_EXCEPTION_IGNORE_CANCEL,
+  /* combinations of individual options */
+  PED_EXCEPTION_OK_CANCEL = PED_EXCEPTION_OK + PED_EXCEPTION_CANCEL,
+  PED_EXCEPTION_YES_NO = PED_EXCEPTION_YES + PED_EXCEPTION_NO,
+  PED_EXCEPTION_YES_NO_CANCEL = PED_EXCEPTION_YES_NO + PED_EXCEPTION_CANCEL,
+  PED_EXCEPTION_IGNORE_CANCEL = PED_EXCEPTION_IGNORE + PED_EXCEPTION_CANCEL,
+  PED_EXCEPTION_RETRY_CANCEL = PED_EXCEPTION_RETRY + PED_EXCEPTION_CANCEL,
+  PED_EXCEPTION_RETRY_IGNORE_CANCEL =
+      PED_EXCEPTION_RETRY + PED_EXCEPTION_IGNORE_CANCEL,
 };
 
 #define PED_EXCEPTION_OPTION_FIRST PED_EXCEPTION_FIX
-#define PED_EXCEPTION_OPTION_LAST PED_EXCEPTION_CANCEL	/* last individual option */
+#define PED_EXCEPTION_OPTION_LAST                                              \
+  PED_EXCEPTION_CANCEL /* last individual option */
 
 typedef enum _PedExceptionOption PedExceptionOption;
 
@@ -77,59 +76,58 @@ typedef enum _PedExceptionOption PedExceptionOption;
  * Structure with information about exception
  */
 struct _PedException {
-	char*			message;	/**< text describing what the event was */
-	PedExceptionType	type;		/**< type of exception */
-	PedExceptionOption	options;	/**< ORed list of options that
-						   the exception handler can
-						   return (the ways an exception
-						   can be resolved) */
+  char *message;              /**< text describing what the event was */
+  PedExceptionType type;      /**< type of exception */
+  PedExceptionOption options; /**< ORed list of options that
+                                 the exception handler can
+                                 return (the ways an exception
+                                 can be resolved) */
 };
 
-typedef PedExceptionOption (PedExceptionHandler) (PedException* ex);
+typedef PedExceptionOption(PedExceptionHandler)(PedException *ex);
 
-extern int ped_exception;	/* set to true if there's an exception */
+extern int ped_exception; /* set to true if there's an exception */
 
-extern char* ped_exception_get_type_string (PedExceptionType ex_type)
-    
+extern char *ped_exception_get_type_string(PedExceptionType ex_type)
+
 #if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 96)
-  __attribute ((__const__))
+    __attribute((__const__))
 #endif
-;
-extern char* ped_exception_get_option_string (PedExceptionOption ex_opt)
-    
-#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 96)
-  __attribute ((__pure__))
-#endif
-;
+    ;
+extern char *ped_exception_get_option_string(PedExceptionOption ex_opt)
 
-extern void ped_exception_set_handler (PedExceptionHandler* handler);
+#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 96)
+    __attribute((__pure__))
+#endif
+    ;
+
+extern void ped_exception_set_handler(PedExceptionHandler *handler);
 extern PedExceptionHandler *ped_exception_get_handler(void)
-    
+
 #if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 96)
-  __attribute ((__pure__))
+    __attribute((__pure__))
 #endif
-;
+    ;
 
-extern PedExceptionOption ped_exception_default_handler (PedException* ex);
+extern PedExceptionOption ped_exception_default_handler(PedException *ex);
 
-extern PedExceptionOption	ped_exception_throw (PedExceptionType ex_type,
-						     PedExceptionOption ex_opt,
-						     const char* message,
-						     ...);
+extern PedExceptionOption ped_exception_throw(PedExceptionType ex_type,
+                                              PedExceptionOption ex_opt,
+                                              const char *message, ...);
 /* rethrows an exception - i.e. calls the exception handler, (or returns a
    code to return to pass up higher) */
-extern PedExceptionOption	ped_exception_rethrow ();
+extern PedExceptionOption ped_exception_rethrow();
 
 /* frees an exception, indicating that the exception has been handled.
    Calling an exception handler counts. */
-extern void			ped_exception_catch ();
+extern void ped_exception_catch();
 
 /* indicate that exceptions should not go to the exception handler, but passed
    up to the calling function(s) */
-extern void			ped_exception_fetch_all ();
+extern void ped_exception_fetch_all();
 
 /* indicate that exceptions should invoke the exception handler */
-extern void			ped_exception_leave_all ();
+extern void ped_exception_leave_all();
 
 #endif /* PED_EXCEPTION_H_INCLUDED */
 

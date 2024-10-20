@@ -20,33 +20,28 @@
 #ifndef _ADVFS_PLUS_H
 #define _ADVFS_PLUS_H
 
-#include <parted/parted.h>
-#include <parted/endian.h>
 #include <parted/debug.h>
+#include <parted/endian.h>
+#include <parted/parted.h>
 
 #include "hfs.h"
 
-int
-hfsplus_btree_search (HfsPPrivateFile* b_tree_file, HfsPPrivateGenericKey* key,
-		      void *record_out, unsigned int record_size,
-		      HfsCPrivateLeafRec* record_ref);
+int hfsplus_btree_search(HfsPPrivateFile *b_tree_file,
+                         HfsPPrivateGenericKey *key, void *record_out,
+                         unsigned int record_size,
+                         HfsCPrivateLeafRec *record_ref);
 
-void
-hfsplus_free_bad_blocks_list(HfsPPrivateLinkExtent* first);
+void hfsplus_free_bad_blocks_list(HfsPPrivateLinkExtent *first);
 
-int
-hfsplus_read_bad_blocks (const PedFileSystem *fs);
+int hfsplus_read_bad_blocks(const PedFileSystem *fs);
 
-int
-hfsplus_is_bad_block (const PedFileSystem *fs, unsigned int fblock);
+int hfsplus_is_bad_block(const PedFileSystem *fs, unsigned int fblock);
 
-PedSector
-hfsplus_get_empty_end (const PedFileSystem *fs);
+PedSector hfsplus_get_empty_end(const PedFileSystem *fs);
 
-PedSector
-hfsplus_get_min_size (const PedFileSystem *fs);
+PedSector hfsplus_get_min_size(const PedFileSystem *fs);
 
-unsigned int
-hfsplus_find_start_pack (const PedFileSystem *fs, unsigned int fblock);
+unsigned int hfsplus_find_start_pack(const PedFileSystem *fs,
+                                     unsigned int fblock);
 
 #endif /* _ADVFS_PLUS_H */

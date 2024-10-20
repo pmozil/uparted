@@ -26,15 +26,14 @@
 #ifndef PED_NATMATH_H_INCLUDED
 #define PED_NATMATH_H_INCLUDED
 
+typedef struct _PedAlignment PedAlignment;
 
-typedef struct _PedAlignment	PedAlignment;
-
-#include <parted/disk.h>
 #include <parted/device.h>
+#include <parted/disk.h>
 #include <parted/geom.h>
 
-#define PED_MIN(a, b)	( ((a)<(b)) ? (a) : (b) )
-#define PED_MAX(a, b)	( ((a)>(b)) ? (a) : (b) )
+#define PED_MIN(a, b) (((a) < (b)) ? (a) : (b))
+#define PED_MAX(a, b) (((a) > (b)) ? (a) : (b))
 
 /* this is weird (I'm still not sure I should be doing this!)
  *
@@ -54,87 +53,83 @@ typedef struct _PedAlignment	PedAlignment;
  */
 
 struct _PedAlignment {
-	PedSector	offset;
-	PedSector	grain_size;
+  PedSector offset;
+  PedSector grain_size;
 };
 
-extern PedSector ped_round_up_to (PedSector sector, PedSector grain_size)
- 
-#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 96)
-  __attribute ((__const__))
-#endif
-;
-extern PedSector ped_round_down_to (PedSector sector, PedSector grain_size)
- 
-#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 96)
-  __attribute ((__const__))
-#endif
-;
-extern PedSector ped_round_to_nearest (PedSector sector, PedSector grain_size)
- 
-#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 96)
-  __attribute ((__const__))
-#endif
-;
-extern PedSector ped_greatest_common_divisor (PedSector a, PedSector b)
- 
-#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 96)
-  __attribute ((__pure__))
-#endif
-;
+extern PedSector ped_round_up_to(PedSector sector, PedSector grain_size)
 
-extern int ped_alignment_init (PedAlignment* align, PedSector offset,
-			       PedSector grain_size);
-extern PedAlignment* ped_alignment_new (PedSector offset, PedSector grain_size);
-extern void ped_alignment_destroy (PedAlignment* align);
-extern PedAlignment* ped_alignment_duplicate (const PedAlignment* align);
-extern PedAlignment* ped_alignment_intersect (const PedAlignment* a,
-					      const PedAlignment* b);
-
-extern PedSector
-ped_alignment_align_up (const PedAlignment* align, const PedGeometry* geom,
-			PedSector sector)
 #if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 96)
-  __attribute ((__pure__))
+    __attribute((__const__))
 #endif
-;
-extern PedSector
-ped_alignment_align_down (const PedAlignment* align, const PedGeometry* geom,
-			  PedSector sector)
-#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 96)
-  __attribute ((__pure__))
-#endif
-;
-extern PedSector
-ped_alignment_align_nearest (const PedAlignment* align, const PedGeometry* geom,
-			     PedSector sector)
-#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 96)
-  __attribute ((__pure__))
-#endif
-;
+    ;
+extern PedSector ped_round_down_to(PedSector sector, PedSector grain_size)
 
-extern int
-ped_alignment_is_aligned (const PedAlignment* align, const PedGeometry* geom,
-			  PedSector sector)
 #if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 96)
-  __attribute ((__pure__))
+    __attribute((__const__))
 #endif
-;
+    ;
+extern PedSector ped_round_to_nearest(PedSector sector, PedSector grain_size)
 
-extern const PedAlignment* ped_alignment_any;
-extern const PedAlignment* ped_alignment_none;
+#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 96)
+    __attribute((__const__))
+#endif
+    ;
+extern PedSector ped_greatest_common_divisor(PedSector a, PedSector b)
 
-static inline PedSector
-ped_div_round_up (PedSector numerator, PedSector divisor)
-{
-	return (numerator + divisor - 1) / divisor;
+#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 96)
+    __attribute((__pure__))
+#endif
+    ;
+
+extern int ped_alignment_init(PedAlignment *align, PedSector offset,
+                              PedSector grain_size);
+extern PedAlignment *ped_alignment_new(PedSector offset, PedSector grain_size);
+extern void ped_alignment_destroy(PedAlignment *align);
+extern PedAlignment *ped_alignment_duplicate(const PedAlignment *align);
+extern PedAlignment *ped_alignment_intersect(const PedAlignment *a,
+                                             const PedAlignment *b);
+
+extern PedSector ped_alignment_align_up(const PedAlignment *align,
+                                        const PedGeometry *geom,
+                                        PedSector sector)
+#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 96)
+    __attribute((__pure__))
+#endif
+    ;
+extern PedSector ped_alignment_align_down(const PedAlignment *align,
+                                          const PedGeometry *geom,
+                                          PedSector sector)
+#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 96)
+    __attribute((__pure__))
+#endif
+    ;
+extern PedSector ped_alignment_align_nearest(const PedAlignment *align,
+                                             const PedGeometry *geom,
+                                             PedSector sector)
+#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 96)
+    __attribute((__pure__))
+#endif
+    ;
+
+extern int ped_alignment_is_aligned(const PedAlignment *align,
+                                    const PedGeometry *geom, PedSector sector)
+#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 96)
+    __attribute((__pure__))
+#endif
+    ;
+
+extern const PedAlignment *ped_alignment_any;
+extern const PedAlignment *ped_alignment_none;
+
+static inline PedSector ped_div_round_up(PedSector numerator,
+                                         PedSector divisor) {
+  return (numerator + divisor - 1) / divisor;
 }
 
-
-static inline PedSector
-ped_div_round_to_nearest (PedSector numerator, PedSector divisor)
-{
-	return (numerator + divisor/2) / divisor;
+static inline PedSector ped_div_round_to_nearest(PedSector numerator,
+                                                 PedSector divisor) {
+  return (numerator + divisor / 2) / divisor;
 }
 
 #endif /* PED_NATMATH_H_INCLUDED */

@@ -29,11 +29,10 @@
  * The polynomial used is 0xedb88320.
  */
 
-extern uint32_t __efi_crc32 (const void *buf, unsigned long len,
-			     uint32_t seed)
+extern uint32_t __efi_crc32(const void *buf, unsigned long len, uint32_t seed)
 #if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 96)
-  __attribute ((__pure__))
+    __attribute((__pure__))
 #endif
-;
+    ;
 
 #endif /* _CRC32_H */

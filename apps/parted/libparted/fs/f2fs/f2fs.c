@@ -18,43 +18,35 @@
 
 #include <config.h>
 
-#include <parted/parted.h>
 #include <parted/endian.h>
+#include <parted/parted.h>
 
 #include "f2fs.h"
 
-static PedGeometry*
-f2fs_probe (PedGeometry* geom)
-{
-        struct f2fs_super_block *sb = alloca(geom->dev->sector_size);
+static PedGeometry *f2fs_probe(PedGeometry *geom) {
+  struct f2fs_super_block *sb = alloca(geom->dev->sector_size);
 
-        if (!ped_geometry_read (geom, sb, F2FS_SB_OFFSET, 1))
-                return NULL;
+  if (!ped_geometry_read(geom, sb, F2FS_SB_OFFSET, 1))
+    return NULL;
 
-        if (PED_LE32_TO_CPU(sb->magic) == F2FS_MAGIC)
-                return ped_geometry_new (geom->dev, geom->start, geom->length);
+  if (PED_LE32_TO_CPU(sb->magic) == F2FS_MAGIC)
+    return ped_geometry_new(geom->dev, geom->start, geom->length);
 
-        return NULL;
+  return NULL;
 }
 
 static PedFileSystemOps f2fs_ops = {
-        probe:          f2fs_probe,
+  probe : f2fs_probe,
 };
 
 static PedFileSystemType f2fs_type = {
-        next:   NULL,
-        ops:    &f2fs_ops,
-        name:   "f2fs",
+  next : NULL,
+  ops : &f2fs_ops,
+  name : "f2fs",
 };
 
-void
-ped_file_system_f2fs_init ()
-{
-        ped_file_system_type_register (&f2fs_type);
-}
+void ped_file_system_f2fs_init() { ped_file_system_type_register(&f2fs_type); }
 
-void
-ped_file_system_f2fs_done ()
-{
-        ped_file_system_type_unregister (&f2fs_type);
+void ped_file_system_f2fs_done() {
+  ped_file_system_type_unregister(&f2fs_type);
 }

@@ -31,90 +31,77 @@
  */
 
 #include <config.h>
-#include <stdlib.h>
-#include <parted/parted.h>
 #include <parted/debug.h>
 #include <parted/natmath.h>
+#include <parted/parted.h>
+#include <stdlib.h>
 
 /* Arrrghhh!  Why doesn't C have tuples? */
 typedef struct {
-	PedSector	gcd;		/* "converges" to the gcd */
-	PedSector	x;
-	PedSector	y;
+    PedSector gcd; /* "converges" to the gcd */
+    PedSector x;
+    PedSector y;
 } EuclidTriple;
 
-static const PedAlignment _any = {
-	offset:		0,
-	grain_size:	1
-};
+static const PedAlignment _any = {offset : 0, grain_size : 1};
 
-const PedAlignment* ped_alignment_any = &_any;
-const PedAlignment* ped_alignment_none = NULL;
+const PedAlignment *ped_alignment_any = &_any;
+const PedAlignment *ped_alignment_none = NULL;
 
 /* This function returns "a mod b", the way C should have done it!
  * Mathematicians prefer -3 mod 4 to be 3.  Reason: division by N
  * is all about adding or subtracting N, and we like our remainders
  * to be between 0 and N - 1.
  */
-static PedSector
-abs_mod (PedSector a, PedSector b)
-{
-	if (a < 0)
-		return a % b + b;
-	else
-		return a % b;
+static PedSector abs_mod(PedSector a, PedSector b) {
+    if (a < 0)
+        return a % b + b;
+    else
+        return a % b;
 }
 
 /* Rounds a number down to the closest number that is a multiple of
  * grain_size.
  */
-PedSector
-ped_round_down_to (PedSector sector, PedSector grain_size)
-{
-	return sector - abs_mod (sector, grain_size);
+PedSector ped_round_down_to(PedSector sector, PedSector grain_size) {
+    return sector - abs_mod(sector, grain_size);
 }
 
 /* Rounds a number up to the closest number that is a multiple of
  * grain_size.
  */
-PedSector
-ped_round_up_to (PedSector sector, PedSector grain_size)
-{
-	if (sector % grain_size)
-		return ped_round_down_to (sector, grain_size) + grain_size;
-	else
-		return sector;
+PedSector ped_round_up_to(PedSector sector, PedSector grain_size) {
+    if (sector % grain_size)
+        return ped_round_down_to(sector, grain_size) + grain_size;
+    else
+        return sector;
 }
 
 /* Rounds a number to the closest number that is a multiple of grain_size. */
-PedSector
-ped_round_to_nearest (PedSector sector, PedSector grain_size)
-{
-	if (sector % grain_size > grain_size/2)
-		return ped_round_up_to (sector, grain_size);
-	else
-		return ped_round_down_to (sector, grain_size);
+PedSector ped_round_to_nearest(PedSector sector, PedSector grain_size) {
+    if (sector % grain_size > grain_size / 2)
+        return ped_round_up_to(sector, grain_size);
+    else
+        return ped_round_down_to(sector, grain_size);
 }
 
 /* This function returns the largest number that divides both a and b.
  * It uses the ancient Euclidean algorithm.
  */
-PedSector
-ped_greatest_common_divisor (PedSector a, PedSector b)
-{
-	PED_ASSERT (a >= 0);
-	PED_ASSERT (b >= 0);
+PedSector ped_greatest_common_divisor(PedSector a, PedSector b) {
+    PED_ASSERT(a >= 0);
+    PED_ASSERT(b >= 0);
 
-	/* Put the arguments in the "right" format.  (Recursive calls made by
-	 * this function are always in the right format.)
-	 */
-	if (b > a)
-		return ped_greatest_common_divisor (b, a);
+    /* Put the arguments in the "right" format.  (Recursive calls made by
+     * this function are always in the right format.)
+     */
+    if (b > a)
+        return ped_greatest_common_divisor(b, a);
 
-	if (b)
-		return ped_greatest_common_divisor (b, a % b);
-	else
-		return a;
+    if (b)
+        return ped_greatest_common_divisor(b, a % b);
+    else
+        return a;
 }
 
 /**
@@ -124,65 +111,56 @@ ped_greatest_common_divisor (PedSector a, PedSector b)
  * The object will represent all sectors \e s for which the equation
  * <tt>s = offset + X * grain_size</tt> holds.
  */
-int
-ped_alignment_init (PedAlignment* align, PedSector offset, PedSector grain_size)
-{
-	PED_ASSERT (align != NULL);
+int ped_alignment_init(PedAlignment *align, PedSector offset,
+                       PedSector grain_size) {
+    PED_ASSERT(align != NULL);
 
-	if (grain_size < 0)
-		return 0;
+    if (grain_size < 0)
+        return 0;
 
-	if (grain_size)
-		align->offset = abs_mod (offset, grain_size);
-	else
-		align->offset = offset;
-	align->grain_size = grain_size;
+    if (grain_size)
+        align->offset = abs_mod(offset, grain_size);
+    else
+        align->offset = offset;
+    align->grain_size = grain_size;
 
-	return 1;
+    return 1;
 }
 
 /**
  * Return an alignment object (used by PedConstraint), representing all
  * PedSector's that are of the form <tt>offset + X * grain_size</tt>.
  */
-PedAlignment*
-ped_alignment_new (PedSector offset, PedSector grain_size)
-{
-	PedAlignment*	align;
+PedAlignment *ped_alignment_new(PedSector offset, PedSector grain_size) {
+    PedAlignment *align;
 
-	align = (PedAlignment*) ped_malloc (sizeof (PedAlignment));
-	if (!align)
-		goto error;
+    align = (PedAlignment *)ped_malloc(sizeof(PedAlignment));
+    if (!align)
+        goto error;
 
-	if (!ped_alignment_init (align, offset, grain_size))
-		goto error_free_align;
+    if (!ped_alignment_init(align, offset, grain_size))
+        goto error_free_align;
 
-	return align;
+    return align;
 
 error_free_align:
-	free (align);
+    free(align);
 error:
-	return NULL;
+    return NULL;
 }
 
 /**
  * Free up memory associated with \p align.
  */
-void
-ped_alignment_destroy (PedAlignment* align)
-{
-	free (align);
-}
+void ped_alignment_destroy(PedAlignment *align) { free(align); }
 
 /**
  * Return a duplicate of \p align.
  */
-PedAlignment*
-ped_alignment_duplicate (const PedAlignment* align)
-{
-	if (!align)
-		return NULL;
-	return ped_alignment_new (align->offset, align->grain_size);
+PedAlignment *ped_alignment_duplicate(const PedAlignment *align) {
+    if (!align)
+        return NULL;
+    return ped_alignment_new(align->offset, align->grain_size);
 }
 
 /* the extended Euclid algorithm.
@@ -196,24 +174,22 @@ ped_alignment_duplicate (const PedAlignment* align)
  * 	gcd = greatest common divisor of a and b
  * 	gcd = x*a + y*b
  */
-static EuclidTriple _GL_ATTRIBUTE_PURE
-extended_euclid (int a, int b)
-{
-	EuclidTriple	result;
-	EuclidTriple	tmp;
+static EuclidTriple _GL_ATTRIBUTE_PURE extended_euclid(int a, int b) {
+    EuclidTriple result;
+    EuclidTriple tmp;
 
-	if (b == 0) {
-		result.gcd = a;
-		result.x = 1;
-		result.y = 0;
-		return result;
-	}
+    if (b == 0) {
+        result.gcd = a;
+        result.x = 1;
+        result.y = 0;
+        return result;
+    }
 
-	tmp = extended_euclid (b, a % b);
-	result.gcd = tmp.gcd;
-	result.x = tmp.y;
-	result.y = tmp.x - (a/b) * tmp.y;
-	return result;
+    tmp = extended_euclid(b, a % b);
+    result.gcd = tmp.gcd;
+    result.x = tmp.y;
+    result.y = tmp.x - (a / b) * tmp.y;
+    return result;
 }
 
 /**
@@ -287,84 +263,78 @@ extended_euclid (int a, int b)
  * this algorithm out :-)
  *
  * \note Returned \c NULL is a valid PedAlignment object, and can be used
-	for ped_alignment_*() function.
+        for ped_alignment_*() function.
  *
  * \return a PedAlignment on success, \c NULL on failure
  */
-PedAlignment*
-ped_alignment_intersect (const PedAlignment* a, const PedAlignment* b)
-{
-	PedSector	new_grain_size;
-	PedSector	new_offset;
-	PedSector	delta_on_gcd;
-	EuclidTriple	gcd_factors;
+PedAlignment *ped_alignment_intersect(const PedAlignment *a,
+                                      const PedAlignment *b) {
+    PedSector new_grain_size;
+    PedSector new_offset;
+    PedSector delta_on_gcd;
+    EuclidTriple gcd_factors;
 
+    if (!a || !b)
+        return NULL;
 
-	if (!a || !b)
-		return NULL;
+    /*PED_DEBUG (0x10, "intersecting alignments (%d,%d) and (%d,%d)",
+                    a->offset, a->grain_size, b->offset, b->grain_size);
+    */
 
-        /*PED_DEBUG (0x10, "intersecting alignments (%d,%d) and (%d,%d)",
-                        a->offset, a->grain_size, b->offset, b->grain_size);
-        */
+    if (a->grain_size < b->grain_size) {
+        const PedAlignment *tmp;
+        tmp = a;
+        a = b;
+        b = tmp;
+    }
 
-	if (a->grain_size < b->grain_size) {
-		const PedAlignment*	tmp;
-	        tmp = a; a = b; b = tmp;
-	}
+    /* weird/trivial case: where the solution space for "a" or "b" is
+     * either empty or contains exactly one solution
+     */
+    if (a->grain_size == 0 && b->grain_size == 0) {
+        if (a->offset == b->offset)
+            return ped_alignment_duplicate(a);
+        else
+            return NULL;
+    }
 
-	/* weird/trivial case: where the solution space for "a" or "b" is
-	 * either empty or contains exactly one solution
-	 */
-	if (a->grain_size == 0 && b->grain_size == 0) {
-		if (a->offset == b->offset)
-			return ped_alignment_duplicate (a);
-		else
-			return NULL;
-	}
+    /* general case */
+    gcd_factors = extended_euclid(a->grain_size, b->grain_size);
 
-	/* general case */
-	gcd_factors = extended_euclid (a->grain_size, b->grain_size);
+    delta_on_gcd = (b->offset - a->offset) / gcd_factors.gcd;
+    new_offset = a->offset + gcd_factors.x * delta_on_gcd * a->grain_size;
+    new_grain_size = a->grain_size * b->grain_size / gcd_factors.gcd;
 
-	delta_on_gcd = (b->offset - a->offset) / gcd_factors.gcd;
-	new_offset = a->offset + gcd_factors.x * delta_on_gcd * a->grain_size;
-	new_grain_size = a->grain_size * b->grain_size / gcd_factors.gcd;
+    /* inconsistency => no solution */
+    if (new_offset != b->offset - gcd_factors.y * delta_on_gcd * b->grain_size)
+        return NULL;
 
-	/* inconsistency => no solution */
-	if (new_offset
-	    != b->offset - gcd_factors.y * delta_on_gcd * b->grain_size)
-		return NULL;
-
-	return ped_alignment_new (new_offset, new_grain_size);
+    return ped_alignment_new(new_offset, new_grain_size);
 }
 
 /* This function returns the sector closest to "sector" that lies inside
  * geom and satisfies the alignment constraint.
  */
-static PedSector _GL_ATTRIBUTE_PURE
-_closest_inside_geometry (const PedAlignment* align, const PedGeometry* geom,
-			  PedSector sector)
-{
-	PED_ASSERT (align != NULL);
+static PedSector _GL_ATTRIBUTE_PURE _closest_inside_geometry(
+    const PedAlignment *align, const PedGeometry *geom, PedSector sector) {
+    PED_ASSERT(align != NULL);
 
-	if (!align->grain_size) {
-		if (ped_alignment_is_aligned (align, geom, sector)
-		    && (!geom || ped_geometry_test_sector_inside (geom,
-				    				  sector)))
-			return sector;
-		else
-			return -1;
-	}
+    if (!align->grain_size) {
+        if (ped_alignment_is_aligned(align, geom, sector) &&
+            (!geom || ped_geometry_test_sector_inside(geom, sector)))
+            return sector;
+        else
+            return -1;
+    }
 
-	if (sector < geom->start)
-		sector += ped_round_up_to (geom->start - sector,
-					   align->grain_size);
-	if (sector > geom->end)
-		sector -= ped_round_up_to (sector - geom->end,
-					   align->grain_size);
+    if (sector < geom->start)
+        sector += ped_round_up_to(geom->start - sector, align->grain_size);
+    if (sector > geom->end)
+        sector -= ped_round_up_to(sector - geom->end, align->grain_size);
 
-	if (!ped_geometry_test_sector_inside (geom, sector))
-		return -1;
-	return sector;
+    if (!ped_geometry_test_sector_inside(geom, sector))
+        return -1;
+    return sector;
 }
 
 /**
@@ -375,24 +345,21 @@ _closest_inside_geometry (const PedAlignment* align, const PedGeometry* geom,
  *
  * \return a PedSector on success, \c -1 on failure
  */
-PedSector
-ped_alignment_align_up (const PedAlignment* align, const PedGeometry* geom,
-			PedSector sector)
-{
-	PedSector	result;
+PedSector ped_alignment_align_up(const PedAlignment *align,
+                                 const PedGeometry *geom, PedSector sector) {
+    PedSector result;
 
-	PED_ASSERT (align != NULL);
+    PED_ASSERT(align != NULL);
 
-	if (!align->grain_size)
-		result = align->offset;
-	else
-		result = ped_round_up_to (sector - align->offset,
-			       		  align->grain_size)
-			 + align->offset;
+    if (!align->grain_size)
+        result = align->offset;
+    else
+        result = ped_round_up_to(sector - align->offset, align->grain_size) +
+                 align->offset;
 
-	if (geom)
-		result = _closest_inside_geometry (align, geom, result);
-	return result;
+    if (geom)
+        result = _closest_inside_geometry(align, geom, result);
+    return result;
 }
 
 /**
@@ -403,39 +370,34 @@ ped_alignment_align_up (const PedAlignment* align, const PedGeometry* geom,
  *
  * \return a PedSector on success, \c -1 on failure
  */
-PedSector
-ped_alignment_align_down (const PedAlignment* align, const PedGeometry* geom,
-			  PedSector sector)
-{
-	PedSector	result;
+PedSector ped_alignment_align_down(const PedAlignment *align,
+                                   const PedGeometry *geom, PedSector sector) {
+    PedSector result;
 
-	PED_ASSERT (align != NULL);
+    PED_ASSERT(align != NULL);
 
-	if (!align->grain_size)
-		result = align->offset;
-	else
-		result = ped_round_down_to (sector - align->offset,
-			      		    align->grain_size)
-			 + align->offset;
+    if (!align->grain_size)
+        result = align->offset;
+    else
+        result = ped_round_down_to(sector - align->offset, align->grain_size) +
+                 align->offset;
 
-	if (geom)
-		result = _closest_inside_geometry (align, geom, result);
-	return result;
+    if (geom)
+        result = _closest_inside_geometry(align, geom, result);
+    return result;
 }
 
 /* Returns either a or b, depending on which is closest to "sector". */
-static PedSector
-closest (PedSector sector, PedSector a, PedSector b)
-{
-	if (a == -1)
-		return b;
-	if (b == -1)
-		return a;
+static PedSector closest(PedSector sector, PedSector a, PedSector b) {
+    if (a == -1)
+        return b;
+    if (b == -1)
+        return a;
 
-	if (llabs (sector - a) < llabs (sector - b))
-		return a;
-	else
-		return b;
+    if (llabs(sector - a) < llabs(sector - b))
+        return a;
+    else
+        return b;
 }
 
 /**
@@ -444,14 +406,13 @@ closest (PedSector sector, PedSector a, PedSector b)
  *
  * \return a PedSector on success, \c -1 on failure
  */
-PedSector
-ped_alignment_align_nearest (const PedAlignment* align, const PedGeometry* geom,
-			     PedSector sector)
-{
-	PED_ASSERT (align != NULL);
+PedSector ped_alignment_align_nearest(const PedAlignment *align,
+                                      const PedGeometry *geom,
+                                      PedSector sector) {
+    PED_ASSERT(align != NULL);
 
-	return closest (sector, ped_alignment_align_up (align, geom, sector),
-			ped_alignment_align_down (align, geom, sector));
+    return closest(sector, ped_alignment_align_up(align, geom, sector),
+                   ped_alignment_align_down(align, geom, sector));
 }
 
 /**
@@ -460,20 +421,18 @@ ped_alignment_align_nearest (const PedAlignment* align, const PedGeometry* geom,
  *
  * \return \c 1 on success, \c 0 on failure
  */
-int
-ped_alignment_is_aligned (const PedAlignment* align, const PedGeometry* geom,
-			  PedSector sector)
-{
-	if (!align)
-		return 0;
+int ped_alignment_is_aligned(const PedAlignment *align, const PedGeometry *geom,
+                             PedSector sector) {
+    if (!align)
+        return 0;
 
-	if (geom && !ped_geometry_test_sector_inside (geom, sector))
-		return 0;
+    if (geom && !ped_geometry_test_sector_inside(geom, sector))
+        return 0;
 
-	if (align->grain_size)
-		return (sector - align->offset) % align->grain_size == 0;
-	else
-		return sector == align->offset;
+    if (align->grain_size)
+        return (sector - align->offset) % align->grain_size == 0;
+    else
+        return sector == align->offset;
 }
 
 /**

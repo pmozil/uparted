@@ -27,26 +27,25 @@
 #include "strlist.h"
 
 #ifdef ENABLE_NLS
-#       include <wchar.h>
+#include <wchar.h>
 #else
-#       ifdef wchar_t
-#               undef wchar_t
-#       endif
-#       define wchar_t char
+#ifdef wchar_t
+#undef wchar_t
 #endif
-
+#define wchar_t char
+#endif
 
 /* opaque data type */
 typedef void Table;
 
-Table* table_new(int ncols);
-void table_destroy (Table* t);
+Table *table_new(int ncols);
+void table_destroy(Table *t);
 
 /*
  * you must not free neither 'row' nor 'list'
  *      -- this will be done by table_destroy()
  */
-void table_add_row (Table* t, wchar_t** row);
-void table_add_row_from_strlist (Table* t, StrList* list);
+void table_add_row(Table *t, wchar_t **row);
+void table_add_row_from_strlist(Table *t, StrList *list);
 
-wchar_t* table_render(Table* t);
+wchar_t *table_render(Table *t);

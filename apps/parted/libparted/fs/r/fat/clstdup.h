@@ -23,6 +23,6 @@
 #include "context.h"
 
 /* the big important one :-) */
-extern int fat_duplicate_clusters (FatOpContext* ctx, PedTimer* timer);
+extern int fat_duplicate_clusters(FatOpContext *ctx, PedTimer *timer);
 
 #endif /* PED_FAT_CLSTDUP_H_INCLUDED */

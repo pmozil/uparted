@@ -8,10 +8,10 @@
 enum { UL_JSON_OBJECT, UL_JSON_ARRAY, UL_JSON_VALUE };
 
 struct ul_jsonwrt {
-    FILE *out;
-    int indent;
+  FILE *out;
+  int indent;
 
-    unsigned int after_close : 1;
+  unsigned int after_close : 1;
 };
 
 void ul_jsonwrt_init(struct ul_jsonwrt *fmt, FILE *out, int indent);

@@ -104,19 +104,19 @@ void close_stdout_set_ignore_EPIPE(bool ignore) { ignore_EPIPE = ignore; }
    on being able to detect failure in other tools via their exit status.  */
 
 void close_stdout(void) {
-    if (close_stream(stdout) != 0 && !(ignore_EPIPE && errno == EPIPE)) {
-        // char const *write_error = _("write error");
-        // if (file_name)
-        //   error (0, errno, "%s: %s", quotearg_colon (file_name),
-        //          write_error);
-        // else
-        //   error (0, errno, "%s", write_error);
+  if (close_stream(stdout) != 0 && !(ignore_EPIPE && errno == EPIPE)) {
+    // char const *write_error = _("write error");
+    // if (file_name)
+    //   error (0, errno, "%s: %s", quotearg_colon (file_name),
+    //          write_error);
+    // else
+    //   error (0, errno, "%s", write_error);
 
-        _Exit(exit_failure);
-    }
+    _Exit(exit_failure);
+  }
 
-    /* Close stderr only if not sanitizing, as sanitizers may report to
-       stderr after this function returns.  */
-    if (!SANITIZE_ADDRESS && close_stream(stderr) != 0)
-        _Exit(exit_failure);
+  /* Close stderr only if not sanitizing, as sanitizers may report to
+     stderr after this function returns.  */
+  if (!SANITIZE_ADDRESS && close_stream(stderr) != 0)
+    _Exit(exit_failure);
 }

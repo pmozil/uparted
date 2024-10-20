@@ -42,17 +42,15 @@
  * @{
  */
 
-
 #include <config.h>
-#include <parted/parted.h>
 #include <parted/debug.h>
+#include <parted/parted.h>
 
 typedef struct {
-	PedTimer*	parent;
-	float		nest_frac;
-	float		start_frac;
+  PedTimer *parent;
+  float nest_frac;
+  float start_frac;
 } NestedContext;
-
 
 /**
  * \brief Creates a timer.
@@ -62,49 +60,40 @@ typedef struct {
  *
  * \return a new PedTimer
  */
-PedTimer*
-ped_timer_new (PedTimerHandler* handler, void* context)
-{
-	PedTimer*	timer;
+PedTimer *ped_timer_new(PedTimerHandler *handler, void *context) {
+  PedTimer *timer;
 
-	PED_ASSERT (handler != NULL);
+  PED_ASSERT(handler != NULL);
 
-	timer = (PedTimer*) ped_malloc (sizeof (PedTimer));
-	if (!timer)
-		return NULL;
+  timer = (PedTimer *)ped_malloc(sizeof(PedTimer));
+  if (!timer)
+    return NULL;
 
-	timer->handler = handler;
-	timer->context = context;
-	ped_timer_reset (timer);
-	return timer;
+  timer->handler = handler;
+  timer->context = context;
+  ped_timer_reset(timer);
+  return timer;
 }
-
 
 /**
  * \brief Destroys a \p timer.
  */
-void
-ped_timer_destroy (PedTimer* timer)
-{
-	if (!timer)
-		return;
+void ped_timer_destroy(PedTimer *timer) {
+  if (!timer)
+    return;
 
-	free (timer);
+  free(timer);
 }
 
 /* This function is used by ped_timer_new_nested() as the timer->handler
  * function.
  */
-static void
-_nest_handler (PedTimer* timer, void* context)
-{
-	NestedContext*	ncontext = (NestedContext*) context;
+static void _nest_handler(PedTimer *timer, void *context) {
+  NestedContext *ncontext = (NestedContext *)context;
 
-	ped_timer_update (
-		ncontext->parent,
-		ncontext->start_frac + ncontext->nest_frac * timer->frac);
+  ped_timer_update(ncontext->parent,
+                   ncontext->start_frac + ncontext->nest_frac * timer->frac);
 }
-
 
 /**
  * \brief Creates a new nested timer.
@@ -120,38 +109,34 @@ _nest_handler (PedTimer* timer, void* context)
  *
  * \return nested timer
  */
-PedTimer*
-ped_timer_new_nested (PedTimer* parent, float nest_frac)
-{
-	NestedContext*	context;
+PedTimer *ped_timer_new_nested(PedTimer *parent, float nest_frac) {
+  NestedContext *context;
 
-	if (!parent)
-		return NULL;
+  if (!parent)
+    return NULL;
 
-	PED_ASSERT (nest_frac >= 0.0f);
-	PED_ASSERT (nest_frac <= 1.0f);
+  PED_ASSERT(nest_frac >= 0.0f);
+  PED_ASSERT(nest_frac <= 1.0f);
 
-	context = (NestedContext*) ped_malloc (sizeof (NestedContext));
-	if (!context)
-		return NULL;
-	context->parent = parent;
-	context->nest_frac = nest_frac;
-	context->start_frac = parent->frac;
+  context = (NestedContext *)ped_malloc(sizeof(NestedContext));
+  if (!context)
+    return NULL;
+  context->parent = parent;
+  context->nest_frac = nest_frac;
+  context->start_frac = parent->frac;
 
-	return ped_timer_new (_nest_handler, context);
+  return ped_timer_new(_nest_handler, context);
 }
 
 /**
  * \brief Destroys a nested \p timer.
  */
-void
-ped_timer_destroy_nested (PedTimer* timer)
-{
-	if (!timer)
-		return;
+void ped_timer_destroy_nested(PedTimer *timer) {
+  if (!timer)
+    return;
 
-	free (timer->context);
-	ped_timer_destroy (timer);
+  free(timer->context);
+  ped_timer_destroy(timer);
 }
 
 /**
@@ -163,17 +148,15 @@ ped_timer_destroy_nested (PedTimer* timer)
  * First it updates \p timer->now and recomputes \p timer->predicted_end,
  * and then calls the handler.
  */
-void
-ped_timer_touch (PedTimer* timer)
-{
-	if (!timer)
-	       return;
+void ped_timer_touch(PedTimer *timer) {
+  if (!timer)
+    return;
 
-	timer->now = time (NULL);
-	if (timer->now > timer->predicted_end)
-		timer->predicted_end = timer->now;
+  timer->now = time(NULL);
+  if (timer->now > timer->predicted_end)
+    timer->predicted_end = timer->now;
 
-	timer->handler (timer, timer->context);
+  timer->handler(timer, timer->context);
 }
 
 /**
@@ -184,17 +167,15 @@ ped_timer_touch (PedTimer* timer)
  * It resets the \p timer, by setting \p timer->start and \p timer->now
  * to the current time.
  */
-void
-ped_timer_reset (PedTimer* timer)
-{
-	if (!timer)
-	       return;
+void ped_timer_reset(PedTimer *timer) {
+  if (!timer)
+    return;
 
-	timer->start = timer->now = timer->predicted_end = time (NULL);
-	timer->state_name = NULL;
-	timer->frac = 0;
+  timer->start = timer->now = timer->predicted_end = time(NULL);
+  timer->state_name = NULL;
+  timer->frac = 0;
 
-	ped_timer_touch (timer);
+  ped_timer_touch(timer);
 }
 
 /**
@@ -205,21 +186,18 @@ ped_timer_reset (PedTimer* timer)
  *
  * Sets the new \p timer->frac, and calls ped_timer_touch().
  */
-void
-ped_timer_update (PedTimer* timer, float frac)
-{
-	if (!timer)
-	       return;
+void ped_timer_update(PedTimer *timer, float frac) {
+  if (!timer)
+    return;
 
-	timer->now = time (NULL);
-	timer->frac = frac;
+  timer->now = time(NULL);
+  timer->frac = frac;
 
-	if (frac)
-		timer->predicted_end
-			= timer->start
-			  + (long) ((timer->now - timer->start) / frac);
+  if (frac)
+    timer->predicted_end =
+        timer->start + (long)((timer->now - timer->start) / frac);
 
-	ped_timer_touch (timer);
+  ped_timer_touch(timer);
 }
 
 /**
@@ -231,14 +209,12 @@ ped_timer_update (PedTimer* timer, float frac)
  * Sets a new name - \p state_name - for the current "phase" of the operation,
  * and calls ped_timer_touch().
  */
-void
-ped_timer_set_state_name (PedTimer* timer, const char* state_name)
-{
-	if (!timer)
-	       return;
+void ped_timer_set_state_name(PedTimer *timer, const char *state_name) {
+  if (!timer)
+    return;
 
-	timer->state_name = state_name;
-	ped_timer_touch (timer);
+  timer->state_name = state_name;
+  ped_timer_touch(timer);
 }
 
 /** @} */
