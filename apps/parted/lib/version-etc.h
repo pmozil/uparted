@@ -26,7 +26,8 @@
 extern "C" {
 #endif
 
-extern const char version_etc_copyright[];
+static const char version_etc_copyright[] =
+    "Copyright %s %d Free Software Foundation, Inc.";
 
 /* The three functions below display the --version information in the
    standard way: command and package names, package version, followed

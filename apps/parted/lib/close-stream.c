@@ -52,23 +52,24 @@
    the failure.  That's what the ferror test is checking below.  */
 
 int close_stream(FILE *stream) {
-  const bool some_pending = (__fpending(stream) != 0);
-  const bool prev_fail = (ferror(stream) != 0);
-  const bool fclose_fail = (fclose(stream) != 0);
+    // const bool some_pending = (__fpending(stream) != 0);
+    const bool some_pending = 0;
+    const bool prev_fail = (ferror(stream) != 0);
+    const bool fclose_fail = (fclose(stream) != 0);
 
-  /* Return an error indication if there was a previous failure or if
-     fclose failed, with one exception: ignore an fclose failure if
-     there was no previous error, no data remains to be flushed, and
-     fclose failed with EBADF.  That can happen when a program like cp
-     is invoked like this 'cp a b >&-' (i.e., with standard output
-     closed) and doesn't generate any output (hence no previous error
-     and nothing to be flushed).  */
+    /* Return an error indication if there was a previous failure or if
+       fclose failed, with one exception: ignore an fclose failure if
+       there was no previous error, no data remains to be flushed, and
+       fclose failed with EBADF.  That can happen when a program like cp
+       is invoked like this 'cp a b >&-' (i.e., with standard output
+       closed) and doesn't generate any output (hence no previous error
+       and nothing to be flushed).  */
 
-  if (prev_fail || (fclose_fail && (some_pending || errno != EBADF))) {
-    if (!fclose_fail)
-      errno = 0;
-    return EOF;
-  }
+    if (prev_fail || (fclose_fail && (some_pending || errno != EBADF))) {
+        if (!fclose_fail)
+            errno = 0;
+        return EOF;
+    }
 
-  return 0;
+    return 0;
 }

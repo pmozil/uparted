@@ -110,12 +110,12 @@ extern int getopt(int ___argc, char *const *___argv, const char *__shortopts);
    returns the contents of the 'val' field.  */
 
 struct option {
-  const char *name;
-  /* has_arg can't be an enum because some compilers complain about
-     type mismatches in all the code that assumes it is an int.  */
-  int has_arg;
-  int *flag;
-  int val;
+    const char *name;
+    /* has_arg can't be an enum because some compilers complain about
+       type mismatches in all the code that assumes it is an int.  */
+    int has_arg;
+    int *flag;
+    int val;
 };
 
 /* Names for the values of the 'has_arg' field of 'struct option'.  */
@@ -124,8 +124,8 @@ struct option {
 #define required_argument 1
 #define optional_argument 2
 
-extern int getopt_long(int ___argc, char **___argv, const char *__shortopts,
-                       const struct option *__longopts, int *__longind);
+extern int getopt_long(int argc, char **argv, const char *options,
+                       const struct option *long_options, int *opt_index);
 
 extern int getopt_long_only(int ___argc, char **___argv,
                             const char *__shortopts,

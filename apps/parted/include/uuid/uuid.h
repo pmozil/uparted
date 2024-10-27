@@ -69,18 +69,26 @@ typedef unsigned char uuid_t[16];
 #ifdef __GNUC__
 #define UUID_DEFINE(name, u0, u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11,    \
                     u12, u13, u14, u15)                                        \
-  static const uuid_t name __attribute__((unused)) = {                         \
-      u0, u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11, u12, u13, u14, u15}
+    static const uuid_t name __attribute__((unused)) = {                       \
+        u0, u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11, u12, u13, u14, u15}
 #else
 #define UUID_DEFINE(name, u0, u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11,    \
                     u12, u13, u14, u15)                                        \
-  static const uuid_t name = {u0, u1, u2,  u3,  u4,  u5,  u6,  u7,             \
-                              u8, u9, u10, u11, u12, u13, u14, u15}
+    static const uuid_t name = {u0, u1, u2,  u3,  u4,  u5,  u6,  u7,           \
+                                u8, u9, u10, u11, u12, u13, u14, u15}
 #endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+struct uuid {
+    uint32_t time_low;
+    uint16_t time_mid;
+    uint16_t time_hi_and_version;
+    uint16_t clock_seq;
+    uint8_t node[6];
+};
 
 /* clear.c */
 extern void uuid_clear(uuid_t uu);
