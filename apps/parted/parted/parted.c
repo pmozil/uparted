@@ -2533,7 +2533,7 @@ int main(int argc, char **argv) {
     set_program_name(argv[0]);
     atexit(close_stdout);
 
-    printf("Get devices\n;");
+    printf("Get devices\n");
     dev = _init(&argc, &argv);
     if (!dev)
         return 1;

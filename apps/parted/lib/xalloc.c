@@ -2,7 +2,7 @@
 #include <xalloc.h>
 
 void xalloc_die() {
-    fprintf(stderr, "\nNo memory left!\n");
+    printf("No memory left!\n");
     _Exit(1);
 }
 
