@@ -10,4 +10,7 @@ qemu-system-x86_64 -enable-kvm \
     -drive format=raw,file=fat:rw:$1 \
     -drive format=raw,file=./data/image.img \
     -nographic \
-    -net none
+    -net none \
+    -m 4096M \
+    -cpu host \
+    -smp 4

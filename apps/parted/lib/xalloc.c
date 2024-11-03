@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <string.h>
 #include <xalloc.h>
 
@@ -11,6 +12,7 @@ void *xmalloc(size_t s) {
     if (val == NULL) {
         xalloc_die();
     }
+    return val;
 }
 
 void *ximalloc(idx_t s) { return xmalloc(s); }
@@ -52,7 +54,12 @@ void *ximemdup(void const *p, idx_t s) { return xmemdup(p, s); }
 char *ximemdup0(void const *p, idx_t s) { return xmemdup(p, s); }
 char *xstrdup(char const *str) {
     size_t len = strlen(str);
-    return xmemdup(str, len);
+    char *out = xmalloc(len + 1);
+    for (size_t i = 0; i < len; i++) {
+        out[i] = str[i];
+    }
+    out[len] = '\0';
+    return out;
 }
 
 void *x2nrealloc(void *p, size_t *pn, size_t s) {

@@ -681,7 +681,8 @@
 #define HAVE_GETTIMEOFDAY 1
 
 /* Define to 1 if you have the 'getuid' function. */
-#define HAVE_GETUID 1
+// #define HAVE_GETUID 1
+#undef HAVE_GETUID
 
 /* Define if the uselocale exists, may be safely called, and returns
    sufficient information. */
@@ -1220,13 +1221,13 @@
 #define _GL_INLINE_HEADER_CONST_PRAGMA
 #else
 #define _GL_INLINE_HEADER_CONST_PRAGMA                                         \
-  _Pragma("GCC diagnostic ignored \"-Wsuggest-attribute=const\"")
+    _Pragma("GCC diagnostic ignored \"-Wsuggest-attribute=const\"")
 #endif
 #define _GL_INLINE_HEADER_BEGIN                                                \
-  _Pragma("GCC diagnostic push")                                               \
-      _Pragma("GCC diagnostic ignored \"-Wmissing-prototypes\"")               \
-          _Pragma("GCC diagnostic ignored \"-Wmissing-declarations\"")         \
-              _GL_INLINE_HEADER_CONST_PRAGMA
+    _Pragma("GCC diagnostic push")                                             \
+        _Pragma("GCC diagnostic ignored \"-Wmissing-prototypes\"")             \
+            _Pragma("GCC diagnostic ignored \"-Wmissing-declarations\"")       \
+                _GL_INLINE_HEADER_CONST_PRAGMA
 #define _GL_INLINE_HEADER_END _Pragma("GCC diagnostic pop")
 #else
 #define _GL_INLINE_HEADER_BEGIN
@@ -1591,7 +1592,7 @@
 /* True if the compiler says it groks GNU C version MAJOR.MINOR.  */
 #if defined __GNUC__ && defined __GNUC_MINOR__
 #define _GL_GNUC_PREREQ(major, minor)                                          \
-  ((major) < __GNUC__ + ((minor) <= __GNUC_MINOR__))
+    ((major) < __GNUC__ + ((minor) <= __GNUC_MINOR__))
 #else
 #define _GL_GNUC_PREREQ(major, minor) 0
 #endif
@@ -1833,7 +1834,7 @@
 #if defined __cplusplus && defined __GNUC__ && !defined __clang__
 /* Work around GCC bug <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108231> */
 #define _GL_ATTRIBUTE_DEALLOC_FREE                                             \
-  _GL_ATTRIBUTE_DEALLOC((void (*)(void *))free, 1)
+    _GL_ATTRIBUTE_DEALLOC((void (*)(void *))free, 1)
 #else
 #define _GL_ATTRIBUTE_DEALLOC_FREE _GL_ATTRIBUTE_DEALLOC(free, 1)
 #endif
@@ -1872,9 +1873,9 @@
 #define _GL_ATTRIBUTE_WARNING(msg) __attribute__((__warning__(msg)))
 #elif _GL_HAS_ATTRIBUTE(diagnose_if)
 #define _GL_ATTRIBUTE_ERROR(msg)                                               \
-  __attribute__((__diagnose_if__(1, msg, "error")))
+    __attribute__((__diagnose_if__(1, msg, "error")))
 #define _GL_ATTRIBUTE_WARNING(msg)                                             \
-  __attribute__((__diagnose_if__(1, msg, "warning")))
+    __attribute__((__diagnose_if__(1, msg, "warning")))
 #else
 #define _GL_ATTRIBUTE_ERROR(msg)
 #define _GL_ATTRIBUTE_WARNING(msg)
@@ -2330,8 +2331,8 @@
 #define _Alignof(type) alignof(type)
 #else
 template <class __t> struct __alignof_helper {
-  char __a;
-  __t __b;
+    char __a;
+    __t __b;
 };
 #define _Alignof(type) offsetof(__alignof_helper<type>, __b)
 #define _GL_STDALIGN_NEEDS_STDDEF 1
@@ -2339,20 +2340,20 @@ template <class __t> struct __alignof_helper {
 #else
 #if (defined __GNUC__ && 4 <= __GNUC__) || defined __clang__
 #define _Alignof(type)                                                         \
-  __builtin_offsetof(                                                          \
-      struct {                                                                 \
-        char __a;                                                              \
-        type __b;                                                              \
-      },                                                                       \
-      __b)
+    __builtin_offsetof(                                                        \
+        struct {                                                               \
+            char __a;                                                          \
+            type __b;                                                          \
+        },                                                                     \
+        __b)
 #else
 #define _Alignof(type)                                                         \
-  offsetof(                                                                    \
-      struct {                                                                 \
-        char __a;                                                              \
-        type __b;                                                              \
-      },                                                                       \
-      __b)
+    offsetof(                                                                  \
+        struct {                                                               \
+            char __a;                                                          \
+            type __b;                                                          \
+        },                                                                     \
+        __b)
 #define _GL_STDALIGN_NEEDS_STDDEF 1
 #endif
 #endif

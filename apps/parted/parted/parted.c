@@ -2028,14 +2028,14 @@ static void _init_messages() {
 
     /* flags */
     first = 1;
-    list = str_list_create(_(flag_msg_start), NULL);
+    list = str_list_create(flag_msg_start, NULL);
     for (part_flag = ped_partition_flag_next(0); part_flag;
          part_flag = ped_partition_flag_next(part_flag)) {
         if (first)
             first = 0;
         else
             str_list_append(list, ", ");
-        str_list_append(list, _(ped_partition_flag_get_name(part_flag)));
+        str_list_append(list, ped_partition_flag_get_name(part_flag));
     }
     str_list_append(list, "\n");
 
@@ -2043,7 +2043,7 @@ static void _init_messages() {
     str_list_destroy(list);
     /* disk flags */
     first = 1;
-    list = str_list_create(_(disk_flag_msg_start), NULL);
+    list = str_list_create(flag_msg_start, NULL);
     for (disk_flag = ped_disk_flag_next(0); disk_flag;
          disk_flag = ped_disk_flag_next(disk_flag)) {
         if (first)
@@ -2138,6 +2138,7 @@ static void _init_commands() {
                             NULL),
 
             str_list_create(_(number_msg), _(min_or_opt_msg), NULL), 1));
+
     command_register(
         commands,
         command_create(str_list_create_unique("help", _("help"), NULL), do_help,
@@ -2483,9 +2484,11 @@ static PedDevice *_init(int *argc_ptr, char ***argv_ptr) {
     }
 #endif
 
+    printf("Choose device\n");
     dev = _choose_device(argc_ptr, argv_ptr);
     if (!dev)
         goto error_done_commands;
+    printf("Done Choose device\n");
 
     g_timer = ped_timer_new(_timer_handler, &timer_context);
     if (!g_timer)
@@ -2524,16 +2527,14 @@ static void _done(PedDevice *dev, PedDisk *diskp) {
     done_ui();
 }
 
-int main(int argc, char **argv) {
+int main(IN int argc, IN char **argv) {
     PedDevice *dev;
     PedDisk *diskp = 0;
     int status;
 
-    printf("Setting program name\n");
     set_program_name(argv[0]);
     atexit(close_stdout);
 
-    printf("Get devices\n");
     dev = _init(&argc, &argv);
     if (!dev)
         return 1;
