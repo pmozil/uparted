@@ -25,7 +25,9 @@
 PedDevice *ped_device_new_from_store(struct store *source);
 
 static int _device_get_sector_size(PedDevice *dev) {
-    return PED_SECTOR_SIZE_DEFAULT;
+    EFI_BLOCK_IO_PROTOCOL *block_io =
+        (EFI_BLOCK_IO_PROTOCOL *)dev->arch_specific;
+    return block_io->Media->BlockSize;
 }
 
 static PedSector _device_get_length(PedDevice *dev) {
@@ -36,11 +38,57 @@ static PedSector _device_get_length(PedDevice *dev) {
     return block_io->Media->LastBlock + 1;
 }
 
-static int _device_probe_geometry(PedDevice *dev) { return 1; }
+static int _device_probe_geometry(PedDevice *dev) {
+    PedSector cyl_size;
+
+    dev->length = _device_get_length(dev);
+    if (!dev->length)
+        return 0;
+
+    dev->sector_size = _device_get_sector_size(dev);
+    if (!dev->sector_size)
+        return 0;
+
+    /* XXX: We have no way to get this!  */
+    dev->bios_geom.sectors = 63;
+    dev->bios_geom.heads = 255;
+    cyl_size = dev->bios_geom.sectors * dev->bios_geom.heads;
+    dev->bios_geom.cylinders =
+        dev->length / cyl_size * (dev->sector_size / PED_SECTOR_SIZE_DEFAULT);
+    dev->hw_geom = dev->bios_geom;
+
+    return 1;
+}
 
 /* Initialize by allocating memory and filling in a few defaults, a
    PedDevice structure.  */
-static PedDevice *_init_device(const char *path) {}
+static PedDevice *_init_device(const char *path) {
+    PedDevice *dev;
+    GNUSpecific *arch_specific;
+
+    dev = (PedDevice *)ped_malloc(sizeof(PedDevice));
+    if (!dev)
+        goto error;
+
+    dev->path = strdup(path);
+    if (!dev->path)
+        goto error_free_dev;
+
+    dev->arch_specific = NULL dev->type =
+        PED_DEVICE_UNKNOWN; /* It's deprecated anyway */
+    dev->open_count = 0;
+    dev->read_only = 0;
+    dev->external_mode = 0;
+    dev->dirty = 0;
+    dev->boot_dirty = 0;
+
+    return dev;
+
+error_free_dev:
+    free(dev);
+error:
+    return NULL;
+}
 
 /* Ask the kernel and translators to reload the partition table.
    XXX: Will probably be replaced by some RPC to partfs when it's finished.  In
