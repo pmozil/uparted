@@ -9,6 +9,13 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include <Library/BaseLib.h>
+#include <Library/DevicePathLib.h>
+#include <Library/MemoryAllocationLib.h>
+#include <Library/UefiBootServicesTableLib.h>
+#include <Library/UefiLib.h>
+#include <Protocol/BlockIo.h>
+
 #include "../architecture.h"
 
 /* Initialize a PedDevice using SOURCE.  The SOURCE will NOT be destroyed;
@@ -21,13 +28,15 @@ static int _device_get_sector_size(PedDevice *dev) {
     return PED_SECTOR_SIZE_DEFAULT;
 }
 
-static PedSector _device_get_length(PedDevice *dev) { return 0; }
+static PedSector _device_get_length(PedDevice *dev) {
+    EFI_BLOCK_IO_PROTOCOL *block_io =
+        (EFI_BLOCK_IO_PROTOCOL *)dev->arch_specific;
+    // UINT64 disk_size =
+    //     (block_io->Media->LastBlock + 1) * block_io->Media->BlockSize;
+    return block_io->Media->LastBlock + 1;
+}
 
 static int _device_probe_geometry(PedDevice *dev) { return 1; }
-
-static int init_file(PedDevice *dev) { return 0; }
-
-static void _flush_cache(PedDevice *dev) {}
 
 /* Initialize by allocating memory and filling in a few defaults, a
    PedDevice structure.  */
