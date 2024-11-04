@@ -18,6 +18,13 @@
 
 #include "../architecture.h"
 
+typedef struct _GNUSpecific GNUSpecific;
+
+struct _GNUSpecific {
+    struct store *store;
+    int consume;
+};
+
 /* Initialize a PedDevice using SOURCE.  The SOURCE will NOT be destroyed;
    the caller created it, it is the caller's responsilbility to free it
    after it calls ped_device_destory.  SOURCE is not registered in Parted's
@@ -74,7 +81,8 @@ static PedDevice *_init_device(const char *path) {
     if (!dev->path)
         goto error_free_dev;
 
-    dev->arch_specific = NULL dev->type =
+    dev->arch_specific = NULL;
+    dev->type =
         PED_DEVICE_UNKNOWN; /* It's deprecated anyway */
     dev->open_count = 0;
     dev->read_only = 0;
