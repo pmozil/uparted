@@ -24,11 +24,11 @@
 #include <parted/parted.h>
 
 typedef struct {
-  StrList *names;
-  int (*method)(PedDevice **dev, PedDisk **diskp);
-  StrList *summary;
-  StrList *help;
-  int non_interactive : 1;
+    StrList *names;
+    int (*method)(PedDevice **dev, PedDisk **diskp);
+    StrList *summary;
+    StrList *help;
+    int non_interactive : 1;
 } Command;
 
 extern Command *command_create(const StrList *names,

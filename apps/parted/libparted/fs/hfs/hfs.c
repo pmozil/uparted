@@ -45,43 +45,43 @@ unsigned hfs_block_count;
 unsigned hfsp_block_count;
 
 static PedFileSystemOps hfs_ops = {
-  probe : hfs_probe,
+    probe : hfs_probe,
 };
 
 static PedFileSystemOps hfsplus_ops = {
-  probe : hfsplus_probe,
+    probe : hfsplus_probe,
 };
 
 static PedFileSystemOps hfsx_ops = {
-  probe : hfsx_probe,
+    probe : hfsx_probe,
 };
 
 static PedFileSystemType hfs_type = {
-  next : NULL,
-  ops : &hfs_ops,
-  name : "hfs",
+    next : NULL,
+    ops : &hfs_ops,
+    name : "hfs",
 };
 
 static PedFileSystemType hfsplus_type = {
-  next : NULL,
-  ops : &hfsplus_ops,
-  name : "hfs+",
+    next : NULL,
+    ops : &hfsplus_ops,
+    name : "hfs+",
 };
 
 static PedFileSystemType hfsx_type = {
-  next : NULL,
-  ops : &hfsx_ops,
-  name : "hfsx",
+    next : NULL,
+    ops : &hfsx_ops,
+    name : "hfsx",
 };
 
 void ped_file_system_hfs_init() {
-  ped_file_system_type_register(&hfs_type);
-  ped_file_system_type_register(&hfsplus_type);
-  ped_file_system_type_register(&hfsx_type);
+    ped_file_system_type_register(&hfs_type);
+    ped_file_system_type_register(&hfsplus_type);
+    ped_file_system_type_register(&hfsx_type);
 }
 
 void ped_file_system_hfs_done() {
-  ped_file_system_type_unregister(&hfs_type);
-  ped_file_system_type_unregister(&hfsplus_type);
-  ped_file_system_type_unregister(&hfsx_type);
+    ped_file_system_type_unregister(&hfs_type);
+    ped_file_system_type_unregister(&hfsplus_type);
+    ped_file_system_type_unregister(&hfsx_type);
 }

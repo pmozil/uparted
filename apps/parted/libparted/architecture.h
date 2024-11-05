@@ -26,8 +26,8 @@
 #include <parted/disk.h>
 
 struct _PedArchitecture {
-  PedDiskArchOps *disk_ops;
-  PedDeviceArchOps *dev_ops;
+    PedDiskArchOps *disk_ops;
+    PedDeviceArchOps *dev_ops;
 };
 typedef struct _PedArchitecture PedArchitecture;
 

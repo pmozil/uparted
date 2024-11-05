@@ -44,7 +44,7 @@ static PedDebugHandler *debug_handler = &default_handler;
  */
 static void default_handler(const int level, const char *file, int line,
                             const char *function, const char *msg) {
-  fprintf(stderr, "[%d] %s:%d (%s): %s\n", level, file, line, function, msg);
+    fprintf(stderr, "[%d] %s:%d (%s): %s\n", level, file, line, function, msg);
 }
 
 /**
@@ -55,23 +55,23 @@ static void default_handler(const int level, const char *file, int line,
  */
 void ped_debug(const int level, const char *file, int line,
                const char *function, const char *msg, ...) {
-  va_list arg_list;
-  char *msg_concat = ped_malloc(8192);
+    va_list arg_list;
+    char *msg_concat = ped_malloc(8192);
 
-  va_start(arg_list, msg);
-  vsnprintf(msg_concat, 8192, msg, arg_list);
-  va_end(arg_list);
+    va_start(arg_list, msg);
+    vsnprintf(msg_concat, 8192, msg, arg_list);
+    va_end(arg_list);
 
-  debug_handler(level, file, line, function, msg_concat);
+    debug_handler(level, file, line, function, msg_concat);
 
-  free(msg_concat);
+    free(msg_concat);
 }
 
 /*
  * handler      debug handler; NULL for default handler
  */
 void ped_debug_set_handler(PedDebugHandler *handler) {
-  debug_handler = (handler ? handler : default_handler);
+    debug_handler = (handler ? handler : default_handler);
 }
 
 /*
@@ -81,27 +81,27 @@ void ped_debug_set_handler(PedDebugHandler *handler) {
 void ped_assert(const char *cond_text, const char *file, int line,
                 const char *function) {
 #if HAVE_BACKTRACE
-  /* Print backtrace stack */
-  void *stack[20];
-  char **strings, **string;
-  int size = backtrace(stack, 20);
-  strings = backtrace_symbols(stack, size);
+    /* Print backtrace stack */
+    void *stack[20];
+    char **strings, **string;
+    int size = backtrace(stack, 20);
+    strings = backtrace_symbols(stack, size);
 
-  if (strings) {
-    printf(_("Backtrace has %d calls on stack:\n"), size);
+    if (strings) {
+        printf(_("Backtrace has %d calls on stack:\n"), size);
 
-    for (string = strings; size > 0; size--, string++)
-      printf("  %d: %s\n", size, *string);
+        for (string = strings; size > 0; size--, string++)
+            printf("  %d: %s\n", size, *string);
 
-    free(strings);
-  }
+        free(strings);
+    }
 #endif
 
-  /* Throw the exception */
-  ped_exception_throw(PED_EXCEPTION_BUG, PED_EXCEPTION_CANCEL,
-                      _("Assertion (%s) at %s:%d in function %s() failed."),
-                      cond_text, file, line, function);
-  abort();
+    /* Throw the exception */
+    ped_exception_throw(PED_EXCEPTION_BUG, PED_EXCEPTION_CANCEL,
+                        _("Assertion (%s) at %s:%d in function %s() failed."),
+                        cond_text, file, line, function);
+    abort();
 }
 
 #endif /* DEBUG */

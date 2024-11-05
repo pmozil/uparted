@@ -38,14 +38,14 @@
  * Disk flags
  */
 enum _PedDiskFlag {
-  /* This flag (which defaults to true) controls if disk types for
-     which cylinder alignment is optional do cylinder alignment when a
-     new partition gets added.
-     This flag is available for msdos and sun disklabels (for sun labels
-     it only controls the aligning of the end of the partition) */
-  PED_DISK_CYLINDER_ALIGNMENT = 1,
-  /* This flag controls whether the boot flag of a GPT PMBR is set */
-  PED_DISK_GPT_PMBR_BOOT = 2,
+    /* This flag (which defaults to true) controls if disk types for
+       which cylinder alignment is optional do cylinder alignment when a
+       new partition gets added.
+       This flag is available for msdos and sun disklabels (for sun labels
+       it only controls the aligning of the end of the partition) */
+    PED_DISK_CYLINDER_ALIGNMENT = 1,
+    /* This flag controls whether the boot flag of a GPT PMBR is set */
+    PED_DISK_GPT_PMBR_BOOT = 2,
 };
 // NOTE: DO NOT define using enums
 #define PED_DISK_FIRST_FLAG 1 // PED_DISK_CYLINDER_ALIGNMENT
@@ -55,52 +55,52 @@ enum _PedDiskFlag {
  * Partition types
  */
 enum _PedPartitionType {
-  PED_PARTITION_NORMAL = 0x00,
-  PED_PARTITION_LOGICAL = 0x01,
-  PED_PARTITION_EXTENDED = 0x02,
-  PED_PARTITION_FREESPACE = 0x04,
-  PED_PARTITION_METADATA = 0x08,
-  PED_PARTITION_PROTECTED = 0x10
+    PED_PARTITION_NORMAL = 0x00,
+    PED_PARTITION_LOGICAL = 0x01,
+    PED_PARTITION_EXTENDED = 0x02,
+    PED_PARTITION_FREESPACE = 0x04,
+    PED_PARTITION_METADATA = 0x08,
+    PED_PARTITION_PROTECTED = 0x10
 };
 
 /**
  * Partition flags.
  */
 enum _PedPartitionFlag {
-  PED_PARTITION_BOOT = 1,
-  PED_PARTITION_ROOT = 2,
-  PED_PARTITION_SWAP = 3,
-  PED_PARTITION_HIDDEN = 4,
-  PED_PARTITION_RAID = 5,
-  PED_PARTITION_LVM = 6,
-  PED_PARTITION_LBA = 7,
-  PED_PARTITION_HPSERVICE = 8,
-  PED_PARTITION_PALO = 9,
-  PED_PARTITION_PREP = 10,
-  PED_PARTITION_MSFT_RESERVED = 11,
-  PED_PARTITION_BIOS_GRUB = 12,
-  PED_PARTITION_APPLE_TV_RECOVERY = 13,
-  PED_PARTITION_DIAG = 14,
-  PED_PARTITION_LEGACY_BOOT = 15,
-  PED_PARTITION_MSFT_DATA = 16,
-  PED_PARTITION_IRST = 17,
-  PED_PARTITION_ESP = 18,
-  PED_PARTITION_CHROMEOS_KERNEL = 19,
-  PED_PARTITION_BLS_BOOT = 20,
-  PED_PARTITION_LINUX_HOME = 21,
-  PED_PARTITION_NO_AUTOMOUNT = 22,
+    PED_PARTITION_BOOT = 1,
+    PED_PARTITION_ROOT = 2,
+    PED_PARTITION_SWAP = 3,
+    PED_PARTITION_HIDDEN = 4,
+    PED_PARTITION_RAID = 5,
+    PED_PARTITION_LVM = 6,
+    PED_PARTITION_LBA = 7,
+    PED_PARTITION_HPSERVICE = 8,
+    PED_PARTITION_PALO = 9,
+    PED_PARTITION_PREP = 10,
+    PED_PARTITION_MSFT_RESERVED = 11,
+    PED_PARTITION_BIOS_GRUB = 12,
+    PED_PARTITION_APPLE_TV_RECOVERY = 13,
+    PED_PARTITION_DIAG = 14,
+    PED_PARTITION_LEGACY_BOOT = 15,
+    PED_PARTITION_MSFT_DATA = 16,
+    PED_PARTITION_IRST = 17,
+    PED_PARTITION_ESP = 18,
+    PED_PARTITION_CHROMEOS_KERNEL = 19,
+    PED_PARTITION_BLS_BOOT = 20,
+    PED_PARTITION_LINUX_HOME = 21,
+    PED_PARTITION_NO_AUTOMOUNT = 22,
 };
 // NOTE: DO NOT define using enums
 #define PED_PARTITION_FIRST_FLAG 1 // PED_PARTITION_BOOT
 #define PED_PARTITION_LAST_FLAG 22 // PED_PARTITION_NO_AUTOMOUNT
 
 enum _PedDiskTypeFeature {
-  PED_DISK_TYPE_EXTENDED = 1,            /**< supports extended partitions */
-  PED_DISK_TYPE_PARTITION_NAME = 2,      /**< supports partition names */
-  PED_DISK_TYPE_PARTITION_TYPE_ID = 4,   /**< supports partition type-ids */
-  PED_DISK_TYPE_PARTITION_TYPE_UUID = 8, /**< supports partition type-uuids */
-  PED_DISK_TYPE_DISK_UUID = 16,          /**< supports disk uuids */
-  PED_DISK_TYPE_PARTITION_UUID = 32,     /**< supports partition uuids */
+    PED_DISK_TYPE_EXTENDED = 1,            /**< supports extended partitions */
+    PED_DISK_TYPE_PARTITION_NAME = 2,      /**< supports partition names */
+    PED_DISK_TYPE_PARTITION_TYPE_ID = 4,   /**< supports partition type-ids */
+    PED_DISK_TYPE_PARTITION_TYPE_UUID = 8, /**< supports partition type-uuids */
+    PED_DISK_TYPE_DISK_UUID = 16,          /**< supports disk uuids */
+    PED_DISK_TYPE_PARTITION_UUID = 32,     /**< supports partition uuids */
 };
 // NOTE: DO NOT define using enums
 #define PED_DISK_TYPE_FIRST_FEATURE 1 // PED_DISK_TYPE_EXTENDED
@@ -142,46 +142,43 @@ typedef const struct _PedDiskArchOps PedDiskArchOps;
  * PedPartition structure represents a partition.
  */
 struct _PedPartition {
-  PedPartition *prev;
-  PedPartition *next;
+    PedPartition *prev;
+    PedPartition *next;
 
-  /**< the partition table of the partition */
-  PedDisk *disk;
-  PedGeometry geom; /**< geometry of the partition */
+    /**< the partition table of the partition */
+    PedDisk *disk;
+    PedGeometry geom; /**< geometry of the partition */
 
-  /**< the partition number:  In Linux, this is the
-       same as the minor number. No assumption
-       should be made about "num" and "type"
-       - different disk labels have different rules. */
+    /**< the partition number:  In Linux, this is the
+         same as the minor number. No assumption
+         should be made about "num" and "type"
+         - different disk labels have different rules. */
 
-  int num;
-  PedPartitionType type; /**< the type of partition: a bit field of
-                                 PED_PARTITION_LOGICAL, PED_PARTITION_EXTENDED,
-                                 PED_PARTITION_METADATA
-                                 and PED_PARTITION_FREESPACE.
-                                 Both the first two, and the last two are
-                                 mutually exclusive.
-                                         An extended partition is a primary
-                                 partition that may contain logical partitions.
-                                 There is at most one extended partition on
-                                 a disk.
-                                         A logical partition is like a primary
-                                 partition, except it's inside an extended
-                                 partition. Internally, pseudo partitions are
-                                 allocated to represent free space, or disk
-                                 label meta-data.  These have the
-                                 PED_PARTITION_FREESPACE or
-                                 PED_PARTITION_METADATA bit set. */
+    int num;
+    PedPartitionType type; /**< the type of partition: a bit field of
+                                   PED_PARTITION_LOGICAL,
+                              PED_PARTITION_EXTENDED, PED_PARTITION_METADATA and
+                              PED_PARTITION_FREESPACE. Both the first two, and
+                              the last two are mutually exclusive. An extended
+                              partition is a primary partition that may contain
+                              logical partitions. There is at most one extended
+                              partition on a disk. A logical partition is like a
+                              primary partition, except it's inside an extended
+                                   partition. Internally, pseudo partitions are
+                                   allocated to represent free space, or disk
+                                   label meta-data.  These have the
+                                   PED_PARTITION_FREESPACE or
+                                   PED_PARTITION_METADATA bit set. */
 
-  /**< The type of file system on the partition. NULL if unknown. */
-  const PedFileSystemType *fs_type;
+    /**< The type of file system on the partition. NULL if unknown. */
+    const PedFileSystemType *fs_type;
 
-  /**< Only used for an extended partition.  The list of logical
-       partitions (and free space and metadata within the extended
-       partition). */
-  PedPartition *part_list;
+    /**< Only used for an extended partition.  The list of logical
+         partitions (and free space and metadata within the extended
+         partition). */
+    PedPartition *part_list;
 
-  void *disk_specific;
+    void *disk_specific;
 };
 
 /** @} */
@@ -195,84 +192,84 @@ struct _PedPartition {
  * Represents a disk label (partition table).
  */
 struct _PedDisk {
-  PedDevice *dev;          /**< the device where the
-                                partition table lies */
-  const PedDiskType *type; /**< type of disk label */
-  const int *block_sizes;  /**< block sizes supported
-                                by this label */
-  PedPartition *part_list; /**< list of partitions. Access with
-                                ped_disk_next_partition() */
+    PedDevice *dev;          /**< the device where the
+                                  partition table lies */
+    const PedDiskType *type; /**< type of disk label */
+    const int *block_sizes;  /**< block sizes supported
+                                  by this label */
+    PedPartition *part_list; /**< list of partitions. Access with
+                                  ped_disk_next_partition() */
 
-  void *disk_specific;
+    void *disk_specific;
 
-  /* office use only ;-) */
-  int needs_clobber; /**< clobber before write? */
-  int update_mode;   /**< mode without free/metadata
-                        partitions, for easier
-                        update */
+    /* office use only ;-) */
+    int needs_clobber; /**< clobber before write? */
+    int update_mode;   /**< mode without free/metadata
+                          partitions, for easier
+                          update */
 };
 
 struct _PedDiskOps {
-  /* disk label operations */
-  int (*probe)(const PedDevice *dev);
-  int (*clobber)(PedDevice *dev);
-  PedDisk *(*alloc)(const PedDevice *dev);
-  PedDisk *(*duplicate)(const PedDisk *disk);
-  void (*free)(PedDisk *disk);
-  int (*read)(PedDisk *disk);
-  int (*write)(const PedDisk *disk);
-  int (*disk_set_flag)(PedDisk *disk, PedDiskFlag flag, int state);
-  int (*disk_get_flag)(const PedDisk *disk, PedDiskFlag flag);
-  int (*disk_is_flag_available)(const PedDisk *disk, PedDiskFlag flag);
-  uint8_t *(*disk_get_uuid)(const PedDisk *disk);
-  /** \todo add label guessing op here */
+    /* disk label operations */
+    int (*probe)(const PedDevice *dev);
+    int (*clobber)(PedDevice *dev);
+    PedDisk *(*alloc)(const PedDevice *dev);
+    PedDisk *(*duplicate)(const PedDisk *disk);
+    void (*free)(PedDisk *disk);
+    int (*read)(PedDisk *disk);
+    int (*write)(const PedDisk *disk);
+    int (*disk_set_flag)(PedDisk *disk, PedDiskFlag flag, int state);
+    int (*disk_get_flag)(const PedDisk *disk, PedDiskFlag flag);
+    int (*disk_is_flag_available)(const PedDisk *disk, PedDiskFlag flag);
+    uint8_t *(*disk_get_uuid)(const PedDisk *disk);
+    /** \todo add label guessing op here */
 
-  /* partition operations */
-  PedPartition *(*partition_new)(const PedDisk *disk,
-                                 PedPartitionType part_type,
-                                 const PedFileSystemType *fs_type,
-                                 PedSector start, PedSector end);
-  PedPartition *(*partition_duplicate)(const PedPartition *part);
-  void (*partition_destroy)(PedPartition *part);
-  int (*partition_set_system)(PedPartition *part,
-                              const PedFileSystemType *fs_type);
-  int (*partition_set_flag)(PedPartition *part, PedPartitionFlag flag,
-                            int state);
-  int (*partition_get_flag)(const PedPartition *part, PedPartitionFlag flag);
-  int (*partition_is_flag_available)(const PedPartition *part,
-                                     PedPartitionFlag flag);
-  void (*partition_set_name)(PedPartition *part, const char *name);
-  const char *(*partition_get_name)(const PedPartition *part);
+    /* partition operations */
+    PedPartition *(*partition_new)(const PedDisk *disk,
+                                   PedPartitionType part_type,
+                                   const PedFileSystemType *fs_type,
+                                   PedSector start, PedSector end);
+    PedPartition *(*partition_duplicate)(const PedPartition *part);
+    void (*partition_destroy)(PedPartition *part);
+    int (*partition_set_system)(PedPartition *part,
+                                const PedFileSystemType *fs_type);
+    int (*partition_set_flag)(PedPartition *part, PedPartitionFlag flag,
+                              int state);
+    int (*partition_get_flag)(const PedPartition *part, PedPartitionFlag flag);
+    int (*partition_is_flag_available)(const PedPartition *part,
+                                       PedPartitionFlag flag);
+    void (*partition_set_name)(PedPartition *part, const char *name);
+    const char *(*partition_get_name)(const PedPartition *part);
 
-  int (*partition_set_type_id)(PedPartition *part, uint8_t id);
-  uint8_t (*partition_get_type_id)(const PedPartition *part);
+    int (*partition_set_type_id)(PedPartition *part, uint8_t id);
+    uint8_t (*partition_get_type_id)(const PedPartition *part);
 
-  int (*partition_set_type_uuid)(PedPartition *part, const uint8_t *uuid);
-  uint8_t *(*partition_get_type_uuid)(const PedPartition *part);
+    int (*partition_set_type_uuid)(PedPartition *part, const uint8_t *uuid);
+    uint8_t *(*partition_get_type_uuid)(const PedPartition *part);
 
-  uint8_t *(*partition_get_uuid)(const PedPartition *part);
+    uint8_t *(*partition_get_uuid)(const PedPartition *part);
 
-  int (*partition_align)(PedPartition *part, const PedConstraint *constraint);
-  int (*partition_enumerate)(PedPartition *part);
-  bool (*partition_check)(const PedPartition *part);
+    int (*partition_align)(PedPartition *part, const PedConstraint *constraint);
+    int (*partition_enumerate)(PedPartition *part);
+    bool (*partition_check)(const PedPartition *part);
 
-  /* other */
-  int (*alloc_metadata)(PedDisk *disk);
-  int (*get_max_primary_partition_count)(const PedDisk *disk);
-  bool (*get_max_supported_partition_count)(const PedDisk *disk,
-                                            int *supported);
-  PedAlignment *(*get_partition_alignment)(const PedDisk *disk);
-  PedSector (*max_length)(void);
-  PedSector (*max_start_sector)(void);
+    /* other */
+    int (*alloc_metadata)(PedDisk *disk);
+    int (*get_max_primary_partition_count)(const PedDisk *disk);
+    bool (*get_max_supported_partition_count)(const PedDisk *disk,
+                                              int *supported);
+    PedAlignment *(*get_partition_alignment)(const PedDisk *disk);
+    PedSector (*max_length)(void);
+    PedSector (*max_start_sector)(void);
 };
 
 struct _PedDiskType {
-  PedDiskType *next;
-  const char *name; /**< the name of the partition table type.
-                         \todo not very intuitive name */
-  PedDiskOps *const ops;
+    PedDiskType *next;
+    const char *name; /**< the name of the partition table type.
+                           \todo not very intuitive name */
+    PedDiskOps *const ops;
 
-  PedDiskTypeFeature features; /**< bitmap of supported features */
+    PedDiskTypeFeature features; /**< bitmap of supported features */
 };
 
 /**
@@ -280,9 +277,9 @@ struct _PedDiskType {
  * whatever) about changes, etc.
  */
 struct _PedDiskArchOps {
-  char *(*partition_get_path)(const PedPartition *part);
-  int (*partition_is_busy)(const PedPartition *part);
-  int (*disk_commit)(PedDisk *disk);
+    char *(*partition_get_path)(const PedPartition *part);
+    int (*partition_is_busy)(const PedPartition *part);
+    int (*disk_commit)(PedDisk *disk);
 };
 
 extern void ped_disk_type_register(PedDiskType *type);

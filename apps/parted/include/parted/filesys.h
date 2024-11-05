@@ -37,16 +37,16 @@ typedef const struct _PedFileSystemOps PedFileSystemOps;
 #include <parted/timer.h>
 
 struct _PedFileSystemOps {
-  PedGeometry *(*probe)(PedGeometry *geom);
+    PedGeometry *(*probe)(PedGeometry *geom);
 };
 
 /**
  * Structure describing type of file system
  */
 struct _PedFileSystemType {
-  PedFileSystemType *next;
-  const char *const name; /**< name of the file system type */
-  PedFileSystemOps *const ops;
+    PedFileSystemType *next;
+    const char *const name; /**< name of the file system type */
+    PedFileSystemOps *const ops;
 };
 
 /**
@@ -55,22 +55,22 @@ struct _PedFileSystemType {
  * and does not probe aliases separately.
  */
 struct _PedFileSystemAlias {
-  PedFileSystemAlias *next;
-  PedFileSystemType *fs_type;
-  const char *alias;
-  int deprecated;
+    PedFileSystemAlias *next;
+    PedFileSystemType *fs_type;
+    const char *alias;
+    int deprecated;
 };
 
 /**
  * Structure describing file system
  */
 struct _PedFileSystem {
-  PedFileSystemType *type; /**< the file system type */
-  PedGeometry *geom;       /**< where the file system actually is */
-  int checked;             /**< 1 if the file system has been checked.
-                                 0 otherwise. */
+    PedFileSystemType *type; /**< the file system type */
+    PedGeometry *geom;       /**< where the file system actually is */
+    int checked;             /**< 1 if the file system has been checked.
+                                   0 otherwise. */
 
-  void *type_specific;
+    void *type_specific;
 };
 
 extern void ped_file_system_type_register(PedFileSystemType *type);

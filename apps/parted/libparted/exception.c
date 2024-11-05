@@ -87,54 +87,54 @@ static const char *const option_strings[] = {
  *  Return a string describing an exception type.
  */
 char *ped_exception_get_type_string(PedExceptionType ex_type) {
-  return (char *)type_strings[ex_type - 1];
+    return (char *)type_strings[ex_type - 1];
 }
 
 /* FIXME: move this out to the prospective math.c */
 /* FIXME: this can probably be done more efficiently */
 static int _GL_ATTRIBUTE_PURE ped_log2(int n) {
-  int x;
+    int x;
 
-  PED_ASSERT(n > 0);
+    PED_ASSERT(n > 0);
 
-  for (x = 0; 1 << x <= n; x++)
-    ;
+    for (x = 0; 1 << x <= n; x++)
+        ;
 
-  return x - 1;
+    return x - 1;
 }
 
 /**
  * Return a string describing an exception option.
  */
 char *ped_exception_get_option_string(PedExceptionOption ex_opt) {
-  return (char *)option_strings[ped_log2(ex_opt)];
+    return (char *)option_strings[ped_log2(ex_opt)];
 }
 
 static PedExceptionOption default_handler(PedException *e) {
-  if (e->type == PED_EXCEPTION_BUG)
-    fprintf(stderr,
-            _("A bug has been detected in GNU Parted.  "
-              "Refer to the web site of parted "
-              "http://www.gnu.org/software/parted/parted.html "
-              "for more information of what could be useful "
-              "for bug submitting!  "
-              "Please email a bug report to "
-              "%s containing at least the "
-              "version (%s) and the following message:  "),
-            PACKAGE_BUGREPORT, VERSION);
-  else
-    fprintf(stderr, "%s: ", ped_exception_get_type_string(e->type));
-  fprintf(stderr, "%s\n", e->message);
+    if (e->type == PED_EXCEPTION_BUG)
+        fprintf(stderr,
+                _("A bug has been detected in GNU Parted.  "
+                  "Refer to the web site of parted "
+                  "http://www.gnu.org/software/parted/parted.html "
+                  "for more information of what could be useful "
+                  "for bug submitting!  "
+                  "Please email a bug report to "
+                  "%s containing at least the "
+                  "version (%s) and the following message:  "),
+                PACKAGE_BUGREPORT, VERSION);
+    else
+        fprintf(stderr, "%s: ", ped_exception_get_type_string(e->type));
+    fprintf(stderr, "%s\n", e->message);
 
-  switch (e->options) {
-  case PED_EXCEPTION_OK:
-  case PED_EXCEPTION_CANCEL:
-  case PED_EXCEPTION_IGNORE:
-    return e->options;
+    switch (e->options) {
+    case PED_EXCEPTION_OK:
+    case PED_EXCEPTION_CANCEL:
+    case PED_EXCEPTION_IGNORE:
+        return e->options;
 
-  default:
-    return PED_EXCEPTION_UNHANDLED;
-  }
+    default:
+        return PED_EXCEPTION_UNHANDLED;
+    }
 }
 
 /**
@@ -144,45 +144,45 @@ static PedExceptionOption default_handler(PedException *e) {
  * indicating the way the event should be resolved.
  */
 void ped_exception_set_handler(PedExceptionHandler *handler) {
-  if (handler)
-    ex_handler = handler;
-  else
-    ex_handler = default_handler;
+    if (handler)
+        ex_handler = handler;
+    else
+        ex_handler = default_handler;
 }
 
 /**
  * Get the current exception handler.
  */
 PedExceptionHandler *ped_exception_get_handler(void) {
-  if (ex_handler)
-    return ex_handler;
-  return default_handler;
+    if (ex_handler)
+        return ex_handler;
+    return default_handler;
 }
 
 /**
  * Assert that the current exception has been resolved.
  */
 void ped_exception_catch() {
-  if (ped_exception) {
-    ped_exception = 0;
-    free(ex->message);
-    free(ex);
-    ex = NULL;
-  }
+    if (ped_exception) {
+        ped_exception = 0;
+        free(ex->message);
+        free(ex);
+        ex = NULL;
+    }
 }
 
 static PedExceptionOption do_throw() {
-  PedExceptionOption ex_opt;
+    PedExceptionOption ex_opt;
 
-  ped_exception = 1;
+    ped_exception = 1;
 
-  if (ex_fetch_count) {
-    return PED_EXCEPTION_UNHANDLED;
-  } else {
-    ex_opt = ex_handler(ex);
-    ped_exception_catch();
-    return ex_opt;
-  }
+    if (ex_fetch_count) {
+        return PED_EXCEPTION_UNHANDLED;
+    } else {
+        ex_opt = ex_handler(ex);
+        ped_exception_catch();
+        return ex_opt;
+    }
 }
 
 /**
@@ -202,46 +202,46 @@ static PedExceptionOption do_throw() {
 PedExceptionOption ped_exception_throw(PedExceptionType ex_type,
                                        PedExceptionOption ex_opts,
                                        const char *message, ...) {
-  va_list arg_list;
-  int result;
-  static int size = 1000;
+    va_list arg_list;
+    int result;
+    static int size = 1000;
 
-  if (ex)
-    ped_exception_catch();
+    if (ex)
+        ped_exception_catch();
 
-  ex = (PedException *)malloc(sizeof(PedException));
-  if (!ex)
-    goto no_memory;
+    ex = (PedException *)malloc(sizeof(PedException));
+    if (!ex)
+        goto no_memory;
 
-  ex->type = ex_type;
-  ex->options = ex_opts;
+    ex->type = ex_type;
+    ex->options = ex_opts;
 
-  while (message) {
-    ex->message = (char *)malloc(size * sizeof(char));
-    if (!ex->message)
-      goto no_memory;
+    while (message) {
+        ex->message = (char *)malloc(size * sizeof(char));
+        if (!ex->message)
+            goto no_memory;
 
-    va_start(arg_list, message);
-    result = vsnprintf(ex->message, size, message, arg_list);
-    va_end(arg_list);
+        va_start(arg_list, message);
+        result = vsnprintf(ex->message, size, message, arg_list);
+        va_end(arg_list);
 
-    if (result > -1 && result < size)
-      break;
+        if (result > -1 && result < size)
+            break;
 
-    size += 10;
-    free(ex->message);
-  }
+        size += 10;
+        free(ex->message);
+    }
 
-  return do_throw();
+    return do_throw();
 
 no_memory:
-  fputs("Out of memory in exception handler!\n", stderr);
+    fputs("Out of memory in exception handler!\n", stderr);
 
-  va_start(arg_list, message);
-  vfprintf(stderr, message, arg_list);
-  va_end(arg_list);
+    va_start(arg_list, message);
+    vfprintf(stderr, message, arg_list);
+    va_end(arg_list);
 
-  return PED_EXCEPTION_UNHANDLED;
+    return PED_EXCEPTION_UNHANDLED;
 }
 
 /**
@@ -268,8 +268,8 @@ void ped_exception_fetch_all() { ex_fetch_count++; }
  *      ped_exception_fetch_all().
  */
 void ped_exception_leave_all() {
-  PED_ASSERT(ex_fetch_count > 0);
-  ex_fetch_count--;
+    PED_ASSERT(ex_fetch_count > 0);
+    ex_fetch_count--;
 }
 
 /** @} */

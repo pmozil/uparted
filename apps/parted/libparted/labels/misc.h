@@ -25,20 +25,20 @@
  * serial number or no MBR signature.
  */
 static inline uint32_t generate_random_uint32(void) {
-  union {
-    uuid_t uuid;
-    uint32_t i;
-  } uu32;
+    union {
+        uuid_t uuid;
+        uint32_t i;
+    } uu32;
 
-  uuid_generate(uu32.uuid);
+    uuid_generate(uu32.uuid);
 
-  return uu32.i > 0 ? uu32.i : 0xffffffff;
+    return uu32.i > 0 ? uu32.i : 0xffffffff;
 }
 
 /* Return nonzero if FS_TYPE_NAME starts with "linux-swap".
    This must match the NUL-terminated "linux-swap" as well
    as "linux-swap(v0)" and "linux-swap(v1)".  */
 static inline int is_linux_swap(char const *fs_type_name) {
-  char const *prefix = "linux-swap";
-  return strncmp(fs_type_name, prefix, strlen(prefix)) == 0;
+    char const *prefix = "linux-swap";
+    return strncmp(fs_type_name, prefix, strlen(prefix)) == 0;
 }

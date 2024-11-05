@@ -41,52 +41,52 @@
 static PedDiskType aix_disk_type;
 
 static int aix_probe(const PedDevice *dev) {
-  PED_ASSERT(dev != NULL);
+    PED_ASSERT(dev != NULL);
 
-  void *label;
-  if (!ptt_read_sector(dev, 0, &label))
-    return 0;
-  bool found = PED_BE32_TO_CPU(*(uint32_t *)label) == AIX_LABEL_MAGIC;
-  free(label);
-  return found;
+    void *label;
+    if (!ptt_read_sector(dev, 0, &label))
+        return 0;
+    bool found = PED_BE32_TO_CPU(*(uint32_t *)label) == AIX_LABEL_MAGIC;
+    free(label);
+    return found;
 }
 
 static PedDisk *aix_alloc(const PedDevice *dev) {
-  PedDisk *disk;
+    PedDisk *disk;
 
-  disk = _ped_disk_alloc(dev, &aix_disk_type);
-  if (!disk)
-    return NULL;
+    disk = _ped_disk_alloc(dev, &aix_disk_type);
+    if (!disk)
+        return NULL;
 
-  return disk;
+    return disk;
 }
 
 static PedDisk *aix_duplicate(const PedDisk *disk) {
-  PedDisk *new_disk;
+    PedDisk *new_disk;
 
-  new_disk = ped_disk_new_fresh(disk->dev, &aix_disk_type);
-  if (!new_disk)
-    return NULL;
+    new_disk = ped_disk_new_fresh(disk->dev, &aix_disk_type);
+    if (!new_disk)
+        return NULL;
 
-  return new_disk;
+    return new_disk;
 }
 
 static void aix_free(PedDisk *disk) { _ped_disk_free(disk); }
 
 static int aix_read(PedDisk *disk) {
-  ped_disk_delete_all(disk);
-  ped_exception_throw(PED_EXCEPTION_NO_FEATURE, PED_EXCEPTION_CANCEL,
-                      _("Support for reading AIX disk labels is "
-                        "is not implemented yet."));
-  return 0;
+    ped_disk_delete_all(disk);
+    ped_exception_throw(PED_EXCEPTION_NO_FEATURE, PED_EXCEPTION_CANCEL,
+                        _("Support for reading AIX disk labels is "
+                          "is not implemented yet."));
+    return 0;
 }
 
 #ifndef DISCOVER_ONLY
 static int aix_write(const PedDisk *disk) {
-  ped_exception_throw(PED_EXCEPTION_NO_FEATURE, PED_EXCEPTION_CANCEL,
-                      _("Support for writing AIX disk labels is "
-                        "is not implemented yet."));
-  return 0;
+    ped_exception_throw(PED_EXCEPTION_NO_FEATURE, PED_EXCEPTION_CANCEL,
+                        _("Support for writing AIX disk labels is "
+                          "is not implemented yet."));
+    return 0;
 }
 #endif /* !DISCOVER_ONLY */
 
@@ -94,70 +94,70 @@ static PedPartition *aix_partition_new(const PedDisk *disk,
                                        PedPartitionType part_type,
                                        const PedFileSystemType *fs_type,
                                        PedSector start, PedSector end) {
-  ped_exception_throw(PED_EXCEPTION_NO_FEATURE, PED_EXCEPTION_CANCEL,
-                      _("Support for adding partitions to AIX disk "
-                        "labels is not implemented yet."));
-  return NULL;
+    ped_exception_throw(PED_EXCEPTION_NO_FEATURE, PED_EXCEPTION_CANCEL,
+                        _("Support for adding partitions to AIX disk "
+                          "labels is not implemented yet."));
+    return NULL;
 }
 
 static PedPartition *aix_partition_duplicate(const PedPartition *part) {
-  ped_exception_throw(PED_EXCEPTION_NO_FEATURE, PED_EXCEPTION_CANCEL,
-                      _("Support for duplicating partitions in AIX "
-                        "disk labels is not implemented yet."));
-  return NULL;
+    ped_exception_throw(PED_EXCEPTION_NO_FEATURE, PED_EXCEPTION_CANCEL,
+                        _("Support for duplicating partitions in AIX "
+                          "disk labels is not implemented yet."));
+    return NULL;
 }
 
 static void aix_partition_destroy(PedPartition *part) {
-  PED_ASSERT(part != NULL);
+    PED_ASSERT(part != NULL);
 
-  _ped_partition_free(part);
+    _ped_partition_free(part);
 }
 
 static int aix_partition_set_system(PedPartition *part,
                                     const PedFileSystemType *fs_type) {
-  ped_exception_throw(PED_EXCEPTION_NO_FEATURE, PED_EXCEPTION_CANCEL,
-                      _("Support for setting system type of partitions "
-                        "in AIX disk labels is not implemented yet."));
-  return 0;
+    ped_exception_throw(PED_EXCEPTION_NO_FEATURE, PED_EXCEPTION_CANCEL,
+                        _("Support for setting system type of partitions "
+                          "in AIX disk labels is not implemented yet."));
+    return 0;
 }
 
 static int aix_partition_set_flag(PedPartition *part, PedPartitionFlag flag,
                                   int state) {
-  ped_exception_throw(PED_EXCEPTION_NO_FEATURE, PED_EXCEPTION_CANCEL,
-                      _("Support for setting flags "
-                        "in AIX disk labels is not implemented yet."));
-  return 0;
+    ped_exception_throw(PED_EXCEPTION_NO_FEATURE, PED_EXCEPTION_CANCEL,
+                        _("Support for setting flags "
+                          "in AIX disk labels is not implemented yet."));
+    return 0;
 }
 
 static int _GL_ATTRIBUTE_CONST aix_partition_get_flag(const PedPartition *part,
                                                       PedPartitionFlag flag) {
-  return 0;
+    return 0;
 }
 
 static int aix_partition_is_flag_available(const PedPartition *part,
                                            PedPartitionFlag flag) {
-  return 0;
+    return 0;
 }
 
 static int aix_get_max_primary_partition_count(const PedDisk *disk) {
-  return 4;
+    return 4;
 }
 
 static bool aix_get_max_supported_partition_count(const PedDisk *disk,
                                                   int *max_n) {
-  *max_n = MAX_TOTAL_PART;
-  return true;
+    *max_n = MAX_TOTAL_PART;
+    return true;
 }
 
 static int _GL_ATTRIBUTE_PURE
 aix_partition_align(PedPartition *part, const PedConstraint *constraint) {
-  PED_ASSERT(part != NULL);
+    PED_ASSERT(part != NULL);
 
-  return 1;
+    return 1;
 }
 
 static int _GL_ATTRIBUTE_PURE aix_partition_enumerate(PedPartition *part) {
-  return 1;
+    return 1;
 }
 
 static int _GL_ATTRIBUTE_PURE aix_alloc_metadata(PedDisk *disk) { return 1; }
@@ -166,13 +166,13 @@ static int _GL_ATTRIBUTE_PURE aix_alloc_metadata(PedDisk *disk) { return 1; }
 PT_define_limit_functions(aix)
 
     static PedDiskOps aix_disk_ops = {
-      clobber : NULL,
-      write : NULL_IF_DISCOVER_ONLY(aix_write),
+        clobber : NULL,
+        write : NULL_IF_DISCOVER_ONLY(aix_write),
 
-      partition_set_name : NULL,
-      partition_get_name : NULL,
+        partition_set_name : NULL,
+        partition_get_name : NULL,
 
-      PT_op_function_initializers(aix)
+        PT_op_function_initializers(aix)
     };
 
 static PedDiskType aix_disk_type =

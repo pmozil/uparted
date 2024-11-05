@@ -33,12 +33,12 @@ typedef struct _PedException PedException;
  * Exception type
  */
 enum _PedExceptionType {
-  PED_EXCEPTION_INFORMATION = 1,
-  PED_EXCEPTION_WARNING = 2,
-  PED_EXCEPTION_ERROR = 3,
-  PED_EXCEPTION_FATAL = 4,
-  PED_EXCEPTION_BUG = 5,
-  PED_EXCEPTION_NO_FEATURE = 6,
+    PED_EXCEPTION_INFORMATION = 1,
+    PED_EXCEPTION_WARNING = 2,
+    PED_EXCEPTION_ERROR = 3,
+    PED_EXCEPTION_FATAL = 4,
+    PED_EXCEPTION_BUG = 5,
+    PED_EXCEPTION_NO_FEATURE = 6,
 };
 typedef enum _PedExceptionType PedExceptionType;
 
@@ -46,29 +46,29 @@ typedef enum _PedExceptionType PedExceptionType;
  * Option for resolving the exception
  */
 enum _PedExceptionOption {
-  /* individual options */
-  PED_EXCEPTION_UNHANDLED = 0,
-  PED_EXCEPTION_FIX = 1,
-  PED_EXCEPTION_YES = 2,
-  PED_EXCEPTION_NO = 4,
-  PED_EXCEPTION_OK = 8,
-  PED_EXCEPTION_RETRY = 16,
-  PED_EXCEPTION_IGNORE = 32,
-  PED_EXCEPTION_CANCEL = 64,
+    /* individual options */
+    PED_EXCEPTION_UNHANDLED = 0,
+    PED_EXCEPTION_FIX = 1,
+    PED_EXCEPTION_YES = 2,
+    PED_EXCEPTION_NO = 4,
+    PED_EXCEPTION_OK = 8,
+    PED_EXCEPTION_RETRY = 16,
+    PED_EXCEPTION_IGNORE = 32,
+    PED_EXCEPTION_CANCEL = 64,
 
-  /* combinations of individual options */
-  PED_EXCEPTION_OK_CANCEL = PED_EXCEPTION_OK + PED_EXCEPTION_CANCEL,
-  PED_EXCEPTION_YES_NO = PED_EXCEPTION_YES + PED_EXCEPTION_NO,
-  PED_EXCEPTION_YES_NO_CANCEL = PED_EXCEPTION_YES_NO + PED_EXCEPTION_CANCEL,
-  PED_EXCEPTION_IGNORE_CANCEL = PED_EXCEPTION_IGNORE + PED_EXCEPTION_CANCEL,
-  PED_EXCEPTION_RETRY_CANCEL = PED_EXCEPTION_RETRY + PED_EXCEPTION_CANCEL,
-  PED_EXCEPTION_RETRY_IGNORE_CANCEL =
-      PED_EXCEPTION_RETRY + PED_EXCEPTION_IGNORE_CANCEL,
+    /* combinations of individual options */
+    PED_EXCEPTION_OK_CANCEL = PED_EXCEPTION_OK + PED_EXCEPTION_CANCEL,
+    PED_EXCEPTION_YES_NO = PED_EXCEPTION_YES + PED_EXCEPTION_NO,
+    PED_EXCEPTION_YES_NO_CANCEL = PED_EXCEPTION_YES_NO + PED_EXCEPTION_CANCEL,
+    PED_EXCEPTION_IGNORE_CANCEL = PED_EXCEPTION_IGNORE + PED_EXCEPTION_CANCEL,
+    PED_EXCEPTION_RETRY_CANCEL = PED_EXCEPTION_RETRY + PED_EXCEPTION_CANCEL,
+    PED_EXCEPTION_RETRY_IGNORE_CANCEL =
+        PED_EXCEPTION_RETRY + PED_EXCEPTION_IGNORE_CANCEL,
 };
 
 #define PED_EXCEPTION_OPTION_FIRST PED_EXCEPTION_FIX
 #define PED_EXCEPTION_OPTION_LAST                                              \
-  PED_EXCEPTION_CANCEL /* last individual option */
+    PED_EXCEPTION_CANCEL /* last individual option */
 
 typedef enum _PedExceptionOption PedExceptionOption;
 
@@ -76,12 +76,12 @@ typedef enum _PedExceptionOption PedExceptionOption;
  * Structure with information about exception
  */
 struct _PedException {
-  char *message;              /**< text describing what the event was */
-  PedExceptionType type;      /**< type of exception */
-  PedExceptionOption options; /**< ORed list of options that
-                                 the exception handler can
-                                 return (the ways an exception
-                                 can be resolved) */
+    char *message;              /**< text describing what the event was */
+    PedExceptionType type;      /**< type of exception */
+    PedExceptionOption options; /**< ORed list of options that
+                                   the exception handler can
+                                   return (the ways an exception
+                                   can be resolved) */
 };
 
 typedef PedExceptionOption(PedExceptionHandler)(PedException *ex);

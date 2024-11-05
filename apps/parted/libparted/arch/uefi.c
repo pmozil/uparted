@@ -82,8 +82,7 @@ static PedDevice *_init_device(const char *path) {
         goto error_free_dev;
 
     dev->arch_specific = NULL;
-    dev->type =
-        PED_DEVICE_UNKNOWN; /* It's deprecated anyway */
+    dev->type = PED_DEVICE_UNKNOWN; /* It's deprecated anyway */
     dev->open_count = 0;
     dev->read_only = 0;
     dev->external_mode = 0;

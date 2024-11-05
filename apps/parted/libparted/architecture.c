@@ -23,20 +23,20 @@
 const PedArchitecture *ped_architecture;
 
 void ped_set_architecture() {
-  /* Set just once */
-  if (ped_architecture)
-    return;
+    /* Set just once */
+    if (ped_architecture)
+        return;
 
 #ifdef linux
-  extern PedArchitecture ped_linux_arch;
-  const PedArchitecture *arch = &ped_linux_arch;
+    extern PedArchitecture ped_linux_arch;
+    const PedArchitecture *arch = &ped_linux_arch;
 #elif defined(__BEOS__)
-  extern PedArchitecture ped_beos_arch;
-  const PedArchitecture *arch = &ped_beos_arch;
+    extern PedArchitecture ped_beos_arch;
+    const PedArchitecture *arch = &ped_beos_arch;
 #else
-  extern PedArchitecture ped_uefi_arch const PedArchitecture *arch =
-      &ped_uefi_arch;
+    extern PedArchitecture ped_uefi_arch const PedArchitecture *arch =
+        &ped_uefi_arch;
 #endif
 
-  ped_architecture = arch;
+    ped_architecture = arch;
 }

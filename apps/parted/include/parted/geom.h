@@ -33,10 +33,10 @@ typedef struct _PedGeometry PedGeometry;
  * Geometry of the partition
  */
 struct _PedGeometry {
-  PedDevice *dev;
-  PedSector start;
-  PedSector length;
-  PedSector end;
+    PedDevice *dev;
+    PedSector start;
+    PedSector length;
+    PedSector end;
 };
 
 #include <parted/device.h>

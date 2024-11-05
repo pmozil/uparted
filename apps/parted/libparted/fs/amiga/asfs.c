@@ -35,104 +35,104 @@
 
 static int _asfs_probe_root(PedGeometry *geom, uint32_t *block, int blocksize,
                             PedSector root) {
-  int i, sum;
-  PedSector start, end;
+    int i, sum;
+    PedSector start, end;
 
-  if (PED_BE32_TO_CPU(block[0]) != 0x53465300)
-    return 0;
-  for (i = 0, sum = 1; i < 128 * blocksize; i++)
-    sum += PED_BE32_TO_CPU(block[i]);
-  if (sum != 0)
-    return 0;
-  if (PED_BE32_TO_CPU(block[2]) * blocksize + geom->start != root) {
-    return 0;
-  }
-  start = ((((PedSector)PED_BE32_TO_CPU(block[8])) << 32) +
-           (PedSector)PED_BE32_TO_CPU(block[9])) /
-          512;
-  end = (((((PedSector)PED_BE32_TO_CPU(block[10])) << 32) +
-          (PedSector)PED_BE32_TO_CPU(block[11])) /
-         512) -
-        1;
-  if (start != geom->start || end != geom->end)
-    return 0;
-  return 1;
+    if (PED_BE32_TO_CPU(block[0]) != 0x53465300)
+        return 0;
+    for (i = 0, sum = 1; i < 128 * blocksize; i++)
+        sum += PED_BE32_TO_CPU(block[i]);
+    if (sum != 0)
+        return 0;
+    if (PED_BE32_TO_CPU(block[2]) * blocksize + geom->start != root) {
+        return 0;
+    }
+    start = ((((PedSector)PED_BE32_TO_CPU(block[8])) << 32) +
+             (PedSector)PED_BE32_TO_CPU(block[9])) /
+            512;
+    end = (((((PedSector)PED_BE32_TO_CPU(block[10])) << 32) +
+            (PedSector)PED_BE32_TO_CPU(block[11])) /
+           512) -
+          1;
+    if (start != geom->start || end != geom->end)
+        return 0;
+    return 1;
 }
 
 static PedGeometry *_asfs_probe(PedGeometry *geom) {
-  uint32_t *block;
-  struct PartitionBlock *part;
-  int blocksize = 1;
-  PedSector root;
-  int found = 0;
+    uint32_t *block;
+    struct PartitionBlock *part;
+    int blocksize = 1;
+    PedSector root;
+    int found = 0;
 
-  PED_ASSERT(geom != NULL);
-  PED_ASSERT(geom->dev != NULL);
-  if (geom->dev->sector_size != 512)
-    return NULL;
+    PED_ASSERT(geom != NULL);
+    PED_ASSERT(geom->dev != NULL);
+    if (geom->dev->sector_size != 512)
+        return NULL;
 
-  /* Finds the blocksize of the partition block */
-  if (!(part = ped_malloc(PED_SECTOR_SIZE_DEFAULT * blocksize))) {
-    ped_exception_throw(PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
-                        _("%s : Failed to allocate partition block\n"),
-                        __func__);
-    goto error_part;
-  }
-  if (amiga_find_part(geom, part) != NULL) {
-    blocksize = PED_BE32_TO_CPU(part->de_SizeBlock) *
-                PED_BE32_TO_CPU(part->de_SectorPerBlock) / 128;
-  }
-  free(part);
+    /* Finds the blocksize of the partition block */
+    if (!(part = ped_malloc(PED_SECTOR_SIZE_DEFAULT * blocksize))) {
+        ped_exception_throw(PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
+                            _("%s : Failed to allocate partition block\n"),
+                            __func__);
+        goto error_part;
+    }
+    if (amiga_find_part(geom, part) != NULL) {
+        blocksize = PED_BE32_TO_CPU(part->de_SizeBlock) *
+                    PED_BE32_TO_CPU(part->de_SectorPerBlock) / 128;
+    }
+    free(part);
 
-  /* Test boot block */
-  if (!(block = ped_malloc(PED_SECTOR_SIZE_DEFAULT * blocksize))) {
-    ped_exception_throw(PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
-                        _("%s : Failed to allocate block\n"), __func__);
-    goto error_block;
-  }
-  root = geom->start;
-  if (!ped_device_read(geom->dev, block, root, blocksize)) {
-    ped_exception_throw(PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
-                        _("%s : Couldn't read root block %llu\n"), __func__,
-                        root);
-    goto error;
-  }
-  if (PED_BE32_TO_CPU(block[0]) != 0x53465300) {
-    goto error;
-  }
+    /* Test boot block */
+    if (!(block = ped_malloc(PED_SECTOR_SIZE_DEFAULT * blocksize))) {
+        ped_exception_throw(PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
+                            _("%s : Failed to allocate block\n"), __func__);
+        goto error_block;
+    }
+    root = geom->start;
+    if (!ped_device_read(geom->dev, block, root, blocksize)) {
+        ped_exception_throw(PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
+                            _("%s : Couldn't read root block %llu\n"), __func__,
+                            root);
+        goto error;
+    }
+    if (PED_BE32_TO_CPU(block[0]) != 0x53465300) {
+        goto error;
+    }
 
-  /* Find and test the root blocks */
-  if (_asfs_probe_root(geom, block, blocksize, root)) {
-    found++;
-  }
-  root = geom->end - blocksize - (geom->length % blocksize) + 1;
-  if (!ped_device_read(geom->dev, block, root, 1)) {
-    ped_exception_throw(PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
-                        _("%s : Couldn't read root block %llu\n"), __func__,
-                        root);
-    goto error;
-  }
-  if (_asfs_probe_root(geom, block, blocksize, root)) {
-    found++;
-  }
-  if (found != 0) {
-    free(block);
-    return ped_geometry_duplicate(geom);
-  }
+    /* Find and test the root blocks */
+    if (_asfs_probe_root(geom, block, blocksize, root)) {
+        found++;
+    }
+    root = geom->end - blocksize - (geom->length % blocksize) + 1;
+    if (!ped_device_read(geom->dev, block, root, 1)) {
+        ped_exception_throw(PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
+                            _("%s : Couldn't read root block %llu\n"), __func__,
+                            root);
+        goto error;
+    }
+    if (_asfs_probe_root(geom, block, blocksize, root)) {
+        found++;
+    }
+    if (found != 0) {
+        free(block);
+        return ped_geometry_duplicate(geom);
+    }
 
 error:
-  free(block);
+    free(block);
 error_block:
 error_part:
-  return NULL;
+    return NULL;
 }
 
 static PedFileSystemOps _asfs_ops = {
-  probe : _asfs_probe,
+    probe : _asfs_probe,
 };
 
 PedFileSystemType _asfs_type = {
-  next : NULL,
-  ops : &_asfs_ops,
-  name : "asfs",
+    next : NULL,
+    ops : &_asfs_ops,
+    name : "asfs",
 };

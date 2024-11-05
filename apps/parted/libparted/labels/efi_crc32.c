@@ -109,13 +109,13 @@ static const uint32_t crc32_tab[] = {
 
 uint32_t _GL_ATTRIBUTE_PURE __efi_crc32(const void *buf, unsigned long len,
                                         uint32_t seed) {
-  unsigned long i;
-  register uint32_t crc32val;
-  const unsigned char *s = buf;
+    unsigned long i;
+    register uint32_t crc32val;
+    const unsigned char *s = buf;
 
-  crc32val = seed;
-  for (i = 0; i < len; i++) {
-    crc32val = crc32_tab[(crc32val ^ s[i]) & 0xff] ^ (crc32val >> 8);
-  }
-  return crc32val;
+    crc32val = seed;
+    for (i = 0; i < len; i++) {
+        crc32val = crc32_tab[(crc32val ^ s[i]) & 0xff] ^ (crc32val >> 8);
+    }
+    return crc32val;
 }

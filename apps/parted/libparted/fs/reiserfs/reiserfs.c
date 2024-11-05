@@ -40,49 +40,51 @@ static PedSector reiserfs_super_offset[] = {128, 16, -1};
 static PedFileSystemType *reiserfs_type;
 
 static PedGeometry *reiserfs_probe(PedGeometry *geom) {
-  int i;
+    int i;
 
-  PED_ASSERT(geom != NULL);
-  reiserfs_super_block_t *sb = alloca(geom->dev->sector_size);
+    PED_ASSERT(geom != NULL);
+    reiserfs_super_block_t *sb = alloca(geom->dev->sector_size);
 
-  for (i = 0; reiserfs_super_offset[i] != -1; i++) {
-    if (reiserfs_super_offset[i] >= geom->length)
-      continue;
-    if (!ped_geometry_read(geom, sb, reiserfs_super_offset[i], 1))
-      continue;
+    for (i = 0; reiserfs_super_offset[i] != -1; i++) {
+        if (reiserfs_super_offset[i] >= geom->length)
+            continue;
+        if (!ped_geometry_read(geom, sb, reiserfs_super_offset[i], 1))
+            continue;
 
-    if (strncmp(REISERFS_SIGNATURE, sb->s_magic, strlen(REISERFS_SIGNATURE)) ==
-            0 ||
-        strncmp(REISER2FS_SIGNATURE, sb->s_magic,
-                strlen(REISER2FS_SIGNATURE)) == 0 ||
-        strncmp(REISER3FS_SIGNATURE, sb->s_magic,
-                strlen(REISER3FS_SIGNATURE)) == 0) {
-      PedSector block_size;
-      PedSector block_count;
+        if (strncmp(REISERFS_SIGNATURE, sb->s_magic,
+                    strlen(REISERFS_SIGNATURE)) == 0 ||
+            strncmp(REISER2FS_SIGNATURE, sb->s_magic,
+                    strlen(REISER2FS_SIGNATURE)) == 0 ||
+            strncmp(REISER3FS_SIGNATURE, sb->s_magic,
+                    strlen(REISER3FS_SIGNATURE)) == 0) {
+            PedSector block_size;
+            PedSector block_count;
 
-      block_size = PED_LE16_TO_CPU(sb->s_blocksize) / geom->dev->sector_size;
-      block_count = PED_LE32_TO_CPU(sb->s_block_count);
-      return ped_geometry_new(geom->dev, geom->start, block_size * block_count);
+            block_size =
+                PED_LE16_TO_CPU(sb->s_blocksize) / geom->dev->sector_size;
+            block_count = PED_LE32_TO_CPU(sb->s_block_count);
+            return ped_geometry_new(geom->dev, geom->start,
+                                    block_size * block_count);
+        }
     }
-  }
-  return NULL;
+    return NULL;
 }
 
 static PedFileSystemOps reiserfs_simple_ops = {
-  probe : reiserfs_probe,
+    probe : reiserfs_probe,
 };
 
 static PedFileSystemType reiserfs_simple_type = {
-  next : NULL,
-  ops : &reiserfs_simple_ops,
-  name : "reiserfs",
+    next : NULL,
+    ops : &reiserfs_simple_ops,
+    name : "reiserfs",
 };
 
 void ped_file_system_reiserfs_init() {
-  reiserfs_type = &reiserfs_simple_type;
-  ped_file_system_type_register(reiserfs_type);
+    reiserfs_type = &reiserfs_simple_type;
+    ped_file_system_type_register(reiserfs_type);
 }
 
 void ped_file_system_reiserfs_done() {
-  ped_file_system_type_unregister(reiserfs_type);
+    ped_file_system_type_unregister(reiserfs_type);
 }

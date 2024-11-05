@@ -25,16 +25,16 @@ typedef struct _FatTable FatTable;
 #include "fat.h"
 
 struct _FatTable {
-  void *table;
-  FatCluster size;
-  int raw_size;
+    void *table;
+    FatCluster size;
+    int raw_size;
 
-  FatType fat_type;
-  FatCluster cluster_count;
-  FatCluster free_cluster_count;
-  FatCluster bad_cluster_count;
+    FatType fat_type;
+    FatCluster cluster_count;
+    FatCluster free_cluster_count;
+    FatCluster bad_cluster_count;
 
-  FatCluster last_alloc;
+    FatCluster last_alloc;
 };
 
 extern FatTable *fat_table_new(FatType fat_type, FatCluster size);

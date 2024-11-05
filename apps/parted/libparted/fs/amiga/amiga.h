@@ -18,38 +18,38 @@
 */
 
 struct PartitionBlock {
-  uint32_t pb_ID;          /* Identifier 32 bit word : 'PART' */
-  uint32_t pb_SummedLongs; /* Size of the structure for checksums */
-  int32_t pb_ChkSum;       /* Checksum of the structure */
-  uint32_t pb_HostID;      /* SCSI Target ID of host, not really used */
-  uint32_t pb_Next;        /* Block number of the next PartitionBlock */
-  uint32_t pb_Flags;       /* Part Flags (NOMOUNT and BOOTABLE) */
-  uint32_t pb_Reserved1[2];
-  uint32_t pb_DevFlags;     /* Preferred flags for OpenDevice */
-  uint8_t pb_DriveName[32]; /* Preferred DOS device name: BSTR form */
-  uint32_t pb_Reserved2[15];
-  uint32_t de_TableSize; /* Size of Environment vector */
-  uint32_t de_SizeBlock; /* Size of the blocks in 32 bit words, usually 128 */
-  uint32_t de_SecOrg;    /* Not used; must be 0 */
-  uint32_t de_Surfaces;  /* Number of heads (surfaces) */
-  uint32_t de_SectorPerBlock; /* Disk sectors per block, used with SizeBlock,
-                                 usually 1 */
-  uint32_t de_BlocksPerTrack; /* Blocks per track. drive specific */
-  uint32_t de_Reserved;       /* DOS reserved blocks at start of partition. */
-  uint32_t de_PreAlloc;       /* DOS reserved blocks at end of partition */
-  uint32_t de_Interleave;     /* Not used, usually 0 */
-  uint32_t de_LowCyl;         /* First cylinder of the partition */
-  uint32_t de_HighCyl;        /* Last cylinder of the partition */
-  uint32_t de_NumBuffers;     /* Initial # DOS of buffers.  */
-  uint32_t de_BufMemType;     /* Type of mem to allocate for buffers */
-  uint32_t de_MaxTransfer;    /* Max number of bytes to transfer at a time */
-  uint32_t de_Mask;           /* Address Mask to block out certain memory */
-  int32_t de_BootPri;         /* Boot priority for autoboot */
-  uint32_t de_DosType;        /* Dostype of the file system */
-  uint32_t de_Baud;           /* Baud rate for serial handler */
-  uint32_t de_Control;        /* Control word for handler/filesystem */
-  uint32_t de_BootBlocks;     /* Number of blocks containing boot code */
-  uint32_t pb_EReserved[12];
+    uint32_t pb_ID;          /* Identifier 32 bit word : 'PART' */
+    uint32_t pb_SummedLongs; /* Size of the structure for checksums */
+    int32_t pb_ChkSum;       /* Checksum of the structure */
+    uint32_t pb_HostID;      /* SCSI Target ID of host, not really used */
+    uint32_t pb_Next;        /* Block number of the next PartitionBlock */
+    uint32_t pb_Flags;       /* Part Flags (NOMOUNT and BOOTABLE) */
+    uint32_t pb_Reserved1[2];
+    uint32_t pb_DevFlags;     /* Preferred flags for OpenDevice */
+    uint8_t pb_DriveName[32]; /* Preferred DOS device name: BSTR form */
+    uint32_t pb_Reserved2[15];
+    uint32_t de_TableSize; /* Size of Environment vector */
+    uint32_t de_SizeBlock; /* Size of the blocks in 32 bit words, usually 128 */
+    uint32_t de_SecOrg;    /* Not used; must be 0 */
+    uint32_t de_Surfaces;  /* Number of heads (surfaces) */
+    uint32_t de_SectorPerBlock; /* Disk sectors per block, used with SizeBlock,
+                                   usually 1 */
+    uint32_t de_BlocksPerTrack; /* Blocks per track. drive specific */
+    uint32_t de_Reserved;       /* DOS reserved blocks at start of partition. */
+    uint32_t de_PreAlloc;       /* DOS reserved blocks at end of partition */
+    uint32_t de_Interleave;     /* Not used, usually 0 */
+    uint32_t de_LowCyl;         /* First cylinder of the partition */
+    uint32_t de_HighCyl;        /* Last cylinder of the partition */
+    uint32_t de_NumBuffers;     /* Initial # DOS of buffers.  */
+    uint32_t de_BufMemType;     /* Type of mem to allocate for buffers */
+    uint32_t de_MaxTransfer;    /* Max number of bytes to transfer at a time */
+    uint32_t de_Mask;           /* Address Mask to block out certain memory */
+    int32_t de_BootPri;         /* Boot priority for autoboot */
+    uint32_t de_DosType;        /* Dostype of the file system */
+    uint32_t de_Baud;           /* Baud rate for serial handler */
+    uint32_t de_Control;        /* Control word for handler/filesystem */
+    uint32_t de_BootBlocks;     /* Number of blocks containing boot code */
+    uint32_t pb_EReserved[12];
 };
 
 #define PART(pos) ((struct PartitionBlock *)(pos))
@@ -63,8 +63,8 @@ struct PartitionBlock *amiga_find_part(PedGeometry *geom,
                                        struct PartitionBlock *part);
 
 struct AmigaIds {
-  uint32_t ID;
-  struct AmigaIds *next;
+    uint32_t ID;
+    struct AmigaIds *next;
 };
 
 struct AmigaIds *_amiga_add_id(uint32_t id, struct AmigaIds *ids);

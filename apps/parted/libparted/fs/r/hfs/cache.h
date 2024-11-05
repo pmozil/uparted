@@ -49,47 +49,47 @@
 #define CR_SHIFT 8 /* number of bits to shift start_block by */
                    /* to get the index of the linked list */
 #define CR_OVER_DIV                                                            \
-  16 /* alloc a table for (1+1/CR_OVER_DIV) *                                  \
-        file_number + CR_ADD_CST */
+    16 /* alloc a table for (1+1/CR_OVER_DIV) *                                \
+          file_number + CR_ADD_CST */
 #define CR_ADD_CST 16
 #define CR_NEW_ALLOC_DIV                                                       \
-  4 /* divide the size of the first alloc table                                \
-       by this value to allocate next tables */
+    4 /* divide the size of the first alloc table                              \
+         by this value to allocate next tables */
 
 /* See DOC for an explaination of this structure */
 /* Access read only from outside cache.c */
 struct _HfsCPrivateExtent {
-  struct _HfsCPrivateExtent *next;
-  uint32_t ext_start;
-  uint32_t ext_length;
-  uint32_t ref_block;
-  uint16_t ref_offset;
-  uint8_t sect_by_block;
-  unsigned where : 5;
-  unsigned ref_index : 3; /* 0 -> 7 */
+    struct _HfsCPrivateExtent *next;
+    uint32_t ext_start;
+    uint32_t ext_length;
+    uint32_t ref_block;
+    uint16_t ref_offset;
+    uint8_t sect_by_block;
+    unsigned where : 5;
+    unsigned ref_index : 3; /* 0 -> 7 */
 };
 typedef struct _HfsCPrivateExtent HfsCPrivateExtent;
 
 /* Internaly used by cache.c for custom memory managment only */
 struct _HfsCPrivateCacheTable {
-  struct _HfsCPrivateCacheTable *next_cache;
-  HfsCPrivateExtent *table;
-  unsigned int table_size;
-  unsigned int table_first_free;
-  /* first_elemt ? */
+    struct _HfsCPrivateCacheTable *next_cache;
+    HfsCPrivateExtent *table;
+    unsigned int table_size;
+    unsigned int table_first_free;
+    /* first_elemt ? */
 };
 typedef struct _HfsCPrivateCacheTable HfsCPrivateCacheTable;
 
 /* Internaly used by cache.c for custom memory managment
    and cache handling only */
 struct _HfsCPrivateCache {
-  HfsCPrivateCacheTable *table_list;
-  HfsCPrivateCacheTable *last_table;
-  HfsCPrivateExtent **linked_ref;
-  unsigned int linked_ref_size;
-  unsigned int block_number;
-  unsigned int first_cachetable_size;
-  unsigned int needed_alloc_size;
+    HfsCPrivateCacheTable *table_list;
+    HfsCPrivateCacheTable *last_table;
+    HfsCPrivateExtent **linked_ref;
+    unsigned int linked_ref_size;
+    unsigned int block_number;
+    unsigned int first_cachetable_size;
+    unsigned int needed_alloc_size;
 };
 typedef struct _HfsCPrivateCache HfsCPrivateCache;
 
@@ -113,7 +113,7 @@ HfsCPrivateExtent *hfsc_cache_move_extent(HfsCPrivateCache *cache,
 
 static __inline__ unsigned int
 hfsc_cache_needed_buffer(HfsCPrivateCache *cache) {
-  return cache->needed_alloc_size;
+    return cache->needed_alloc_size;
 }
 
 #endif /* _CACHE_H */

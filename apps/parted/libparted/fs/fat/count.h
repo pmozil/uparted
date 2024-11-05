@@ -24,15 +24,15 @@ typedef enum _FatClusterFlag FatClusterFlag;
 typedef struct _FatClusterInfo FatClusterInfo;
 
 enum _FatClusterFlag {
-  FAT_FLAG_FREE = 0,
-  FAT_FLAG_FILE = 1,
-  FAT_FLAG_DIRECTORY = 2,
-  FAT_FLAG_BAD = 3
+    FAT_FLAG_FREE = 0,
+    FAT_FLAG_FILE = 1,
+    FAT_FLAG_DIRECTORY = 2,
+    FAT_FLAG_BAD = 3
 };
 
 struct __attribute__((packed)) _FatClusterInfo {
-  unsigned int units_used : 6; /* 1 unit = cluster_size / 64 */
-  FatClusterFlag flag : 2;
+    unsigned int units_used : 6; /* 1 unit = cluster_size / 64 */
+    FatClusterFlag flag : 2;
 };
 
 extern int fat_collect_cluster_info(PedFileSystem *fs);

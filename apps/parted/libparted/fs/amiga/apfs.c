@@ -35,94 +35,94 @@
 
 static int _apfs_probe_root(uint32_t *block, uint32_t blocksize,
                             uint32_t kind) {
-  if (PED_BE32_TO_CPU(block[0]) != kind)
-    return 0;
-  return 1;
+    if (PED_BE32_TO_CPU(block[0]) != kind)
+        return 0;
+    return 1;
 }
 
 static PedGeometry *_generic_apfs_probe(PedGeometry *geom, uint32_t kind) {
-  uint32_t *block;
-  PedSector root;
-  struct PartitionBlock *part;
-  uint32_t blocksize = 1, reserved = 2;
+    uint32_t *block;
+    PedSector root;
+    struct PartitionBlock *part;
+    uint32_t blocksize = 1, reserved = 2;
 
-  PED_ASSERT(geom != NULL);
-  PED_ASSERT(geom->dev != NULL);
-  if (geom->dev->sector_size != 512)
-    return NULL;
+    PED_ASSERT(geom != NULL);
+    PED_ASSERT(geom->dev != NULL);
+    if (geom->dev->sector_size != 512)
+        return NULL;
 
-  /* Finds the blocksize and reserved values of the partition block */
-  if (!(part = ped_malloc(PED_SECTOR_SIZE_DEFAULT * blocksize))) {
-    ped_exception_throw(PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
-                        _("%s : Failed to allocate partition block\n"),
-                        __func__);
-    goto error_part;
-  }
-  if (amiga_find_part(geom, part) != NULL) {
-    reserved = PED_BE32_TO_CPU(part->de_Reserved);
-    blocksize = PED_BE32_TO_CPU(part->de_SizeBlock) *
-                PED_BE32_TO_CPU(part->de_SectorPerBlock) / 128;
-  }
-  free(part);
+    /* Finds the blocksize and reserved values of the partition block */
+    if (!(part = ped_malloc(PED_SECTOR_SIZE_DEFAULT * blocksize))) {
+        ped_exception_throw(PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
+                            _("%s : Failed to allocate partition block\n"),
+                            __func__);
+        goto error_part;
+    }
+    if (amiga_find_part(geom, part) != NULL) {
+        reserved = PED_BE32_TO_CPU(part->de_Reserved);
+        blocksize = PED_BE32_TO_CPU(part->de_SizeBlock) *
+                    PED_BE32_TO_CPU(part->de_SectorPerBlock) / 128;
+    }
+    free(part);
 
-  /* Test boot block */
-  if (!(block = ped_malloc(PED_SECTOR_SIZE_DEFAULT * blocksize))) {
-    ped_exception_throw(PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
-                        _("%s : Failed to allocate block\n"), __func__);
-    goto error_block;
-  }
-  if (!ped_device_read(geom->dev, block, geom->start, blocksize)) {
-    ped_exception_throw(PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
-                        _("%s : Couldn't read boot block %llu\n"), __func__,
-                        geom->start);
-    goto error;
-  }
-  if (PED_BE32_TO_CPU(block[0]) != kind) {
-    goto error;
-  }
+    /* Test boot block */
+    if (!(block = ped_malloc(PED_SECTOR_SIZE_DEFAULT * blocksize))) {
+        ped_exception_throw(PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
+                            _("%s : Failed to allocate block\n"), __func__);
+        goto error_block;
+    }
+    if (!ped_device_read(geom->dev, block, geom->start, blocksize)) {
+        ped_exception_throw(PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
+                            _("%s : Couldn't read boot block %llu\n"), __func__,
+                            geom->start);
+        goto error;
+    }
+    if (PED_BE32_TO_CPU(block[0]) != kind) {
+        goto error;
+    }
 
-  /* Find and test the root block */
-  root = geom->start + reserved * blocksize;
-  if (!ped_device_read(geom->dev, block, root, blocksize)) {
-    ped_exception_throw(PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
-                        _("%s : Couldn't read root block %llu\n"), __func__,
-                        root);
-    goto error;
-  }
-  if (_apfs_probe_root(block, blocksize, kind) == 1) {
-    free(block);
-    return ped_geometry_duplicate(geom);
-  }
+    /* Find and test the root block */
+    root = geom->start + reserved * blocksize;
+    if (!ped_device_read(geom->dev, block, root, blocksize)) {
+        ped_exception_throw(PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
+                            _("%s : Couldn't read root block %llu\n"), __func__,
+                            root);
+        goto error;
+    }
+    if (_apfs_probe_root(block, blocksize, kind) == 1) {
+        free(block);
+        return ped_geometry_duplicate(geom);
+    }
 
 error:
-  free(block);
+    free(block);
 error_block:
 error_part:
-  return NULL;
+    return NULL;
 }
 
 static PedGeometry *_apfs1_probe(PedGeometry *geom) {
-  return _generic_apfs_probe(geom, 0x50463101);
+    return _generic_apfs_probe(geom, 0x50463101);
 }
 
 static PedGeometry *_apfs2_probe(PedGeometry *geom) {
-  return _generic_apfs_probe(geom, 0x50463102);
+    return _generic_apfs_probe(geom, 0x50463102);
 }
 
 static PedFileSystemOps _apfs1_ops = {
-  probe : _apfs1_probe,
+    probe : _apfs1_probe,
 };
 static PedFileSystemOps _apfs2_ops = {
-  probe : _apfs2_probe,
+    probe : _apfs2_probe,
 };
 
 PedFileSystemType _apfs1_type = {
-  next : NULL,
-  ops : &_apfs1_ops,
-  name : "apfs1",
+    next : NULL,
+    ops : &_apfs1_ops,
+    name : "apfs1",
 };
 PedFileSystemType _apfs2_type = {
-  next : NULL,
-  ops : &_apfs2_ops,
-  name : "apfs2",
+    next : NULL,
+    ops : &_apfs2_ops,
+    name : "apfs2",
 };

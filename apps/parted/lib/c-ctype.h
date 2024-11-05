@@ -78,157 +78,157 @@ extern "C" {
 /* Cases for control characters.  */
 
 #define _C_CTYPE_CNTRL                                                         \
-  case '\a':                                                                   \
-  case '\b':                                                                   \
-  case '\f':                                                                   \
-  case '\n':                                                                   \
-  case '\r':                                                                   \
-  case '\t':                                                                   \
-  case '\v':                                                                   \
-    _C_CTYPE_OTHER_CNTRL
+    case '\a':                                                                 \
+    case '\b':                                                                 \
+    case '\f':                                                                 \
+    case '\n':                                                                 \
+    case '\r':                                                                 \
+    case '\t':                                                                 \
+    case '\v':                                                                 \
+        _C_CTYPE_OTHER_CNTRL
 
 /* ASCII control characters other than those with \-letter escapes.  */
 
 #if C_CTYPE_ASCII
 #define _C_CTYPE_OTHER_CNTRL                                                   \
-  case '\x00':                                                                 \
-  case '\x01':                                                                 \
-  case '\x02':                                                                 \
-  case '\x03':                                                                 \
-  case '\x04':                                                                 \
-  case '\x05':                                                                 \
-  case '\x06':                                                                 \
-  case '\x0e':                                                                 \
-  case '\x0f':                                                                 \
-  case '\x10':                                                                 \
-  case '\x11':                                                                 \
-  case '\x12':                                                                 \
-  case '\x13':                                                                 \
-  case '\x14':                                                                 \
-  case '\x15':                                                                 \
-  case '\x16':                                                                 \
-  case '\x17':                                                                 \
-  case '\x18':                                                                 \
-  case '\x19':                                                                 \
-  case '\x1a':                                                                 \
-  case '\x1b':                                                                 \
-  case '\x1c':                                                                 \
-  case '\x1d':                                                                 \
-  case '\x1e':                                                                 \
-  case '\x1f':                                                                 \
-  case '\x7f'
+    case '\x00':                                                               \
+    case '\x01':                                                               \
+    case '\x02':                                                               \
+    case '\x03':                                                               \
+    case '\x04':                                                               \
+    case '\x05':                                                               \
+    case '\x06':                                                               \
+    case '\x0e':                                                               \
+    case '\x0f':                                                               \
+    case '\x10':                                                               \
+    case '\x11':                                                               \
+    case '\x12':                                                               \
+    case '\x13':                                                               \
+    case '\x14':                                                               \
+    case '\x15':                                                               \
+    case '\x16':                                                               \
+    case '\x17':                                                               \
+    case '\x18':                                                               \
+    case '\x19':                                                               \
+    case '\x1a':                                                               \
+    case '\x1b':                                                               \
+    case '\x1c':                                                               \
+    case '\x1d':                                                               \
+    case '\x1e':                                                               \
+    case '\x1f':                                                               \
+    case '\x7f'
 #else
 /* Use EBCDIC code page 1047's assignments for ASCII control chars;
    assume all EBCDIC code pages agree about these assignments.  */
 #define _C_CTYPE_OTHER_CNTRL                                                   \
-  case '\x00':                                                                 \
-  case '\x01':                                                                 \
-  case '\x02':                                                                 \
-  case '\x03':                                                                 \
-  case '\x07':                                                                 \
-  case '\x0e':                                                                 \
-  case '\x0f':                                                                 \
-  case '\x10':                                                                 \
-  case '\x11':                                                                 \
-  case '\x12':                                                                 \
-  case '\x13':                                                                 \
-  case '\x18':                                                                 \
-  case '\x19':                                                                 \
-  case '\x1c':                                                                 \
-  case '\x1d':                                                                 \
-  case '\x1e':                                                                 \
-  case '\x1f':                                                                 \
-  case '\x26':                                                                 \
-  case '\x27':                                                                 \
-  case '\x2d':                                                                 \
-  case '\x2e':                                                                 \
-  case '\x32':                                                                 \
-  case '\x37':                                                                 \
-  case '\x3c':                                                                 \
-  case '\x3d':                                                                 \
-  case '\x3f'
+    case '\x00':                                                               \
+    case '\x01':                                                               \
+    case '\x02':                                                               \
+    case '\x03':                                                               \
+    case '\x07':                                                               \
+    case '\x0e':                                                               \
+    case '\x0f':                                                               \
+    case '\x10':                                                               \
+    case '\x11':                                                               \
+    case '\x12':                                                               \
+    case '\x13':                                                               \
+    case '\x18':                                                               \
+    case '\x19':                                                               \
+    case '\x1c':                                                               \
+    case '\x1d':                                                               \
+    case '\x1e':                                                               \
+    case '\x1f':                                                               \
+    case '\x26':                                                               \
+    case '\x27':                                                               \
+    case '\x2d':                                                               \
+    case '\x2e':                                                               \
+    case '\x32':                                                               \
+    case '\x37':                                                               \
+    case '\x3c':                                                               \
+    case '\x3d':                                                               \
+    case '\x3f'
 #endif
 
 /* Cases for lowercase hex letters, and lowercase letters, all offset by N.  */
 
 #define _C_CTYPE_LOWER_A_THRU_F_N(N)                                           \
-  case 'a' + (N):                                                              \
-  case 'b' + (N):                                                              \
-  case 'c' + (N):                                                              \
-  case 'd' + (N):                                                              \
-  case 'e' + (N):                                                              \
-  case 'f' + (N)
+    case 'a' + (N):                                                            \
+    case 'b' + (N):                                                            \
+    case 'c' + (N):                                                            \
+    case 'd' + (N):                                                            \
+    case 'e' + (N):                                                            \
+    case 'f' + (N)
 #define _C_CTYPE_LOWER_N(N)                                                    \
-  _C_CTYPE_LOWER_A_THRU_F_N(N) : case 'g' + (N):                               \
-  case 'h' + (N):                                                              \
-  case 'i' + (N):                                                              \
-  case 'j' + (N):                                                              \
-  case 'k' + (N):                                                              \
-  case 'l' + (N):                                                              \
-  case 'm' + (N):                                                              \
-  case 'n' + (N):                                                              \
-  case 'o' + (N):                                                              \
-  case 'p' + (N):                                                              \
-  case 'q' + (N):                                                              \
-  case 'r' + (N):                                                              \
-  case 's' + (N):                                                              \
-  case 't' + (N):                                                              \
-  case 'u' + (N):                                                              \
-  case 'v' + (N):                                                              \
-  case 'w' + (N):                                                              \
-  case 'x' + (N):                                                              \
-  case 'y' + (N):                                                              \
-  case 'z' + (N)
+    _C_CTYPE_LOWER_A_THRU_F_N(N) : case 'g' + (N):                             \
+    case 'h' + (N):                                                            \
+    case 'i' + (N):                                                            \
+    case 'j' + (N):                                                            \
+    case 'k' + (N):                                                            \
+    case 'l' + (N):                                                            \
+    case 'm' + (N):                                                            \
+    case 'n' + (N):                                                            \
+    case 'o' + (N):                                                            \
+    case 'p' + (N):                                                            \
+    case 'q' + (N):                                                            \
+    case 'r' + (N):                                                            \
+    case 's' + (N):                                                            \
+    case 't' + (N):                                                            \
+    case 'u' + (N):                                                            \
+    case 'v' + (N):                                                            \
+    case 'w' + (N):                                                            \
+    case 'x' + (N):                                                            \
+    case 'y' + (N):                                                            \
+    case 'z' + (N)
 
 /* Cases for hex letters, digits, lower, punct, and upper.  */
 
 #define _C_CTYPE_A_THRU_F                                                      \
-  _C_CTYPE_LOWER_A_THRU_F_N(0) : _C_CTYPE_LOWER_A_THRU_F_N('A' - 'a')
+    _C_CTYPE_LOWER_A_THRU_F_N(0) : _C_CTYPE_LOWER_A_THRU_F_N('A' - 'a')
 #define _C_CTYPE_DIGIT                                                         \
-  case '0':                                                                    \
-  case '1':                                                                    \
-  case '2':                                                                    \
-  case '3':                                                                    \
-  case '4':                                                                    \
-  case '5':                                                                    \
-  case '6':                                                                    \
-  case '7':                                                                    \
-  case '8':                                                                    \
-  case '9'
+    case '0':                                                                  \
+    case '1':                                                                  \
+    case '2':                                                                  \
+    case '3':                                                                  \
+    case '4':                                                                  \
+    case '5':                                                                  \
+    case '6':                                                                  \
+    case '7':                                                                  \
+    case '8':                                                                  \
+    case '9'
 #define _C_CTYPE_LOWER _C_CTYPE_LOWER_N(0)
 #define _C_CTYPE_PUNCT                                                         \
-  case '!':                                                                    \
-  case '"':                                                                    \
-  case '#':                                                                    \
-  case '$':                                                                    \
-  case '%':                                                                    \
-  case '&':                                                                    \
-  case '\'':                                                                   \
-  case '(':                                                                    \
-  case ')':                                                                    \
-  case '*':                                                                    \
-  case '+':                                                                    \
-  case ',':                                                                    \
-  case '-':                                                                    \
-  case '.':                                                                    \
-  case '/':                                                                    \
-  case ':':                                                                    \
-  case ';':                                                                    \
-  case '<':                                                                    \
-  case '=':                                                                    \
-  case '>':                                                                    \
-  case '?':                                                                    \
-  case '@':                                                                    \
-  case '[':                                                                    \
-  case '\\':                                                                   \
-  case ']':                                                                    \
-  case '^':                                                                    \
-  case '_':                                                                    \
-  case '`':                                                                    \
-  case '{':                                                                    \
-  case '|':                                                                    \
-  case '}':                                                                    \
-  case '~'
+    case '!':                                                                  \
+    case '"':                                                                  \
+    case '#':                                                                  \
+    case '$':                                                                  \
+    case '%':                                                                  \
+    case '&':                                                                  \
+    case '\'':                                                                 \
+    case '(':                                                                  \
+    case ')':                                                                  \
+    case '*':                                                                  \
+    case '+':                                                                  \
+    case ',':                                                                  \
+    case '-':                                                                  \
+    case '.':                                                                  \
+    case '/':                                                                  \
+    case ':':                                                                  \
+    case ';':                                                                  \
+    case '<':                                                                  \
+    case '=':                                                                  \
+    case '>':                                                                  \
+    case '?':                                                                  \
+    case '@':                                                                  \
+    case '[':                                                                  \
+    case '\\':                                                                 \
+    case ']':                                                                  \
+    case '^':                                                                  \
+    case '_':                                                                  \
+    case '`':                                                                  \
+    case '{':                                                                  \
+    case '|':                                                                  \
+    case '}':                                                                  \
+    case '~'
 #define _C_CTYPE_UPPER _C_CTYPE_LOWER_N('A' - 'a')
 
 /* Function definitions.  */
@@ -249,154 +249,154 @@ extern "C" {
  */
 
 C_CTYPE_INLINE bool c_isalnum(int c) {
-  switch (c) {
-  _C_CTYPE_DIGIT:
-  _C_CTYPE_LOWER:
-  _C_CTYPE_UPPER:
-    return true;
-  default:
-    return false;
-  }
+    switch (c) {
+    _C_CTYPE_DIGIT:
+    _C_CTYPE_LOWER:
+    _C_CTYPE_UPPER:
+        return true;
+    default:
+        return false;
+    }
 }
 
 C_CTYPE_INLINE bool c_isalpha(int c) {
-  switch (c) {
-  _C_CTYPE_LOWER:
-  _C_CTYPE_UPPER:
-    return true;
-  default:
-    return false;
-  }
+    switch (c) {
+    _C_CTYPE_LOWER:
+    _C_CTYPE_UPPER:
+        return true;
+    default:
+        return false;
+    }
 }
 
 /* The function isascii is not locale dependent.
    Its use in EBCDIC is questionable. */
 C_CTYPE_INLINE bool c_isascii(int c) {
-  switch (c) {
-  case ' ':
-  _C_CTYPE_CNTRL:
-  _C_CTYPE_DIGIT:
-  _C_CTYPE_LOWER:
-  _C_CTYPE_PUNCT:
-  _C_CTYPE_UPPER:
-    return true;
-  default:
-    return false;
-  }
+    switch (c) {
+    case ' ':
+    _C_CTYPE_CNTRL:
+    _C_CTYPE_DIGIT:
+    _C_CTYPE_LOWER:
+    _C_CTYPE_PUNCT:
+    _C_CTYPE_UPPER:
+        return true;
+    default:
+        return false;
+    }
 }
 
 C_CTYPE_INLINE bool c_isblank(int c) { return c == ' ' || c == '\t'; }
 
 C_CTYPE_INLINE bool c_iscntrl(int c) {
-  switch (c) {
-  _C_CTYPE_CNTRL:
-    return true;
-  default:
-    return false;
-  }
+    switch (c) {
+    _C_CTYPE_CNTRL:
+        return true;
+    default:
+        return false;
+    }
 }
 
 C_CTYPE_INLINE bool c_isdigit(int c) {
-  switch (c) {
-  _C_CTYPE_DIGIT:
-    return true;
-  default:
-    return false;
-  }
+    switch (c) {
+    _C_CTYPE_DIGIT:
+        return true;
+    default:
+        return false;
+    }
 }
 
 C_CTYPE_INLINE bool c_isgraph(int c) {
-  switch (c) {
-  _C_CTYPE_DIGIT:
-  _C_CTYPE_LOWER:
-  _C_CTYPE_PUNCT:
-  _C_CTYPE_UPPER:
-    return true;
-  default:
-    return false;
-  }
+    switch (c) {
+    _C_CTYPE_DIGIT:
+    _C_CTYPE_LOWER:
+    _C_CTYPE_PUNCT:
+    _C_CTYPE_UPPER:
+        return true;
+    default:
+        return false;
+    }
 }
 
 C_CTYPE_INLINE bool c_islower(int c) {
-  switch (c) {
-  _C_CTYPE_LOWER:
-    return true;
-  default:
-    return false;
-  }
+    switch (c) {
+    _C_CTYPE_LOWER:
+        return true;
+    default:
+        return false;
+    }
 }
 
 C_CTYPE_INLINE bool c_isprint(int c) {
-  switch (c) {
-  case ' ':
-  _C_CTYPE_DIGIT:
-  _C_CTYPE_LOWER:
-  _C_CTYPE_PUNCT:
-  _C_CTYPE_UPPER:
-    return true;
-  default:
-    return false;
-  }
+    switch (c) {
+    case ' ':
+    _C_CTYPE_DIGIT:
+    _C_CTYPE_LOWER:
+    _C_CTYPE_PUNCT:
+    _C_CTYPE_UPPER:
+        return true;
+    default:
+        return false;
+    }
 }
 
 C_CTYPE_INLINE bool c_ispunct(int c) {
-  switch (c) {
-  _C_CTYPE_PUNCT:
-    return true;
-  default:
-    return false;
-  }
+    switch (c) {
+    _C_CTYPE_PUNCT:
+        return true;
+    default:
+        return false;
+    }
 }
 
 C_CTYPE_INLINE bool c_isspace(int c) {
-  switch (c) {
-  case ' ':
-  case '\t':
-  case '\n':
-  case '\v':
-  case '\f':
-  case '\r':
-    return true;
-  default:
-    return false;
-  }
+    switch (c) {
+    case ' ':
+    case '\t':
+    case '\n':
+    case '\v':
+    case '\f':
+    case '\r':
+        return true;
+    default:
+        return false;
+    }
 }
 
 C_CTYPE_INLINE bool c_isupper(int c) {
-  switch (c) {
-  _C_CTYPE_UPPER:
-    return true;
-  default:
-    return false;
-  }
+    switch (c) {
+    _C_CTYPE_UPPER:
+        return true;
+    default:
+        return false;
+    }
 }
 
 C_CTYPE_INLINE bool c_isxdigit(int c) {
-  switch (c) {
-  _C_CTYPE_DIGIT:
-  _C_CTYPE_A_THRU_F:
-    return true;
-  default:
-    return false;
-  }
+    switch (c) {
+    _C_CTYPE_DIGIT:
+    _C_CTYPE_A_THRU_F:
+        return true;
+    default:
+        return false;
+    }
 }
 
 C_CTYPE_INLINE int c_tolower(int c) {
-  switch (c) {
-  _C_CTYPE_UPPER:
-    return c - 'A' + 'a';
-  default:
-    return c;
-  }
+    switch (c) {
+    _C_CTYPE_UPPER:
+        return c - 'A' + 'a';
+    default:
+        return c;
+    }
 }
 
 C_CTYPE_INLINE int c_toupper(int c) {
-  switch (c) {
-  _C_CTYPE_LOWER:
-    return c - 'a' + 'A';
-  default:
-    return c;
-  }
+    switch (c) {
+    _C_CTYPE_LOWER:
+        return c - 'a' + 'A';
+    default:
+        return c;
+    }
 }
 
 #ifdef __cplusplus

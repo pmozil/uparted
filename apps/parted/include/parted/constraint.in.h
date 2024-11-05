@@ -27,12 +27,12 @@ typedef struct _PedConstraint PedConstraint;
 #include <parted/natmath.h>
 
 struct _PedConstraint {
-  PedAlignment *start_align;
-  PedAlignment *end_align;
-  PedGeometry *start_range;
-  PedGeometry *end_range;
-  PedSector min_size;
-  PedSector max_size;
+    PedAlignment *start_align;
+    PedAlignment *end_align;
+    PedGeometry *start_range;
+    PedGeometry *end_range;
+    PedSector min_size;
+    PedSector max_size;
 };
 
 extern int ped_constraint_init(PedConstraint *constraint,

@@ -25,17 +25,17 @@
 typedef struct _FatTraverseInfo FatTraverseInfo;
 
 struct _FatTraverseInfo {
-  PedFileSystem *fs;
-  char *dir_name;
+    PedFileSystem *fs;
+    char *dir_name;
 
-  int is_legacy_root_dir;
-  int dirty;
-  int eof;
+    int is_legacy_root_dir;
+    int dirty;
+    int eof;
 
-  FatDirEntry *dir_entries;
-  int current_entry;
-  FatCluster this_buffer, next_buffer;
-  int buffer_size;
+    FatDirEntry *dir_entries;
+    int current_entry;
+    FatCluster this_buffer, next_buffer;
+    int buffer_size;
 };
 
 extern int fat_traverse_entries_per_buffer(FatTraverseInfo *trav_info);

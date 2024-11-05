@@ -37,13 +37,13 @@ typedef void PedTimerHandler(PedTimer *timer, void *context);
  * Structure keeping track of progress and time
  */
 struct _PedTimer {
-  float frac;               /**< fraction of operation done */
-  time_t start;             /**< time of start of op */
-  time_t now;               /**< time of last update (now!) */
-  time_t predicted_end;     /**< expected finish time */
-  const char *state_name;   /**< eg: "copying data" */
-  PedTimerHandler *handler; /**< who to notify on updates */
-  void *context;            /**< context to pass to handler */
+    float frac;               /**< fraction of operation done */
+    time_t start;             /**< time of start of op */
+    time_t now;               /**< time of last update (now!) */
+    time_t predicted_end;     /**< expected finish time */
+    const char *state_name;   /**< eg: "copying data" */
+    PedTimerHandler *handler; /**< who to notify on updates */
+    void *context;            /**< context to pass to handler */
 };
 
 extern PedTimer *ped_timer_new(PedTimerHandler *handler, void *context);

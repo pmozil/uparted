@@ -42,37 +42,37 @@ typedef u_int32_t blk_t;
 #endif
 
 struct ext2_fs {
-  struct ext2_dev_handle *devhandle;
+    struct ext2_dev_handle *devhandle;
 
-  struct ext2_super_block sb;
-  struct ext2_group_desc *gd;
-  struct ext2_buffer_cache *bc;
-  int metadirty; /* 0:all sb&gd copies clean
-                    1:all sb&gd copies dirty
-                    2:only first sb&gd copy clean */
+    struct ext2_super_block sb;
+    struct ext2_group_desc *gd;
+    struct ext2_buffer_cache *bc;
+    int metadirty; /* 0:all sb&gd copies clean
+                      1:all sb&gd copies dirty
+                      2:only first sb&gd copy clean */
 
-  int dynamic_version;
-  int sparse;      /* sparse superblocks */
-  int has_journal; /* journal */
-  int has_internal_journal;
+    int dynamic_version;
+    int sparse;      /* sparse superblocks */
+    int has_journal; /* journal */
+    int has_internal_journal;
 
-  int blocksize;
-  int logsize;
-  blk_t adminblocks;
-  blk_t gdblocks;
-  blk_t itoffset;
-  blk_t inodeblocks;
-  int numgroups;
-  int r_frac; /* reserved % of blocks */
+    int blocksize;
+    int logsize;
+    blk_t adminblocks;
+    blk_t gdblocks;
+    blk_t itoffset;
+    blk_t inodeblocks;
+    int numgroups;
+    int r_frac; /* reserved % of blocks */
 
-  unsigned char *relocator_pool;
-  unsigned char *relocator_pool_end;
+    unsigned char *relocator_pool;
+    unsigned char *relocator_pool_end;
 
-  int opt_debug;
-  int opt_safe;
-  int opt_verbose;
+    int opt_debug;
+    int opt_safe;
+    int opt_verbose;
 
-  void *journal;
+    void *journal;
 };
 
 #endif

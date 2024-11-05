@@ -26,24 +26,24 @@ enum _FatDirection { FAT_DIR_FORWARD, FAT_DIR_BACKWARD };
 typedef enum _FatDirection FatDirection;
 
 struct _FatOpContext {
-  PedFileSystem *old_fs;
-  PedFileSystem *new_fs;
+    PedFileSystem *old_fs;
+    PedFileSystem *new_fs;
 
-  PedSector frag_sectors; /* should equal old_fs and
-                             new_fs's frag_sectors */
+    PedSector frag_sectors; /* should equal old_fs and
+                               new_fs's frag_sectors */
 
-  FatDirection start_move_dir;
-  FatFragment start_move_delta;
+    FatDirection start_move_dir;
+    FatFragment start_move_delta;
 
-  FatFragment buffer_offset;
-  FatFragment buffer_frags;
-  FatFragment *buffer_map;
+    FatFragment buffer_offset;
+    FatFragment buffer_frags;
+    FatFragment *buffer_map;
 
-  FatFragment frags_duped;
+    FatFragment frags_duped;
 
-  FatFragment *remap;
+    FatFragment *remap;
 
-  FatCluster new_root_dir[32];
+    FatCluster new_root_dir[32];
 };
 typedef struct _FatOpContext FatOpContext;
 

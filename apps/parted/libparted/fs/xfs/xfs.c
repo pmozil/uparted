@@ -34,40 +34,42 @@
 #include <uuid/uuid.h>
 
 static PedGeometry *xfs_probe(PedGeometry *geom) {
-  PedSector block_size;
-  PedSector block_count;
-  struct xfs_sb *sb = alloca(geom->dev->sector_size);
+    PedSector block_size;
+    PedSector block_count;
+    struct xfs_sb *sb = alloca(geom->dev->sector_size);
 
-  if (geom->length < XFS_SB_DADDR + 1)
+    if (geom->length < XFS_SB_DADDR + 1)
+        return NULL;
+    if (!ped_geometry_read(geom, sb, XFS_SB_DADDR, 1))
+        return NULL;
+
+    if (PED_LE32_TO_CPU(sb->sb_magicnum) == XFS_SB_MAGIC) {
+        block_size = PED_LE32_TO_CPU(sb->sb_blocksize) / geom->dev->sector_size;
+        block_count = PED_LE64_TO_CPU(sb->sb_dblocks);
+
+        return ped_geometry_new(geom->dev, geom->start,
+                                block_size * block_count);
+    }
+
+    if (PED_BE32_TO_CPU(sb->sb_magicnum) == XFS_SB_MAGIC) {
+        block_size = PED_BE32_TO_CPU(sb->sb_blocksize) / geom->dev->sector_size;
+        block_count = PED_BE64_TO_CPU(sb->sb_dblocks);
+
+        geom =
+            ped_geometry_new(geom->dev, geom->start, block_size * block_count);
+        return geom;
+    }
     return NULL;
-  if (!ped_geometry_read(geom, sb, XFS_SB_DADDR, 1))
-    return NULL;
-
-  if (PED_LE32_TO_CPU(sb->sb_magicnum) == XFS_SB_MAGIC) {
-    block_size = PED_LE32_TO_CPU(sb->sb_blocksize) / geom->dev->sector_size;
-    block_count = PED_LE64_TO_CPU(sb->sb_dblocks);
-
-    return ped_geometry_new(geom->dev, geom->start, block_size * block_count);
-  }
-
-  if (PED_BE32_TO_CPU(sb->sb_magicnum) == XFS_SB_MAGIC) {
-    block_size = PED_BE32_TO_CPU(sb->sb_blocksize) / geom->dev->sector_size;
-    block_count = PED_BE64_TO_CPU(sb->sb_dblocks);
-
-    geom = ped_geometry_new(geom->dev, geom->start, block_size * block_count);
-    return geom;
-  }
-  return NULL;
 }
 
 static PedFileSystemOps xfs_ops = {
-  probe : xfs_probe,
+    probe : xfs_probe,
 };
 
 static PedFileSystemType xfs_type = {
-  next : NULL,
-  ops : &xfs_ops,
-  name : "xfs",
+    next : NULL,
+    ops : &xfs_ops,
+    name : "xfs",
 };
 
 void ped_file_system_xfs_init() { ped_file_system_type_register(&xfs_type); }

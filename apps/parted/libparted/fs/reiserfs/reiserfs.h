@@ -29,52 +29,52 @@
 #define DEFAULT_BLOCK_SIZE 4096
 
 struct reiserfs_super_block {
-  uint32_t s_block_count;
-  uint32_t s_free_blocks;
-  uint32_t s_root_block;
-  uint32_t s_journal_block;
-  uint32_t s_journal_dev;
-  uint32_t s_orig_journal_size;
-  uint32_t s_journal_trans_max;
-  uint32_t s_journal_block_count;
-  uint32_t s_journal_max_batch;
-  uint32_t s_journal_max_commit_age;
-  uint32_t s_journal_max_trans_age;
-  uint16_t s_blocksize;
-  uint16_t s_oid_maxsize;
-  uint16_t s_oid_cursize;
-  uint16_t s_state;
-  char s_magic[10];
-  uint16_t s_fsck_state;
-  uint32_t s_hash_function_code;
-  uint16_t s_tree_height;
-  uint16_t s_bmap_nr;
-  uint16_t s_version;
-  char padding[438];
+    uint32_t s_block_count;
+    uint32_t s_free_blocks;
+    uint32_t s_root_block;
+    uint32_t s_journal_block;
+    uint32_t s_journal_dev;
+    uint32_t s_orig_journal_size;
+    uint32_t s_journal_trans_max;
+    uint32_t s_journal_block_count;
+    uint32_t s_journal_max_batch;
+    uint32_t s_journal_max_commit_age;
+    uint32_t s_journal_max_trans_age;
+    uint16_t s_blocksize;
+    uint16_t s_oid_maxsize;
+    uint16_t s_oid_cursize;
+    uint16_t s_state;
+    char s_magic[10];
+    uint16_t s_fsck_state;
+    uint32_t s_hash_function_code;
+    uint16_t s_tree_height;
+    uint16_t s_bmap_nr;
+    uint16_t s_version;
+    char padding[438];
 };
 
 typedef struct reiserfs_super_block reiserfs_super_block_t;
 
 enum reiserfs_exception_type {
-  EXCEPTION_INFORMATION = 1,
-  EXCEPTION_WARNING = 2,
-  EXCEPTION_ERROR = 3,
-  EXCEPTION_FATAL = 4,
-  EXCEPTION_BUG = 5,
-  EXCEPTION_NO_FEATURE = 6
+    EXCEPTION_INFORMATION = 1,
+    EXCEPTION_WARNING = 2,
+    EXCEPTION_ERROR = 3,
+    EXCEPTION_FATAL = 4,
+    EXCEPTION_BUG = 5,
+    EXCEPTION_NO_FEATURE = 6
 };
 
 typedef enum reiserfs_exception_type reiserfs_exception_type_t;
 
 enum reiserfs_exception_option {
-  EXCEPTION_UNHANDLED = 1 << 0,
-  EXCEPTION_FIX = 1 << 1,
-  EXCEPTION_YES = 1 << 2,
-  EXCEPTION_NO = 1 << 3,
-  EXCEPTION_OK = 1 << 4,
-  EXCEPTION_RETRY = 1 << 5,
-  EXCEPTION_IGNORE = 1 << 6,
-  EXCEPTION_CANCEL = 1 << 7
+    EXCEPTION_UNHANDLED = 1 << 0,
+    EXCEPTION_FIX = 1 << 1,
+    EXCEPTION_YES = 1 << 2,
+    EXCEPTION_NO = 1 << 3,
+    EXCEPTION_OK = 1 << 4,
+    EXCEPTION_RETRY = 1 << 5,
+    EXCEPTION_IGNORE = 1 << 6,
+    EXCEPTION_CANCEL = 1 << 7
 };
 
 typedef enum reiserfs_exception_option reiserfs_exception_option_t;

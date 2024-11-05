@@ -53,8 +53,8 @@ typedef struct _PedAlignment PedAlignment;
  */
 
 struct _PedAlignment {
-  PedSector offset;
-  PedSector grain_size;
+    PedSector offset;
+    PedSector grain_size;
 };
 
 extern PedSector ped_round_up_to(PedSector sector,
@@ -93,12 +93,12 @@ extern const PedAlignment *ped_alignment_none;
 
 static inline PedSector ped_div_round_up(PedSector numerator,
                                          PedSector divisor) {
-  return (numerator + divisor - 1) / divisor;
+    return (numerator + divisor - 1) / divisor;
 }
 
 static inline PedSector ped_div_round_to_nearest(PedSector numerator,
                                                  PedSector divisor) {
-  return (numerator + divisor / 2) / divisor;
+    return (numerator + divisor / 2) / divisor;
 }
 
 #endif /* PED_NATMATH_H_INCLUDED */

@@ -30,230 +30,230 @@
    examples are shown here as valid C strings rather than what
    displays on a terminal (with "??/" as a trigraph for "\\").  */
 enum quoting_style {
-  /* Output names as-is (ls --quoting-style=literal).  Can result in
-     embedded null bytes if QA_ELIDE_NULL_BYTES is not in
-     effect.
+    /* Output names as-is (ls --quoting-style=literal).  Can result in
+       embedded null bytes if QA_ELIDE_NULL_BYTES is not in
+       effect.
 
-     quotearg_buffer:
-     "simple", "\0 \t\n'\"\033??/\\", "a:b"
-     quotearg:
-     "simple", " \t\n'\"\033??/\\", "a:b"
-     quotearg_colon:
-     "simple", " \t\n'\"\033??/\\", "a:b"
-  */
-  literal_quoting_style,
+       quotearg_buffer:
+       "simple", "\0 \t\n'\"\033??/\\", "a:b"
+       quotearg:
+       "simple", " \t\n'\"\033??/\\", "a:b"
+       quotearg_colon:
+       "simple", " \t\n'\"\033??/\\", "a:b"
+    */
+    literal_quoting_style,
 
-  /* Quote names for the shell if they contain shell metacharacters
-     or would cause ambiguous output (ls --quoting-style=shell).
-     Can result in embedded null bytes if QA_ELIDE_NULL_BYTES is not
-     in effect.
+    /* Quote names for the shell if they contain shell metacharacters
+       or would cause ambiguous output (ls --quoting-style=shell).
+       Can result in embedded null bytes if QA_ELIDE_NULL_BYTES is not
+       in effect.
 
-     quotearg_buffer:
-     "simple", "'\0 \t\n'\\''\"\033??/\\'", "a:b"
-     quotearg:
-     "simple", "' \t\n'\\''\"\033??/\\'", "a:b"
-     quotearg_colon:
-     "simple", "' \t\n'\\''\"\033??/\\'", "'a:b'"
-  */
-  shell_quoting_style,
+       quotearg_buffer:
+       "simple", "'\0 \t\n'\\''\"\033??/\\'", "a:b"
+       quotearg:
+       "simple", "' \t\n'\\''\"\033??/\\'", "a:b"
+       quotearg_colon:
+       "simple", "' \t\n'\\''\"\033??/\\'", "'a:b'"
+    */
+    shell_quoting_style,
 
-  /* Quote names for the shell, even if they would normally not
-     require quoting (ls --quoting-style=shell-always).  Can result
-     in embedded null bytes if QA_ELIDE_NULL_BYTES is not in effect.
-     Behaves like shell_quoting_style if QA_ELIDE_OUTER_QUOTES is in
-     effect.
+    /* Quote names for the shell, even if they would normally not
+       require quoting (ls --quoting-style=shell-always).  Can result
+       in embedded null bytes if QA_ELIDE_NULL_BYTES is not in effect.
+       Behaves like shell_quoting_style if QA_ELIDE_OUTER_QUOTES is in
+       effect.
 
-     quotearg_buffer:
-     "'simple'", "'\0 \t\n'\\''\"\033??/\\'", "'a:b'"
-     quotearg:
-     "'simple'", "' \t\n'\\''\"\033??/\\'", "'a:b'"
-     quotearg_colon:
-     "'simple'", "' \t\n'\\''\"\033??/\\'", "'a:b'"
-  */
-  shell_always_quoting_style,
+       quotearg_buffer:
+       "'simple'", "'\0 \t\n'\\''\"\033??/\\'", "'a:b'"
+       quotearg:
+       "'simple'", "' \t\n'\\''\"\033??/\\'", "'a:b'"
+       quotearg_colon:
+       "'simple'", "' \t\n'\\''\"\033??/\\'", "'a:b'"
+    */
+    shell_always_quoting_style,
 
-  /* Quote names for the shell if they contain shell metacharacters
-     or other problematic characters (ls --quoting-style=shell-escape).
-     Non printable characters are quoted using the $'...' syntax,
-     which originated in ksh93 and is widely supported by most shells,
-     and proposed for inclusion in POSIX.
+    /* Quote names for the shell if they contain shell metacharacters
+       or other problematic characters (ls --quoting-style=shell-escape).
+       Non printable characters are quoted using the $'...' syntax,
+       which originated in ksh93 and is widely supported by most shells,
+       and proposed for inclusion in POSIX.
 
-     quotearg_buffer:
-     "simple", "''$'\\0'' '$'\\t\\n'\\''\"'$'\\033''??/\\'", "a:b"
-     quotearg:
-     "simple", "''$'\\0'' '$'\\t\\n'\\''\"'$'\\033''??/\\'", "a:b"
-     quotearg_colon:
-     "simple", "''$'\\0'' '$'\\t\\n'\\''\"'$'\\033''??/\\'", "'a:b'"
-  */
-  shell_escape_quoting_style,
+       quotearg_buffer:
+       "simple", "''$'\\0'' '$'\\t\\n'\\''\"'$'\\033''??/\\'", "a:b"
+       quotearg:
+       "simple", "''$'\\0'' '$'\\t\\n'\\''\"'$'\\033''??/\\'", "a:b"
+       quotearg_colon:
+       "simple", "''$'\\0'' '$'\\t\\n'\\''\"'$'\\033''??/\\'", "'a:b'"
+    */
+    shell_escape_quoting_style,
 
-  /* Quote names for the shell even if they would normally not
-     require quoting (ls --quoting-style=shell-escape).
-     Non printable characters are quoted using the $'...' syntax,
-     which originated in ksh93 and is widely supported by most shells,
-     and proposed for inclusion in POSIX.  Behaves like
-     shell_escape_quoting_style if QA_ELIDE_OUTER_QUOTES is in effect.
+    /* Quote names for the shell even if they would normally not
+       require quoting (ls --quoting-style=shell-escape).
+       Non printable characters are quoted using the $'...' syntax,
+       which originated in ksh93 and is widely supported by most shells,
+       and proposed for inclusion in POSIX.  Behaves like
+       shell_escape_quoting_style if QA_ELIDE_OUTER_QUOTES is in effect.
 
-     quotearg_buffer:
-     "simple", "''$'\\0'' '$'\\t\\n'\\''\"'$'\\033''??/\'", "a:b"
-     quotearg:
-     "simple", "''$'\\0'' '$'\\t\\n'\\''\"'$'\\033''??/\'", "a:b"
-     quotearg_colon:
-     "simple", "''$'\\0'' '$'\\t\\n'\\''\"'$'\\033''??/\'", "'a:b'"
-  */
-  shell_escape_always_quoting_style,
+       quotearg_buffer:
+       "simple", "''$'\\0'' '$'\\t\\n'\\''\"'$'\\033''??/\'", "a:b"
+       quotearg:
+       "simple", "''$'\\0'' '$'\\t\\n'\\''\"'$'\\033''??/\'", "a:b"
+       quotearg_colon:
+       "simple", "''$'\\0'' '$'\\t\\n'\\''\"'$'\\033''??/\'", "'a:b'"
+    */
+    shell_escape_always_quoting_style,
 
-  /* Quote names as for a C language string (ls --quoting-style=c).
-     Behaves like c_maybe_quoting_style if QA_ELIDE_OUTER_QUOTES is
-     in effect.  Split into consecutive strings if
-     QA_SPLIT_TRIGRAPHS.
+    /* Quote names as for a C language string (ls --quoting-style=c).
+       Behaves like c_maybe_quoting_style if QA_ELIDE_OUTER_QUOTES is
+       in effect.  Split into consecutive strings if
+       QA_SPLIT_TRIGRAPHS.
 
-     quotearg_buffer:
-     "\"simple\"", "\"\\0 \\t\\n'\\\"\\033??/\\\\\"", "\"a:b\""
-     quotearg:
-     "\"simple\"", "\"\\0 \\t\\n'\\\"\\033??/\\\\\"", "\"a:b\""
-     quotearg_colon:
-     "\"simple\"", "\"\\0 \\t\\n'\\\"\\033??/\\\\\"", "\"a\\:b\""
-  */
-  c_quoting_style,
+       quotearg_buffer:
+       "\"simple\"", "\"\\0 \\t\\n'\\\"\\033??/\\\\\"", "\"a:b\""
+       quotearg:
+       "\"simple\"", "\"\\0 \\t\\n'\\\"\\033??/\\\\\"", "\"a:b\""
+       quotearg_colon:
+       "\"simple\"", "\"\\0 \\t\\n'\\\"\\033??/\\\\\"", "\"a\\:b\""
+    */
+    c_quoting_style,
 
-  /* Like c_quoting_style except omit the surrounding double-quote
-     characters if no quoted characters are encountered.
+    /* Like c_quoting_style except omit the surrounding double-quote
+       characters if no quoted characters are encountered.
 
-     quotearg_buffer:
-     "simple", "\"\\0 \\t\\n'\\\"\\033??/\\\\\"", "a:b"
-     quotearg:
-     "simple", "\"\\0 \\t\\n'\\\"\\033??/\\\\\"", "a:b"
-     quotearg_colon:
-     "simple", "\"\\0 \\t\\n'\\\"\\033??/\\\\\"", "\"a:b\""
-  */
-  c_maybe_quoting_style,
+       quotearg_buffer:
+       "simple", "\"\\0 \\t\\n'\\\"\\033??/\\\\\"", "a:b"
+       quotearg:
+       "simple", "\"\\0 \\t\\n'\\\"\\033??/\\\\\"", "a:b"
+       quotearg_colon:
+       "simple", "\"\\0 \\t\\n'\\\"\\033??/\\\\\"", "\"a:b\""
+    */
+    c_maybe_quoting_style,
 
-  /* Like c_quoting_style except always omit the surrounding
-     double-quote characters and ignore QA_SPLIT_TRIGRAPHS
-     (ls --quoting-style=escape).
+    /* Like c_quoting_style except always omit the surrounding
+       double-quote characters and ignore QA_SPLIT_TRIGRAPHS
+       (ls --quoting-style=escape).
 
-     quotearg_buffer:
-     "simple", "\\0 \\t\\n'\"\\033??/\\\\", "a:b"
-     quotearg:
-     "simple", "\\0 \\t\\n'\"\\033??/\\\\", "a:b"
-     quotearg_colon:
-     "simple", "\\0 \\t\\n'\"\\033??/\\\\", "a\\:b"
-  */
-  escape_quoting_style,
+       quotearg_buffer:
+       "simple", "\\0 \\t\\n'\"\\033??/\\\\", "a:b"
+       quotearg:
+       "simple", "\\0 \\t\\n'\"\\033??/\\\\", "a:b"
+       quotearg_colon:
+       "simple", "\\0 \\t\\n'\"\\033??/\\\\", "a\\:b"
+    */
+    escape_quoting_style,
 
-  /* Like clocale_quoting_style, but use single quotes in the
-     default C locale or if the program does not use gettext
-     (ls --quoting-style=locale).  For UTF-8 locales, quote
-     characters will use Unicode.
+    /* Like clocale_quoting_style, but use single quotes in the
+       default C locale or if the program does not use gettext
+       (ls --quoting-style=locale).  For UTF-8 locales, quote
+       characters will use Unicode.
 
-     LC_MESSAGES=C
-     quotearg_buffer:
-     "`simple'", "`\\0 \\t\\n\\'\"\\033??/\\\\'", "`a:b'"
-     quotearg:
-     "`simple'", "`\\0 \\t\\n\\'\"\\033??/\\\\'", "`a:b'"
-     quotearg_colon:
-     "`simple'", "`\\0 \\t\\n\\'\"\\033??/\\\\'", "`a\\:b'"
+       LC_MESSAGES=C
+       quotearg_buffer:
+       "`simple'", "`\\0 \\t\\n\\'\"\\033??/\\\\'", "`a:b'"
+       quotearg:
+       "`simple'", "`\\0 \\t\\n\\'\"\\033??/\\\\'", "`a:b'"
+       quotearg_colon:
+       "`simple'", "`\\0 \\t\\n\\'\"\\033??/\\\\'", "`a\\:b'"
 
-     LC_MESSAGES=pt_PT.utf8
-     quotearg_buffer:
-     "\302\253simple\302\273",
-     "\302\253\\0 \\t\\n'\"\\033??/\\\\\302\253", "\302\253a:b\302\273"
-     quotearg:
-     "\302\253simple\302\273",
-     "\302\253\\0 \\t\\n'\"\\033??/\\\\\302\253", "\302\253a:b\302\273"
-     quotearg_colon:
-     "\302\253simple\302\273",
-     "\302\253\\0 \\t\\n'\"\\033??/\\\\\302\253", "\302\253a\\:b\302\273"
-  */
-  locale_quoting_style,
+       LC_MESSAGES=pt_PT.utf8
+       quotearg_buffer:
+       "\302\253simple\302\273",
+       "\302\253\\0 \\t\\n'\"\\033??/\\\\\302\253", "\302\253a:b\302\273"
+       quotearg:
+       "\302\253simple\302\273",
+       "\302\253\\0 \\t\\n'\"\\033??/\\\\\302\253", "\302\253a:b\302\273"
+       quotearg_colon:
+       "\302\253simple\302\273",
+       "\302\253\\0 \\t\\n'\"\\033??/\\\\\302\253", "\302\253a\\:b\302\273"
+    */
+    locale_quoting_style,
 
-  /* Like c_quoting_style except use quotation marks appropriate for
-     the locale and ignore QA_SPLIT_TRIGRAPHS
-     (ls --quoting-style=clocale).
+    /* Like c_quoting_style except use quotation marks appropriate for
+       the locale and ignore QA_SPLIT_TRIGRAPHS
+       (ls --quoting-style=clocale).
 
-     LC_MESSAGES=C
-     quotearg_buffer:
-     "\"simple\"", "\"\\0 \\t\\n'\\\"\\033??/\\\\\"", "\"a:b\""
-     quotearg:
-     "\"simple\"", "\"\\0 \\t\\n'\\\"\\033??/\\\\\"", "\"a:b\""
-     quotearg_colon:
-     "\"simple\"", "\"\\0 \\t\\n'\\\"\\033??/\\\\\"", "\"a\\:b\""
+       LC_MESSAGES=C
+       quotearg_buffer:
+       "\"simple\"", "\"\\0 \\t\\n'\\\"\\033??/\\\\\"", "\"a:b\""
+       quotearg:
+       "\"simple\"", "\"\\0 \\t\\n'\\\"\\033??/\\\\\"", "\"a:b\""
+       quotearg_colon:
+       "\"simple\"", "\"\\0 \\t\\n'\\\"\\033??/\\\\\"", "\"a\\:b\""
 
-     LC_MESSAGES=pt_PT.utf8
-     quotearg_buffer:
-     "\302\253simple\302\273",
-     "\302\253\\0 \\t\\n'\"\\033??/\\\\\302\253", "\302\253a:b\302\273"
-     quotearg:
-     "\302\253simple\302\273",
-     "\302\253\\0 \\t\\n'\"\\033??/\\\\\302\253", "\302\253a:b\302\273"
-     quotearg_colon:
-     "\302\253simple\302\273",
-     "\302\253\\0 \\t\\n'\"\\033??/\\\\\302\253", "\302\253a\\:b\302\273"
-  */
-  clocale_quoting_style,
+       LC_MESSAGES=pt_PT.utf8
+       quotearg_buffer:
+       "\302\253simple\302\273",
+       "\302\253\\0 \\t\\n'\"\\033??/\\\\\302\253", "\302\253a:b\302\273"
+       quotearg:
+       "\302\253simple\302\273",
+       "\302\253\\0 \\t\\n'\"\\033??/\\\\\302\253", "\302\253a:b\302\273"
+       quotearg_colon:
+       "\302\253simple\302\273",
+       "\302\253\\0 \\t\\n'\"\\033??/\\\\\302\253", "\302\253a\\:b\302\273"
+    */
+    clocale_quoting_style,
 
-  /* Like clocale_quoting_style except use the custom quotation marks
-     set by set_custom_quoting.  If custom quotation marks are not
-     set, the behavior is undefined.
+    /* Like clocale_quoting_style except use the custom quotation marks
+       set by set_custom_quoting.  If custom quotation marks are not
+       set, the behavior is undefined.
 
-     left_quote = right_quote = "'"
-     quotearg_buffer:
-     "'simple'", "'\\0 \\t\\n\\'\"\\033??/\\\\'", "'a:b'"
-     quotearg:
-     "'simple'", "'\\0 \\t\\n\\'\"\\033??/\\\\'", "'a:b'"
-     quotearg_colon:
-     "'simple'", "'\\0 \\t\\n\\'\"\\033??/\\\\'", "'a\\:b'"
+       left_quote = right_quote = "'"
+       quotearg_buffer:
+       "'simple'", "'\\0 \\t\\n\\'\"\\033??/\\\\'", "'a:b'"
+       quotearg:
+       "'simple'", "'\\0 \\t\\n\\'\"\\033??/\\\\'", "'a:b'"
+       quotearg_colon:
+       "'simple'", "'\\0 \\t\\n\\'\"\\033??/\\\\'", "'a\\:b'"
 
-     left_quote = "(" and right_quote = ")"
-     quotearg_buffer:
-     "(simple)", "(\\0 \\t\\n'\"\\033??/\\\\)", "(a:b)"
-     quotearg:
-     "(simple)", "(\\0 \\t\\n'\"\\033??/\\\\)", "(a:b)"
-     quotearg_colon:
-     "(simple)", "(\\0 \\t\\n'\"\\033??/\\\\)", "(a\\:b)"
+       left_quote = "(" and right_quote = ")"
+       quotearg_buffer:
+       "(simple)", "(\\0 \\t\\n'\"\\033??/\\\\)", "(a:b)"
+       quotearg:
+       "(simple)", "(\\0 \\t\\n'\"\\033??/\\\\)", "(a:b)"
+       quotearg_colon:
+       "(simple)", "(\\0 \\t\\n'\"\\033??/\\\\)", "(a\\:b)"
 
-     left_quote = ":" and right_quote = " "
-     quotearg_buffer:
-     ":simple ", ":\\0\\ \\t\\n'\"\\033??/\\\\ ", ":a:b "
-     quotearg:
-     ":simple ", ":\\0\\ \\t\\n'\"\\033??/\\\\ ", ":a:b "
-     quotearg_colon:
-     ":simple ", ":\\0\\ \\t\\n'\"\\033??/\\\\ ", ":a\\:b "
+       left_quote = ":" and right_quote = " "
+       quotearg_buffer:
+       ":simple ", ":\\0\\ \\t\\n'\"\\033??/\\\\ ", ":a:b "
+       quotearg:
+       ":simple ", ":\\0\\ \\t\\n'\"\\033??/\\\\ ", ":a:b "
+       quotearg_colon:
+       ":simple ", ":\\0\\ \\t\\n'\"\\033??/\\\\ ", ":a\\:b "
 
-     left_quote = "\"'" and right_quote = "'\""
-     Notice that this is treated as a single level of quotes or two
-     levels where the outer quote need not be escaped within the inner
-     quotes.  For two levels where the outer quote must be escaped
-     within the inner quotes, you must use separate quotearg
-     invocations.
-     quotearg_buffer:
-     "\"'simple'\"", "\"'\\0 \\t\\n\\'\"\\033??/\\\\'\"", "\"'a:b'\""
-     quotearg:
-     "\"'simple'\"", "\"'\\0 \\t\\n\\'\"\\033??/\\\\'\"", "\"'a:b'\""
-     quotearg_colon:
-     "\"'simple'\"", "\"'\\0 \\t\\n\\'\"\\033??/\\\\'\"", "\"'a\\:b'\""
-  */
-  custom_quoting_style
+       left_quote = "\"'" and right_quote = "'\""
+       Notice that this is treated as a single level of quotes or two
+       levels where the outer quote need not be escaped within the inner
+       quotes.  For two levels where the outer quote must be escaped
+       within the inner quotes, you must use separate quotearg
+       invocations.
+       quotearg_buffer:
+       "\"'simple'\"", "\"'\\0 \\t\\n\\'\"\\033??/\\\\'\"", "\"'a:b'\""
+       quotearg:
+       "\"'simple'\"", "\"'\\0 \\t\\n\\'\"\\033??/\\\\'\"", "\"'a:b'\""
+       quotearg_colon:
+       "\"'simple'\"", "\"'\\0 \\t\\n\\'\"\\033??/\\\\'\"", "\"'a\\:b'\""
+    */
+    custom_quoting_style
 };
 
 /* Flags for use in set_quoting_flags.  */
 enum quoting_flags {
-  /* Always elide null bytes from styles that do not quote them,
-     even when the length of the result is available to the
-     caller.  */
-  QA_ELIDE_NULL_BYTES = 0x01,
+    /* Always elide null bytes from styles that do not quote them,
+       even when the length of the result is available to the
+       caller.  */
+    QA_ELIDE_NULL_BYTES = 0x01,
 
-  /* Omit the surrounding quote characters if no escaped characters
-     are encountered.  Note that if no other character needs
-     escaping, then neither does the escape character.  */
-  QA_ELIDE_OUTER_QUOTES = 0x02,
+    /* Omit the surrounding quote characters if no escaped characters
+       are encountered.  Note that if no other character needs
+       escaping, then neither does the escape character.  */
+    QA_ELIDE_OUTER_QUOTES = 0x02,
 
-  /* In the c_quoting_style and c_maybe_quoting_style, split ANSI
-     trigraph sequences into concatenated strings (for example,
-     "?""?/" rather than "??/", which could be confused with
-     "\\").  */
-  QA_SPLIT_TRIGRAPHS = 0x04
+    /* In the c_quoting_style and c_maybe_quoting_style, split ANSI
+       trigraph sequences into concatenated strings (for example,
+       "?""?/" rather than "??/", which could be confused with
+       "\\").  */
+    QA_SPLIT_TRIGRAPHS = 0x04
 };
 
 /* For now, --quoting-style=literal is the default, but this may change.  */

@@ -135,11 +135,11 @@ typedef uint8_t xfs_arch_t; /* architecutre of an xfs fs */
 typedef enum { XFS_LOOKUP_EQi, XFS_LOOKUP_LEi, XFS_LOOKUP_GEi } xfs_lookup_t;
 
 typedef enum {
-  XFS_BTNUM_BNOi,
-  XFS_BTNUM_CNTi,
-  XFS_BTNUM_BMAPi,
-  XFS_BTNUM_INOi,
-  XFS_BTNUM_MAX
+    XFS_BTNUM_BNOi,
+    XFS_BTNUM_CNTi,
+    XFS_BTNUM_BMAPi,
+    XFS_BTNUM_INOi,
+    XFS_BTNUM_MAX
 } xfs_btnum_t;
 
 #ifdef CONFIG_PROC_FS
@@ -148,100 +148,100 @@ typedef enum {
  */
 struct xfsstats {
 #define XFSSTAT_END_EXTENT_ALLOC 4
-  uint32_t xs_allocx;
-  uint32_t xs_allocb;
-  uint32_t xs_freex;
-  uint32_t xs_freeb;
+    uint32_t xs_allocx;
+    uint32_t xs_allocb;
+    uint32_t xs_freex;
+    uint32_t xs_freeb;
 #define XFSSTAT_END_ALLOC_BTREE (XFSSTAT_END_EXTENT_ALLOC + 4)
-  uint32_t xs_abt_lookup;
-  uint32_t xs_abt_compare;
-  uint32_t xs_abt_insrec;
-  uint32_t xs_abt_delrec;
+    uint32_t xs_abt_lookup;
+    uint32_t xs_abt_compare;
+    uint32_t xs_abt_insrec;
+    uint32_t xs_abt_delrec;
 #define XFSSTAT_END_BLOCK_MAPPING (XFSSTAT_END_ALLOC_BTREE + 7)
-  uint32_t xs_blk_mapr;
-  uint32_t xs_blk_mapw;
-  uint32_t xs_blk_unmap;
-  uint32_t xs_add_exlist;
-  uint32_t xs_del_exlist;
-  uint32_t xs_look_exlist;
-  uint32_t xs_cmp_exlist;
+    uint32_t xs_blk_mapr;
+    uint32_t xs_blk_mapw;
+    uint32_t xs_blk_unmap;
+    uint32_t xs_add_exlist;
+    uint32_t xs_del_exlist;
+    uint32_t xs_look_exlist;
+    uint32_t xs_cmp_exlist;
 #define XFSSTAT_END_BLOCK_MAP_BTREE (XFSSTAT_END_BLOCK_MAPPING + 4)
-  uint32_t xs_bmbt_lookup;
-  uint32_t xs_bmbt_compare;
-  uint32_t xs_bmbt_insrec;
-  uint32_t xs_bmbt_delrec;
+    uint32_t xs_bmbt_lookup;
+    uint32_t xs_bmbt_compare;
+    uint32_t xs_bmbt_insrec;
+    uint32_t xs_bmbt_delrec;
 #define XFSSTAT_END_DIRECTORY_OPS (XFSSTAT_END_BLOCK_MAP_BTREE + 4)
-  uint32_t xs_dir_lookup;
-  uint32_t xs_dir_create;
-  uint32_t xs_dir_remove;
-  uint32_t xs_dir_getdents;
+    uint32_t xs_dir_lookup;
+    uint32_t xs_dir_create;
+    uint32_t xs_dir_remove;
+    uint32_t xs_dir_getdents;
 #define XFSSTAT_END_TRANSACTIONS (XFSSTAT_END_DIRECTORY_OPS + 3)
-  uint32_t xs_trans_sync;
-  uint32_t xs_trans_async;
-  uint32_t xs_trans_empty;
+    uint32_t xs_trans_sync;
+    uint32_t xs_trans_async;
+    uint32_t xs_trans_empty;
 #define XFSSTAT_END_INODE_OPS (XFSSTAT_END_TRANSACTIONS + 7)
-  uint32_t xs_ig_attempts;
-  uint32_t xs_ig_found;
-  uint32_t xs_ig_frecycle;
-  uint32_t xs_ig_missed;
-  uint32_t xs_ig_dup;
-  uint32_t xs_ig_reclaims;
-  uint32_t xs_ig_attrchg;
+    uint32_t xs_ig_attempts;
+    uint32_t xs_ig_found;
+    uint32_t xs_ig_frecycle;
+    uint32_t xs_ig_missed;
+    uint32_t xs_ig_dup;
+    uint32_t xs_ig_reclaims;
+    uint32_t xs_ig_attrchg;
 #define XFSSTAT_END_LOG_OPS (XFSSTAT_END_INODE_OPS + 5)
-  uint32_t xs_log_writes;
-  uint32_t xs_log_blocks;
-  uint32_t xs_log_noiclogs;
-  uint32_t xs_log_force;
-  uint32_t xs_log_force_sleep;
+    uint32_t xs_log_writes;
+    uint32_t xs_log_blocks;
+    uint32_t xs_log_noiclogs;
+    uint32_t xs_log_force;
+    uint32_t xs_log_force_sleep;
 #define XFSSTAT_END_TAIL_PUSHING (XFSSTAT_END_LOG_OPS + 10)
-  uint32_t xs_try_logspace;
-  uint32_t xs_sleep_logspace;
-  uint32_t xs_push_ail;
-  uint32_t xs_push_ail_success;
-  uint32_t xs_push_ail_pushbuf;
-  uint32_t xs_push_ail_pinned;
-  uint32_t xs_push_ail_locked;
-  uint32_t xs_push_ail_flushing;
-  uint32_t xs_push_ail_restarts;
-  uint32_t xs_push_ail_flush;
+    uint32_t xs_try_logspace;
+    uint32_t xs_sleep_logspace;
+    uint32_t xs_push_ail;
+    uint32_t xs_push_ail_success;
+    uint32_t xs_push_ail_pushbuf;
+    uint32_t xs_push_ail_pinned;
+    uint32_t xs_push_ail_locked;
+    uint32_t xs_push_ail_flushing;
+    uint32_t xs_push_ail_restarts;
+    uint32_t xs_push_ail_flush;
 #define XFSSTAT_END_WRITE_CONVERT (XFSSTAT_END_TAIL_PUSHING + 2)
-  uint32_t xs_xstrat_quick;
-  uint32_t xs_xstrat_split;
+    uint32_t xs_xstrat_quick;
+    uint32_t xs_xstrat_split;
 #define XFSSTAT_END_READ_WRITE_OPS (XFSSTAT_END_WRITE_CONVERT + 2)
-  uint32_t xs_write_calls;
-  uint32_t xs_read_calls;
+    uint32_t xs_write_calls;
+    uint32_t xs_read_calls;
 #define XFSSTAT_END_ATTRIBUTE_OPS (XFSSTAT_END_READ_WRITE_OPS + 4)
-  uint32_t xs_attr_get;
-  uint32_t xs_attr_set;
-  uint32_t xs_attr_remove;
-  uint32_t xs_attr_list;
+    uint32_t xs_attr_get;
+    uint32_t xs_attr_set;
+    uint32_t xs_attr_remove;
+    uint32_t xs_attr_list;
 #define XFSSTAT_END_QUOTA_OPS (XFSSTAT_END_ATTRIBUTE_OPS + 8)
-  uint32_t xs_qm_dqreclaims;
-  uint32_t xs_qm_dqreclaim_misses;
-  uint32_t xs_qm_dquot_dups;
-  uint32_t xs_qm_dqcachemisses;
-  uint32_t xs_qm_dqcachehits;
-  uint32_t xs_qm_dqwants;
-  uint32_t xs_qm_dqshake_reclaims;
-  uint32_t xs_qm_dqinact_reclaims;
+    uint32_t xs_qm_dqreclaims;
+    uint32_t xs_qm_dqreclaim_misses;
+    uint32_t xs_qm_dquot_dups;
+    uint32_t xs_qm_dqcachemisses;
+    uint32_t xs_qm_dqcachehits;
+    uint32_t xs_qm_dqwants;
+    uint32_t xs_qm_dqshake_reclaims;
+    uint32_t xs_qm_dqinact_reclaims;
 #define XFSSTAT_END_INODE_CLUSTER (XFSSTAT_END_QUOTA_OPS + 3)
-  uint32_t xs_iflush_count;
-  uint32_t xs_icluster_flushcnt;
-  uint32_t xs_icluster_flushinode;
+    uint32_t xs_iflush_count;
+    uint32_t xs_icluster_flushcnt;
+    uint32_t xs_icluster_flushinode;
 #define XFSSTAT_END_VNODE_OPS (XFSSTAT_END_INODE_CLUSTER + 8)
-  uint32_t vn_active;  /* # vnodes not on free lists */
-  uint32_t vn_alloc;   /* # times vn_alloc called */
-  uint32_t vn_get;     /* # times vn_get called */
-  uint32_t vn_hold;    /* # times vn_hold called */
-  uint32_t vn_rele;    /* # times vn_rele called */
-  uint32_t vn_reclaim; /* # times vn_reclaim called */
-  uint32_t vn_remove;  /* # times vn_remove called */
-  uint32_t vn_free;    /* # times vn_free called */
-  struct xfsstats_xpc {
-    uint64_t xs_xstrat_bytes;
-    uint64_t xs_write_bytes;
-    uint64_t xs_read_bytes;
-  } xpc;
+    uint32_t vn_active;  /* # vnodes not on free lists */
+    uint32_t vn_alloc;   /* # times vn_alloc called */
+    uint32_t vn_get;     /* # times vn_get called */
+    uint32_t vn_hold;    /* # times vn_hold called */
+    uint32_t vn_rele;    /* # times vn_rele called */
+    uint32_t vn_reclaim; /* # times vn_reclaim called */
+    uint32_t vn_remove;  /* # times vn_remove called */
+    uint32_t vn_free;    /* # times vn_free called */
+    struct xfsstats_xpc {
+        uint64_t xs_xstrat_bytes;
+        uint64_t xs_write_bytes;
+        uint64_t xs_read_bytes;
+    } xpc;
 } xfsstats;
 
 #define XFS_STATS_INC(count) (xfsstats.##count++)
@@ -266,10 +266,10 @@ struct xfsstats {
 #define IRIX_DEV_MAXMAJ 0x1ff
 #define IRIX_DEV_MAXMIN 0x3ffff
 #define IRIX_DEV_MAJOR(dev)                                                    \
-  ((int)(((unsigned)(dev) >> IRIX_DEV_BITSMINOR) & IRIX_DEV_MAXMAJ))
+    ((int)(((unsigned)(dev) >> IRIX_DEV_BITSMINOR) & IRIX_DEV_MAXMAJ))
 #define IRIX_DEV_MINOR(dev) ((int)((dev) & IRIX_DEV_MAXMIN))
 #define IRIX_MKDEV(major, minor)                                               \
-  ((xfs_dev_t)(((major) << IRIX_DEV_BITSMINOR) | (minor & IRIX_DEV_MAXMIN)))
+    ((xfs_dev_t)(((major) << IRIX_DEV_BITSMINOR) | (minor & IRIX_DEV_MAXMIN)))
 
 #define IRIX_DEV_TO_KDEVT(dev) MKDEV(IRIX_DEV_MAJOR(dev), IRIX_DEV_MINOR(dev))
 #define IRIX_DEV_TO_DEVT(dev) ((IRIX_DEV_MAJOR(dev) << 8) | IRIX_DEV_MINOR(dev))
@@ -290,8 +290,8 @@ typedef uint64_t __psunsigned_t;
  */
 typedef struct flid {
 #ifdef CELL_CAPABLE
-  pid_t fl_pid;
-  sysid_t fl_sysid;
+    pid_t fl_pid;
+    sysid_t fl_sysid;
 #endif
 } flid_t;
 

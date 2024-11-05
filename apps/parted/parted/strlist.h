@@ -32,8 +32,8 @@
 
 typedef struct _StrList StrList;
 struct _StrList {
-  StrList *next;
-  const wchar_t *str;
+    StrList *next;
+    const wchar_t *str;
 };
 
 extern char *language;

@@ -24,125 +24,125 @@
 #include "fat.h"
 
 PedFileSystem *fat_alloc(const PedGeometry *geom) {
-  PedFileSystem *fs;
+    PedFileSystem *fs;
 
-  fs = (PedFileSystem *)ped_malloc(sizeof(PedFileSystem));
-  if (!fs)
-    goto error;
+    fs = (PedFileSystem *)ped_malloc(sizeof(PedFileSystem));
+    if (!fs)
+        goto error;
 
-  fs->type_specific = (FatSpecific *)ped_malloc(sizeof(FatSpecific));
-  if (!fs->type_specific)
-    goto error_free_fs;
-  FatSpecific *fs_info = (FatSpecific *)fs->type_specific;
-  fs_info->boot_sector = NULL;
-  fs_info->info_sector = NULL;
-  fs->geom = ped_geometry_duplicate(geom);
-  if (!fs->geom)
-    goto error_free_type_specific;
+    fs->type_specific = (FatSpecific *)ped_malloc(sizeof(FatSpecific));
+    if (!fs->type_specific)
+        goto error_free_fs;
+    FatSpecific *fs_info = (FatSpecific *)fs->type_specific;
+    fs_info->boot_sector = NULL;
+    fs_info->info_sector = NULL;
+    fs->geom = ped_geometry_duplicate(geom);
+    if (!fs->geom)
+        goto error_free_type_specific;
 
-  fs->checked = 0;
-  return fs;
+    fs->checked = 0;
+    return fs;
 
 error_free_type_specific:
-  free(fs->type_specific);
+    free(fs->type_specific);
 error_free_fs:
-  free(fs);
+    free(fs);
 error:
-  return NULL;
+    return NULL;
 }
 
 void fat_free(PedFileSystem *fs) {
-  FatSpecific *fs_info = (FatSpecific *)fs->type_specific;
-  free(fs_info->boot_sector);
-  ped_geometry_destroy(fs->geom);
-  free(fs->type_specific);
-  free(fs);
+    FatSpecific *fs_info = (FatSpecific *)fs->type_specific;
+    free(fs_info->boot_sector);
+    ped_geometry_destroy(fs->geom);
+    free(fs->type_specific);
+    free(fs);
 }
 
 PedGeometry *fat_probe(PedGeometry *geom, FatType *fat_type) {
-  PedFileSystem *fs;
-  FatSpecific *fs_info;
-  PedGeometry *result;
+    PedFileSystem *fs;
+    FatSpecific *fs_info;
+    PedGeometry *result;
 
-  fs = fat_alloc(geom);
-  if (!fs)
-    goto error;
-  fs_info = (FatSpecific *)fs->type_specific;
+    fs = fat_alloc(geom);
+    if (!fs)
+        goto error;
+    fs_info = (FatSpecific *)fs->type_specific;
 
-  if (!fat_boot_sector_read(&fs_info->boot_sector, geom))
-    goto error_free_fs;
-  if (!fat_boot_sector_analyse(fs_info->boot_sector, fs))
-    goto error_free_fs;
+    if (!fat_boot_sector_read(&fs_info->boot_sector, geom))
+        goto error_free_fs;
+    if (!fat_boot_sector_analyse(fs_info->boot_sector, fs))
+        goto error_free_fs;
 
-  *fat_type = fs_info->fat_type;
-  result = ped_geometry_new(geom->dev, geom->start, fs_info->sector_count);
+    *fat_type = fs_info->fat_type;
+    result = ped_geometry_new(geom->dev, geom->start, fs_info->sector_count);
 
-  fat_free(fs);
-  return result;
+    fat_free(fs);
+    return result;
 
 error_free_fs:
-  fat_free(fs);
+    fat_free(fs);
 error:
-  return NULL;
+    return NULL;
 }
 
 PedGeometry *fat_probe_fat16(PedGeometry *geom) {
-  FatType fat_type;
-  PedGeometry *probed_geom = fat_probe(geom, &fat_type);
+    FatType fat_type;
+    PedGeometry *probed_geom = fat_probe(geom, &fat_type);
 
-  if (probed_geom) {
-    if (fat_type == FAT_TYPE_FAT16)
-      return probed_geom;
-    ped_geometry_destroy(probed_geom);
-  }
-  return NULL;
+    if (probed_geom) {
+        if (fat_type == FAT_TYPE_FAT16)
+            return probed_geom;
+        ped_geometry_destroy(probed_geom);
+    }
+    return NULL;
 }
 
 PedGeometry *fat_probe_fat32(PedGeometry *geom) {
-  FatType fat_type;
-  PedGeometry *probed_geom = fat_probe(geom, &fat_type);
+    FatType fat_type;
+    PedGeometry *probed_geom = fat_probe(geom, &fat_type);
 
-  if (probed_geom) {
-    if (fat_type == FAT_TYPE_FAT32)
-      return probed_geom;
-    ped_geometry_destroy(probed_geom);
-  }
-  return NULL;
+    if (probed_geom) {
+        if (fat_type == FAT_TYPE_FAT32)
+            return probed_geom;
+        ped_geometry_destroy(probed_geom);
+    }
+    return NULL;
 }
 
 static PedFileSystemOps fat16_ops = {
-  probe : fat_probe_fat16,
+    probe : fat_probe_fat16,
 };
 
 static PedFileSystemOps fat32_ops = {
-  probe : fat_probe_fat32,
+    probe : fat_probe_fat32,
 };
 
 PedFileSystemType fat16_type = {
-  next : NULL,
-  ops : &fat16_ops,
-  name : "fat16",
+    next : NULL,
+    ops : &fat16_ops,
+    name : "fat16",
 };
 
 PedFileSystemType fat32_type = {
-  next : NULL,
-  ops : &fat32_ops,
-  name : "fat32",
+    next : NULL,
+    ops : &fat32_ops,
+    name : "fat32",
 };
 
 void ped_file_system_fat_init() {
-  if (sizeof(FatBootSector) != 512) {
-    ped_exception_throw(
-        PED_EXCEPTION_BUG, PED_EXCEPTION_CANCEL,
-        _("GNU Parted was miscompiled: the FAT boot sector "
-          "should be 512 bytes.  FAT support will be disabled."));
-  } else {
-    ped_file_system_type_register(&fat16_type);
-    ped_file_system_type_register(&fat32_type);
-  }
+    if (sizeof(FatBootSector) != 512) {
+        ped_exception_throw(
+            PED_EXCEPTION_BUG, PED_EXCEPTION_CANCEL,
+            _("GNU Parted was miscompiled: the FAT boot sector "
+              "should be 512 bytes.  FAT support will be disabled."));
+    } else {
+        ped_file_system_type_register(&fat16_type);
+        ped_file_system_type_register(&fat32_type);
+    }
 }
 
 void ped_file_system_fat_done() {
-  ped_file_system_type_unregister(&fat16_type);
-  ped_file_system_type_unregister(&fat32_type);
+    ped_file_system_type_unregister(&fat16_type);
+    ped_file_system_type_unregister(&fat32_type);
 }

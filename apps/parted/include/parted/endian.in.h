@@ -30,14 +30,14 @@
 #define _PED_SWAP16(x) ((_GET_BYTE(x, 0) << 8) + (_GET_BYTE(x, 1) << 0))
 
 #define _PED_SWAP32(x)                                                         \
-  ((_GET_BYTE(x, 0) << 24) + (_GET_BYTE(x, 1) << 16) +                         \
-   (_GET_BYTE(x, 2) << 8) + (_GET_BYTE(x, 3) << 0))
+    ((_GET_BYTE(x, 0) << 24) + (_GET_BYTE(x, 1) << 16) +                       \
+     (_GET_BYTE(x, 2) << 8) + (_GET_BYTE(x, 3) << 0))
 
 #define _PED_SWAP64(x)                                                         \
-  ((_GET_BYTE(x, 0) << 56) + (_GET_BYTE(x, 1) << 48) +                         \
-   (_GET_BYTE(x, 2) << 40) + (_GET_BYTE(x, 3) << 32) +                         \
-   (_GET_BYTE(x, 4) << 24) + (_GET_BYTE(x, 5) << 16) +                         \
-   (_GET_BYTE(x, 6) << 8) + (_GET_BYTE(x, 7) << 0))
+    ((_GET_BYTE(x, 0) << 56) + (_GET_BYTE(x, 1) << 48) +                       \
+     (_GET_BYTE(x, 2) << 40) + (_GET_BYTE(x, 3) << 32) +                       \
+     (_GET_BYTE(x, 4) << 24) + (_GET_BYTE(x, 5) << 16) +                       \
+     (_GET_BYTE(x, 6) << 8) + (_GET_BYTE(x, 7) << 0))
 
 #define PED_SWAP16(x) ((uint16_t)_PED_SWAP16((uint16_t)(x)))
 #define PED_SWAP32(x) ((uint32_t)_PED_SWAP32((uint32_t)(x)))

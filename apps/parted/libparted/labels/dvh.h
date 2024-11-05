@@ -58,38 +58,38 @@
  * Linux doesn't care ...
  */
 struct device_parameters {
-  unsigned char dp_skew;        /* spiral addressing skew */
-  unsigned char dp_gap1;        /* words of 0 before header */
-  unsigned char dp_gap2;        /* words of 0 between hdr and data */
-  unsigned char dp_spares_cyl;  /* This is for drives (such as SCSI
-        that support zone oriented sparing, where the zone is larger
-        than one track.  It gets subracteded from the cylinder size
-        ( dp_trks0 * dp_sec) when doing partition size calculations */
-  unsigned short dp_cyls;       /* number of usable cylinders (i.e.,
-        doesn't include cylinders reserved by the drive for badblocks,
-        etc.). For drives with variable geometry, this number may be
-        decreased so that:
-        dp_cyls * ((dp_heads * dp_trks0) - dp_spares_cyl) <= actualcapacity
-        This happens on SCSI drives such as the Wren IV and Toshiba 156
-        Also see dp_cylshi below */
-  unsigned short dp_shd0;       /* starting head vol 0 */
-  unsigned short dp_trks0;      /* number of tracks / cylinder vol 0*/
-  unsigned char dp_ctq_depth;   /* Depth of CTQ queue */
-  unsigned char dp_cylshi;      /* high byte of 24 bits of cylinder count */
-  unsigned short dp_unused;     /* not used */
-  unsigned short dp_secs;       /* number of sectors/track */
-  unsigned short dp_secbytes;   /* length of sector in bytes */
-  unsigned short dp_interleave; /* sector interleave */
-  int dp_flags;                 /* controller characteristics */
-  int dp_datarate;              /* bytes/sec for kernel stats */
-  int dp_nretries;              /* max num retries on data error */
-  int dp_mspw;                  /* ms per word to xfer, for iostat */
-  unsigned short dp_xgap1;      /* Gap 1 for xylogics controllers */
-  unsigned short dp_xsync;      /* sync delay for xylogics controllers */
-  unsigned short dp_xrdly;      /* read delay for xylogics controllers */
-  unsigned short dp_xgap2;      /* gap 2 for xylogics controllers */
-  unsigned short dp_xrgate;     /* read gate for xylogics controllers */
-  unsigned short dp_xwcont;     /* write continuation for xylogics */
+    unsigned char dp_skew;        /* spiral addressing skew */
+    unsigned char dp_gap1;        /* words of 0 before header */
+    unsigned char dp_gap2;        /* words of 0 between hdr and data */
+    unsigned char dp_spares_cyl;  /* This is for drives (such as SCSI
+          that support zone oriented sparing, where the zone is larger
+          than one track.  It gets subracteded from the cylinder size
+          ( dp_trks0 * dp_sec) when doing partition size calculations */
+    unsigned short dp_cyls;       /* number of usable cylinders (i.e.,
+          doesn't include cylinders reserved by the drive for badblocks,
+          etc.). For drives with variable geometry, this number may be
+          decreased so that:
+          dp_cyls * ((dp_heads * dp_trks0) - dp_spares_cyl) <= actualcapacity
+          This happens on SCSI drives such as the Wren IV and Toshiba 156
+          Also see dp_cylshi below */
+    unsigned short dp_shd0;       /* starting head vol 0 */
+    unsigned short dp_trks0;      /* number of tracks / cylinder vol 0*/
+    unsigned char dp_ctq_depth;   /* Depth of CTQ queue */
+    unsigned char dp_cylshi;      /* high byte of 24 bits of cylinder count */
+    unsigned short dp_unused;     /* not used */
+    unsigned short dp_secs;       /* number of sectors/track */
+    unsigned short dp_secbytes;   /* length of sector in bytes */
+    unsigned short dp_interleave; /* sector interleave */
+    int dp_flags;                 /* controller characteristics */
+    int dp_datarate;              /* bytes/sec for kernel stats */
+    int dp_nretries;              /* max num retries on data error */
+    int dp_mspw;                  /* ms per word to xfer, for iostat */
+    unsigned short dp_xgap1;      /* Gap 1 for xylogics controllers */
+    unsigned short dp_xsync;      /* sync delay for xylogics controllers */
+    unsigned short dp_xrdly;      /* read delay for xylogics controllers */
+    unsigned short dp_xgap2;      /* gap 2 for xylogics controllers */
+    unsigned short dp_xrgate;     /* read gate for xylogics controllers */
+    unsigned short dp_xwcont;     /* write continuation for xylogics */
 };
 
 /*
@@ -111,9 +111,9 @@ struct device_parameters {
 #define VDNAMESIZE 8
 
 struct volume_directory {
-  char vd_name[VDNAMESIZE]; /* name */
-  unsigned int vd_lbn;      /* logical block number */
-  unsigned int vd_nbytes;   /* file length in bytes */
+    char vd_name[VDNAMESIZE]; /* name */
+    unsigned int vd_lbn;      /* logical block number */
+    unsigned int vd_nbytes;   /* file length in bytes */
 };
 
 /*
@@ -124,10 +124,10 @@ struct volume_directory {
  *
  * NOTE: pt_firstlbn SHOULD BE CYLINDER ALIGNED
  */
-struct partition_table {    /* one per logical partition */
-  unsigned int pt_nblks;    /* # of logical blks in partition */
-  unsigned int pt_firstlbn; /* first lbn of partition */
-  int pt_type;              /* use of partition */
+struct partition_table {      /* one per logical partition */
+    unsigned int pt_nblks;    /* # of logical blks in partition */
+    unsigned int pt_firstlbn; /* first lbn of partition */
+    int pt_type;              /* use of partition */
 };
 
 #define PTYPE_VOLHDR 0  /* partition is volume header */
@@ -164,15 +164,15 @@ struct partition_table {    /* one per logical partition */
 #define NOT_BOOTABLE 0x80;
 
 struct volume_header {
-  int vh_magic;                          /* identifies volume header */
-  short vh_rootpt;                       /* root partition number */
-  short vh_swappt;                       /* swap partition number */
-  char vh_bootfile[BFNAMESIZE];          /* name of file to boot */
-  struct device_parameters vh_dp;        /* device parameters */
-  struct volume_directory vh_vd[NVDIR];  /* other vol hdr contents */
-  struct partition_table vh_pt[NPARTAB]; /* device partition layout */
-  int vh_csum;                           /* volume header checksum */
-  int vh_fill;                           /* fill out to 512 bytes */
+    int vh_magic;                          /* identifies volume header */
+    short vh_rootpt;                       /* root partition number */
+    short vh_swappt;                       /* swap partition number */
+    char vh_bootfile[BFNAMESIZE];          /* name of file to boot */
+    struct device_parameters vh_dp;        /* device parameters */
+    struct volume_directory vh_vd[NVDIR];  /* other vol hdr contents */
+    struct partition_table vh_pt[NPARTAB]; /* device partition layout */
+    int vh_csum;                           /* volume header checksum */
+    int vh_fill;                           /* fill out to 512 bytes */
 };
 
 #endif /* _SYS_DVH_H */
