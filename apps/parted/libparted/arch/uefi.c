@@ -32,16 +32,26 @@ struct _GNUSpecific {
 PedDevice *ped_device_new_from_store(struct store *source);
 
 static int _device_get_sector_size(PedDevice *dev) {
-    EFI_BLOCK_IO_PROTOCOL *block_io =
-        (EFI_BLOCK_IO_PROTOCOL *)dev->arch_specific;
+    EFI_BLOCK_IO_PROTOCOL *block_io;
+    EFI_HANDLE *handle = (EFI_HANDLE *)dev->arch_specific;
+    EFI_STATUS status = gBS->HandleProtocol(handle, &gEfiBlockIoProtocolGuid,
+                                            (VOID **)&block_io);
+    if (EFI_ERROR(status)) {
+        puts("Failed to open handle to device");
+        return -1;
+    }
     return block_io->Media->BlockSize;
 }
 
 static PedSector _device_get_length(PedDevice *dev) {
-    EFI_BLOCK_IO_PROTOCOL *block_io =
-        (EFI_BLOCK_IO_PROTOCOL *)dev->arch_specific;
-    // UINT64 disk_size =
-    //     (block_io->Media->LastBlock + 1) * block_io->Media->BlockSize;
+    EFI_BLOCK_IO_PROTOCOL *block_io;
+    EFI_HANDLE *handle = (EFI_HANDLE *)dev->arch_specific;
+    EFI_STATUS status = gBS->HandleProtocol(handle, &gEfiBlockIoProtocolGuid,
+                                            (VOID **)&block_io);
+    if (EFI_ERROR(status)) {
+        puts("Failed to open handle to device");
+        return -1;
+    }
     return block_io->Media->LastBlock + 1;
 }
 
@@ -94,6 +104,34 @@ static PedDevice *_init_device(const char *path) {
 error_free_dev:
     free(dev);
 error:
+    return NULL;
+}
+
+static EFI_HANDLE *find_from_path(char const *path) {
+    UINTN handleCount;
+    EFI_HANDLE *found = NULL;
+    EFI_HANDLE *allHandles;
+    EFI_STATUS status = EFI_SUCCESS;
+
+    status = gBS->LocateHandleBuffer(ByProtocol, &gEfiBlockIoProtocolGuid, NULL,
+                                     &handleCount, &allHandles);
+    if (EFI_ERROR(status)) {
+        printf("Failed to find handles\n\r");
+        return NULL;
+    }
+
+    for (UINTN handleIdx = 0; handleIdx < handleCount; handleIdx++) {
+        EFI_DEVICE_PATH_PROTOCOL *path =
+            DevicePathFromHandle(allHandles[handleIdx]);
+        while (path != NULL && !IsDevicePathEndType(path)) {
+            char const *name = ConvertDevicePathToText(path, FALSE, TRUE);
+            if (!strcmp(path, name)) {
+                handle = &allHandles[handleIdx];
+                return handle;
+            }
+        }
+    }
+
     return NULL;
 }
 
@@ -179,24 +217,29 @@ static int uefi_disk_commit(PedDisk *disk) {
     return _reread_part_table(disk->dev);
 }
 
-static PedDeviceArchOps uefi_dev_ops = {._new = uefi_new,
-                                        .destroy = uefi_destroy,
-                                        .is_busy = uefi_is_busy,
-                                        .open = uefi_open,
-                                        .refresh_open = uefi_refresh_open,
-                                        .close = uefi_close,
-                                        .refresh_close = uefi_refresh_close,
-                                        .read = uefi_read,
-                                        .write = uefi_write,
-                                        .check = uefi_check,
-                                        .sync = uefi_sync,
-                                        .sync_fast = uefi_sync,
-                                        .probe_all = uefi_probe_all};
+static PedDeviceArchOps uefi_dev_ops = {
+    ._new = uefi_new,
+    .destroy = uefi_destroy,
+    .is_busy = uefi_is_busy,
+    .open = uefi_open,
+    .refresh_open = uefi_refresh_open,
+    .close = uefi_close,
+    .refresh_close = uefi_refresh_close,
+    .read = uefi_read,
+    .write = uefi_write,
+    .check = uefi_check,
+    .sync = uefi_sync,
+    .sync_fast = uefi_sync,
+    .probe_all = uefi_probe_all,
+};
 
 static PedDiskArchOps uefi_disk_ops = {
     .partition_get_path = uefi_partition_get_path,
     .partition_is_busy = uefi_partition_is_busy,
-    .disk_commit = uefi_disk_commit};
+    .disk_commit = uefi_disk_commit,
+};
 
-static const PedArchitecture ped_uefi_arch = {.dev_ops = &uefi_dev_ops,
-                                              .disk_ops = &uefi_disk_ops};
+static const PedArchitecture ped_uefi_arch = {
+    .dev_ops = &uefi_dev_ops,
+    .disk_ops = &uefi_disk_ops,
+};
