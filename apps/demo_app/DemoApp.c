@@ -94,6 +94,38 @@ int main(IN int Argc, IN char **Argv) {
             UINT64 disk_size =
                 (block_io->Media->LastBlock + 1) * block_io->Media->BlockSize;
             Print(L"Disk Size: %llu bytes\n", disk_size);
+            // test read on disks not 0
+            // if (i == 0) {
+            //     continue;
+            // }
+            // EFI_BLOCK_IO_PROTOCOL *block_io;
+            // EFI_HANDLE *handle = disks[i];
+            // EFI_STATUS status =
+            //     gBS->HandleProtocol(handle, &gEfiBlockIoProtocolGuid,
+            //             (VOID **)&block_io);
+            // if (EFI_ERROR(status)) {
+            //     puts("Failed to open handle to device");
+            //     return 1;
+            // }
+            // char *buffer = malloc(disk_size);
+            // if (buffer == NULL) {
+            //     puts("Failed to allocate buffer");
+            //     return 1;
+            // }
+            // 108 - block number, where to start = 108 * 512 byte number. 512 - blocksize
+            // block_io->Media->BlockSize - how many to read. in this case 1 block
+            // status = block_io->ReadBlocks(block_io, block_io->Media->MediaId,
+            //         108, block_io->Media->BlockSize, buffer);
+            // if (EFI_ERROR(status) || buffer == NULL) {
+            //     puts("Failed to read from device");
+            //     continue;
+            // }
+            // for (int k = 0; k < block_io->Media->BlockSize; k++) {
+            //     if (buffer[k] != '\0') {
+            //         Print(L"%d: %c\n", k, buffer[k]);
+            //     }
+            // }
+            free(buffer);
         }
     }
 
