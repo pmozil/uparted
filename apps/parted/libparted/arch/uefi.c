@@ -135,6 +135,41 @@ static EFI_HANDLE *find_from_path(char const *path) {
     return NULL;
 }
 
+static PedDevice *uefi_new(const char *path) {
+    PedDevice *dev;
+    GNUSpecific *arch_specific;
+    error_t ro_err, rw_err;
+    int ispath;
+    EFI_BLOCK_IO_PROTOCOL *block_io;
+    EFI_HANDLE *handle;
+    EFI_STATUS status;
+    EFI_BLOCK_IO_MEDIA *media;
+
+    PED_ASSERT(path != NULL);
+
+    handle = find_from_path(path);
+    if (path == NULL)
+        return NULL;
+
+    status = gBS->HandleProtocol(handle, &gEfiBlockIoProtocolGuid,
+                                 (VOID **)&block_io);
+    if (EFI_ERROR(status)) {
+        puts("Failed to open handle to device");
+        return -1;
+    }
+    media = block_io->media;
+
+    dev = _init_device(path);
+    if (dev == NULL)
+        return NULL;
+
+    dev->arch_specific = (void *)handle;
+    dev->read_only = media->ReadOnly;
+    dev->path = path;
+
+    return dev;
+}
+
 /* Ask the kernel and translators to reload the partition table.
    XXX: Will probably be replaced by some RPC to partfs when it's finished.  In
    the meantime, gnumach's glue layer will pass BLKRRPART to the Linux drivers.
@@ -146,8 +181,6 @@ static void _done_device(PedDevice *dev) {}
 
 /* Release all resources that libparted owns in DEV.  */
 static void uefi_destroy(PedDevice *dev) {}
-
-static PedDevice *uefi_new(const char *path) {}
 
 static int uefi_is_busy(PedDevice *dev) { return 0; }
 
