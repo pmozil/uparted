@@ -201,7 +201,7 @@ static int uefi_read(const PedDevice *dev, void *user_buffer,
                                             (VOID **)&block_io);
     if (EFI_ERROR(status)) {
         puts("Failed to open handle to device");
-        return -1;
+        return 0;
     }
     status = block_io->ReadBlocks(block_io, block_io->Media->MediaId,
         device_start, (UINTN) count * block_io->Media->BlockSize, user_buffer);
@@ -213,6 +213,19 @@ static int uefi_read(const PedDevice *dev, void *user_buffer,
 
 static int uefi_write(PedDevice *dev, const void *buffer, PedSector start,
                       PedSector count) {
+    EFI_BLOCK_IO_PROTOCOL *block_io;
+    EFI_HANDLE *handle = (EFI_HANDLE *)dev->arch_specific;
+    EFI_STATUS status = gBS->HandleProtocol(handle, &gEfiBlockIoProtocolGuid,
+                                            (VOID **)&block_io);
+    if (EFI_ERROR(status)) {
+        puts("Failed to open handle to device");
+        return 0;
+    }
+    status = block_io->WriteBlocks(block_io, block_io->Media->MediaId,
+        start, (UINTN) count * block_io->Media->BlockSize, buffer);
+    if (EFI_ERROR(status)) {
+        puts("Failed to read from device");
+    }
     return 1;
 }
 
