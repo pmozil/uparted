@@ -193,8 +193,8 @@ static int uefi_close(PedDevice *dev) { return 0; }
 
 static int uefi_refresh_close(PedDevice *dev) { return 1; }
 
-static int uefi_read(const PedDevice *dev, void *user_buffer,
-                     PedSector device_start, PedSector count) {
+static int uefi_read(const PedDevice *dev, void *buffer,
+                     PedSector start, PedSector count) {
     EFI_BLOCK_IO_PROTOCOL *block_io;
     EFI_HANDLE *handle = (EFI_HANDLE *)dev->arch_specific;
     EFI_STATUS status = gBS->HandleProtocol(handle, &gEfiBlockIoProtocolGuid,
@@ -204,8 +204,8 @@ static int uefi_read(const PedDevice *dev, void *user_buffer,
         return 0;
     }
     status = block_io->ReadBlocks(block_io, block_io->Media->MediaId,
-        device_start, (UINTN) count * block_io->Media->BlockSize, user_buffer);
-    if (EFI_ERROR(status) || user_buffer == NULL) {
+        start, (UINTN) count * block_io->Media->BlockSize, buffer);
+    if (EFI_ERROR(status) || buffer == NULL) {
         puts("Failed to read from device");
     }
     return 1;
