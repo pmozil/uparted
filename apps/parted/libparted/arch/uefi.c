@@ -236,7 +236,21 @@ static PedSector uefi_check(PedDevice *dev, void *buffer, PedSector start,
     return 0;
 }
 
-static int uefi_sync(PedDevice *dev) { return 1; }
+static int uefi_sync(PedDevice *dev) {
+    EFI_BLOCK_IO_PROTOCOL *block_io;
+    EFI_HANDLE *handle = (EFI_HANDLE *)dev->arch_specific;
+    EFI_STATUS status = gBS->HandleProtocol(handle, &gEfiBlockIoProtocolGuid,
+                                            (VOID **)&block_io);
+    if (EFI_ERROR(status)) {
+        puts("Failed to open handle to device");
+        return 0;
+    }
+    status = block_io->FlushBlocks(block_io);
+    if (EFI_ERROR(status)) {
+        puts("Failed to read from device");
+    }
+    return 1;
+}
 
 static void uefi_probe_all() {
     printf("CALLED PROBE ALL\n");
