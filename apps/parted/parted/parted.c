@@ -23,6 +23,8 @@
 #include <stdbool.h>
 #include <uuid/uuid.h>
 
+#include "architecture.h"
+
 #include "argmatch.h"
 #include "closeout.h"
 #include "command.h"
@@ -2439,7 +2441,10 @@ static PedDevice *_choose_device(int *argc_ptr, char ***argv_ptr) {
         (*argv_ptr)++;
     } else {
     retry:
+        extern PedArchitecture ped_uefi_arch;
+        printf("Probe devices: %p\n", ped_uefi_arch.dev_ops->probe_all);
         ped_device_probe_all();
+        printf("Done Probe device\n");
         dev = ped_device_get_next(NULL);
         if (!dev) {
             if (ped_exception_throw(
@@ -2458,6 +2463,7 @@ static PedDevice *_choose_device(int *argc_ptr, char ***argv_ptr) {
 
 static PedDevice *_init(int *argc_ptr, char ***argv_ptr) {
     PedDevice *dev;
+    ped_set_architecture();
 
 #ifdef ENABLE_MTRACE
     mtrace();

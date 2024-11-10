@@ -18,6 +18,9 @@
 #  VALID_ARCHITECTURES        = X64
 #
 
+[Protocols]
+    gEfiBlockIoProtocolGuid
+
 [Packages]
   StdLib/StdLib.dec
   MdePkg/MdePkg.dec
@@ -31,17 +34,16 @@
   GCC:*_*_*_CC_FLAGS = -Wno-unused-function -Wno-format -Wno-error -fno-strict-aliasing -I$(EDK2_LIBC_PATH)/AppPkg/Applications/Parted/ -I$(EDK2_LIBC_PATH)/AppPkg/Applications/Parted/include/ -I$(EDK2_LIBC_PATH)/AppPkg/Applications/Parted/lib/ -I$(EDK2_LIBC_PATH)/AppPkg/Applications/Parted/libparted/
 
 [Sources]
-    lib/version-etc.c
+    parted/parted.c
+    libparted/architecture.c
+    libparted/arch/uefi.c
     lib/closeout.c
-    lib/close-stream.c
     lib/getopt.c
     lib/xalloc.c
     lib/progname.c
     lib/argmatch.c
     lib/uuid/uuid_parse.c
     lib/uuid/uuid_unparse.c
-    libparted/architecture.c
-    libparted/arch/uefi.c
     libparted/cs/constraint.c
     libparted/cs/geom.c
     libparted/cs/natmath.c
@@ -58,4 +60,5 @@
     parted/table.c
     parted/ui.c
     parted/strutils.c
-    parted/parted.c
+    lib/version-etc.c
+    lib/close-stream.c
