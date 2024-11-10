@@ -195,6 +195,16 @@ static int uefi_refresh_close(PedDevice *dev) { return 1; }
 
 static int uefi_read(const PedDevice *dev, void *user_buffer,
                      PedSector device_start, PedSector count) {
+    EFI_BLOCK_IO_PROTOCOL *block_io;
+    EFI_HANDLE *handle = (EFI_HANDLE *)dev->arch_specific;
+    EFI_STATUS status = gBS->HandleProtocol(handle, &gEfiBlockIoProtocolGuid,
+                                            (VOID **)&block_io);
+    if (EFI_ERROR(status)) {
+        puts("Failed to open handle to device");
+        return -1;
+    }
+    status = block_io->ReadBlocks(block_io, block_io->Media->MediaId,
+        device_start, (UINTN) count, user_buffer);
     return 1;
 }
 
