@@ -125,7 +125,7 @@ int main(IN int Argc, IN char **Argv) {
             //         Print(L"%d: %c\n", k, buffer[k]);
             //     }
             // }
-            free(buffer);
+            // free(buffer);
         }
     }
 

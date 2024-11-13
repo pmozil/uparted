@@ -107,7 +107,7 @@ error:
     return NULL;
 }
 
-static EFI_HANDLE find_from_path(char const *dev_path) {
+static EFI_HANDLE *find_from_path(char const *dev_path) {
     UINTN handleCount;
     EFI_HANDLE *allHandles;
     EFI_STATUS status = EFI_SUCCESS;
@@ -134,7 +134,7 @@ static EFI_HANDLE find_from_path(char const *dev_path) {
     return NULL;
 }
 
-static PedDevice *uefi_new_fom_handle(EFI_HANDLE *handle, const char *path) {
+static PedDevice *uefi_new_from_handle(EFI_HANDLE *handle, const char *path) {
     PedDevice *dev;
     EFI_BLOCK_IO_PROTOCOL *block_io;
     EFI_STATUS status;
@@ -164,14 +164,14 @@ static PedDevice *uefi_new_fom_handle(EFI_HANDLE *handle, const char *path) {
 }
 
 static PedDevice *uefi_new(const char *path) {
-    EFI_HANDLE handle;
+    EFI_HANDLE *handle;
     PED_ASSERT(path != NULL);
 
     handle = find_from_path(path);
-    if (path == NULL)
+    if (handle == NULL)
         return NULL;
 
-    return uefi_new_fom_handle(&handle, path);
+    return uefi_new_from_handle(handle, path);
 }
 
 /* Ask the kernel and translators to reload the partition table.
