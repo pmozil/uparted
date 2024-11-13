@@ -37,6 +37,13 @@
 
 #include <config.h>
 
+#include <Library/BaseLib.h>
+#include <Library/DevicePathLib.h>
+#include <Library/MemoryAllocationLib.h>
+#include <Library/UefiBootServicesTableLib.h>
+#include <Library/UefiLib.h>
+#include <Protocol/BlockIo.h>
+
 #include <parted/debug.h>
 #include <parted/parted.h>
 
@@ -146,19 +153,17 @@ PedDevice *ped_device_get(const char *path) {
     if (!normal_path)
         /* Well, maybe it is just that the file does not exist.
          * Try it anyway.  */
-        normal_path = strdup(path);
+        normal_path = path;
     if (!normal_path)
         return NULL;
 
     for (walk = devices; walk != NULL; walk = walk->next) {
-        if (!strcmp(walk->path, normal_path)) {
-            free(normal_path);
+        if (!StrCmp((CHAR16 *)walk->path, (CHAR16 *)normal_path)) {
             return walk;
         }
     }
 
     walk = ped_architecture->dev_ops->_new(normal_path);
-    free(normal_path);
     if (!walk)
         return NULL;
     _device_register(walk);
