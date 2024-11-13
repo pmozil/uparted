@@ -107,7 +107,7 @@ error:
     return NULL;
 }
 
-static EFI_HANDLE *find_from_path(char const *dev_path) {
+static EFI_HANDLE find_from_path(char const *dev_path) {
     UINTN handleCount;
     EFI_HANDLE *allHandles;
     EFI_STATUS status = EFI_SUCCESS;
@@ -115,7 +115,7 @@ static EFI_HANDLE *find_from_path(char const *dev_path) {
     status = gBS->LocateHandleBuffer(ByProtocol, &gEfiBlockIoProtocolGuid, NULL,
                                      &handleCount, &allHandles);
     if (EFI_ERROR(status)) {
-        printf("Failed to find handles\n\r");
+        printf("Failed to find handles. Error: %i\n\r", status);
         return NULL;
     }
 
@@ -123,11 +123,11 @@ static EFI_HANDLE *find_from_path(char const *dev_path) {
         EFI_DEVICE_PATH_PROTOCOL *path =
             DevicePathFromHandle(allHandles[handleIdx]);
         while (path != NULL && !IsDevicePathEndType(path)) {
-            char const *name =
-                (char const *)ConvertDevicePathToText(path, FALSE, TRUE);
-            if (!strcmp(dev_path, name)) {
+            CHAR16 const *name = ConvertDevicePathToText(path, FALSE, TRUE);
+            if (!StrCmp((CHAR16 *)dev_path, name)) {
                 return &allHandles[handleIdx];
             }
+            path = NextDevicePathNode(path);
         }
     }
 
@@ -139,11 +139,12 @@ static PedDevice *uefi_new_fom_handle(EFI_HANDLE *handle, const char *path) {
     EFI_BLOCK_IO_PROTOCOL *block_io;
     EFI_STATUS status;
     EFI_BLOCK_IO_MEDIA *media;
+    UINTN str_size;
 
     status = gBS->HandleProtocol(handle, &gEfiBlockIoProtocolGuid,
                                  (VOID **)&block_io);
     if (EFI_ERROR(status)) {
-        puts("Failed to open handle to device");
+        printf("Failed to open handle to device. Status: %i\n\r", status);
         return NULL;
     }
     media = block_io->Media;
@@ -155,20 +156,22 @@ static PedDevice *uefi_new_fom_handle(EFI_HANDLE *handle, const char *path) {
 
     dev->arch_specific = (void *)handle;
     dev->read_only = media->ReadOnly;
-    dev->path = xstrdup(path);
+    str_size = StrSize((CHAR16 *)path);
+    dev->path = malloc(str_size + 2);
+    memcpy(dev->path, path, str_size + 1);
 
     return dev;
 }
 
 static PedDevice *uefi_new(const char *path) {
-    EFI_HANDLE *handle;
+    EFI_HANDLE handle;
     PED_ASSERT(path != NULL);
 
     handle = find_from_path(path);
     if (path == NULL)
         return NULL;
 
-    return uefi_new_fom_handle(handle, path);
+    return uefi_new_fom_handle(&handle, path);
 }
 
 /* Ask the kernel and translators to reload the partition table.
@@ -253,7 +256,6 @@ static int uefi_sync(PedDevice *dev) {
 }
 
 static void uefi_probe_all() {
-    printf("CALLED PROBE ALL\n");
     EFI_STATUS status = EFI_SUCCESS;
 
     UINTN handleCount;
@@ -267,7 +269,8 @@ static void uefi_probe_all() {
         EFI_DEVICE_PATH_PROTOCOL *path =
             DevicePathFromHandle(allHandles[handleIdx]);
         while (path != NULL && !IsDevicePathEndType(path)) {
-            if (DevicePathType(path) == MEDIA_DEVICE_PATH) {
+            if (DevicePathType(path) == MEDIA_DEVICE_PATH &&
+                DevicePathSubType(path) == MEDIA_HARDDRIVE_DP) {
                 _ped_device_probe(
                     (char *)ConvertDevicePathToText(path, FALSE, TRUE));
             }

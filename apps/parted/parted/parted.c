@@ -2442,9 +2442,7 @@ static PedDevice *_choose_device(int *argc_ptr, char ***argv_ptr) {
     } else {
     retry:
         extern PedArchitecture ped_uefi_arch;
-        printf("Probe devices: %p\n", ped_uefi_arch.dev_ops->probe_all);
         ped_device_probe_all();
-        printf("Done Probe device\n");
         dev = ped_device_get_next(NULL);
         if (!dev) {
             if (ped_exception_throw(
@@ -2490,7 +2488,6 @@ static PedDevice *_init(int *argc_ptr, char ***argv_ptr) {
     }
 #endif
 
-    printf("Choose device\n");
     dev = _choose_device(argc_ptr, argv_ptr);
     if (!dev)
         goto error_done_commands;
