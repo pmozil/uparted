@@ -156,9 +156,16 @@ static PedDevice *uefi_new_from_handle(EFI_HANDLE *handle, const char *path) {
 
     dev->arch_specific = (void *)handle;
     dev->read_only = media->ReadOnly;
-    str_size = StrSize((CHAR16 *)path);
-    dev->path = malloc(str_size + 2);
-    memcpy(dev->path, path, str_size + 1);
+
+    dev->path = path;
+    // Print(L"Device PATH: %s\n", path);
+    // str_size = StrSize((CHAR16 *)path);
+    // dev->path = malloc(2 * str_size + 2);
+    // for (UINTN i = 0; i <= str_size; i++) {
+    //     ((CHAR16 *)dev->path)[i] = ((CHAR16 *)path)[i];
+    // }
+    // memcpy(dev->path, path, 2 * str_size + 1);
+    // dev->path[2 * str_size] = L'\0';
 
     return dev;
 }
@@ -196,8 +203,8 @@ static int uefi_close(PedDevice *dev) { return 0; }
 
 static int uefi_refresh_close(PedDevice *dev) { return 1; }
 
-static int uefi_read(const PedDevice *dev, void *buffer,
-                     PedSector start, PedSector count) {
+static int uefi_read(const PedDevice *dev, void *buffer, PedSector start,
+                     PedSector count) {
     EFI_BLOCK_IO_PROTOCOL *block_io;
     EFI_HANDLE *handle = (EFI_HANDLE *)dev->arch_specific;
     EFI_STATUS status = gBS->HandleProtocol(handle, &gEfiBlockIoProtocolGuid,
@@ -206,8 +213,9 @@ static int uefi_read(const PedDevice *dev, void *buffer,
         puts("Failed to open handle to device");
         return 0;
     }
-    status = block_io->ReadBlocks(block_io, block_io->Media->MediaId,
-        start, (UINTN) count * block_io->Media->BlockSize, buffer);
+    status =
+        block_io->ReadBlocks(block_io, block_io->Media->MediaId, start,
+                             (UINTN)count * block_io->Media->BlockSize, buffer);
     if (EFI_ERROR(status) || buffer == NULL) {
         puts("Failed to read from device");
     }
@@ -224,8 +232,9 @@ static int uefi_write(PedDevice *dev, const void *buffer, PedSector start,
         puts("Failed to open handle to device");
         return 0;
     }
-    status = block_io->WriteBlocks(block_io, block_io->Media->MediaId,
-        start, (UINTN) count * block_io->Media->BlockSize, buffer);
+    status = block_io->WriteBlocks(block_io, block_io->Media->MediaId, start,
+                                   (UINTN)count * block_io->Media->BlockSize,
+                                   buffer);
     if (EFI_ERROR(status)) {
         puts("Failed to read from device");
     }

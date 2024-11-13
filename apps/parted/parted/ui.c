@@ -19,6 +19,9 @@
 
 #include <config.h>
 
+#include <Library/BaseLib.h>
+#include <Library/UefiLib.h>
+
 #include <parted/debug.h>
 #include <parted/parted.h>
 
@@ -1470,7 +1473,9 @@ void help_msg() {
     exit(EXIT_SUCCESS);
 }
 
-void print_using_dev(PedDevice *dev) { printf(_("Using %s\n"), dev->path); }
+void print_using_dev(PedDevice *dev) {
+    Print(L"Using %s\n", (CHAR16 *)dev->path);
+}
 
 int interactive_mode(PedDevice **dev, PedDisk **disk, Command *cmd_list[]) {
     StrList *list;

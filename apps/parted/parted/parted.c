@@ -23,6 +23,9 @@
 #include <stdbool.h>
 #include <uuid/uuid.h>
 
+#include <Library/BaseLib.h>
+#include <Library/UefiLib.h>
+
 #include "architecture.h"
 
 #include "argmatch.h"
@@ -1099,9 +1102,9 @@ static void _print_disk_info(const PedDevice *dev, const PedDisk *diskp) {
             puts("BYT;");
             break;
         }
-        printf("%s:%s:%s:%lld:%lld:%s:%s:%s;\n", escaped_path, end,
-               transport[dev->type], dev->sector_size, dev->phys_sector_size,
-               pt_name, escaped_model, disk_flags);
+        Print(L"%s:%s:%s:%lld:%lld:%s:%s:%s;\n", escaped_path, end,
+              transport[dev->type], dev->sector_size, dev->phys_sector_size,
+              pt_name, escaped_model, disk_flags);
         free(escaped_path);
         free(escaped_model);
     } else if (opt_output_mode == JSON) {
@@ -1214,9 +1217,10 @@ static int do_print(PedDevice **dev, PedDisk **diskp) {
         ped_device_probe_all();
 
         while ((current_dev = ped_device_get_next(current_dev))) {
-            end = ped_unit_format_byte(
-                current_dev, current_dev->length * current_dev->sector_size);
-            printf("%s (%s)\n", current_dev->path, end);
+            // end = ped_unit_format_byte(
+            //     current_dev, current_dev->length * current_dev->sector_size);
+            Print(L"%s (%llu)\n", current_dev->path,
+                  current_dev->length * current_dev->sector_size);
             free(end);
         }
 
@@ -2491,7 +2495,6 @@ static PedDevice *_init(int *argc_ptr, char ***argv_ptr) {
     dev = _choose_device(argc_ptr, argv_ptr);
     if (!dev)
         goto error_done_commands;
-    printf("Done Choose device\n");
 
     g_timer = ped_timer_new(_timer_handler, &timer_context);
     if (!g_timer)
