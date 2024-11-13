@@ -125,15 +125,7 @@ static EFI_HANDLE *find_from_path(char const *dev_path) {
         while (path != NULL && !IsDevicePathEndType(path)) {
             CHAR16 const *name = ConvertDevicePathToText(path, FALSE, TRUE);
             if (!StrCmp((CHAR16 *)dev_path, name)) {
-                EFI_BLOCK_IO_PROTOCOL *block_io;
-                EFI_HANDLE *handle = allHandles[handleIdx];
-                status = gBS->HandleProtocol(handle, &gEfiBlockIoProtocolGuid,
-                        (VOID **)&block_io);
-                if (EFI_ERROR(status)) {
-                    printf("Failed to open handleEEEEEEEEEE to device. Status: %i\n\r", status);
-                    return NULL;
-                }
-                return handle;
+                return allHandles[handleIdx];
             }
             path = NextDevicePathNode(path);
         }
