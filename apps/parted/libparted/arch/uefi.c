@@ -123,7 +123,7 @@ static EFI_HANDLE *find_from_path(char const *dev_path) {
         EFI_DEVICE_PATH_PROTOCOL *path =
             DevicePathFromHandle(allHandles[handleIdx]);
         while (path != NULL && !IsDevicePathEndType(path)) {
-            CHAR16 const *name = ConvertDevicePathToText(path, FALSE, TRUE);
+            CHAR16 const *name = ConvertDevicePathToText(path, FALSE, FALSE);
             if (!StrCmp((CHAR16 *)dev_path, name)) {
                 return allHandles[handleIdx];
             }
@@ -156,6 +156,7 @@ static PedDevice *uefi_new_from_handle(EFI_HANDLE *handle, const char *path) {
 
     dev->arch_specific = (void *)handle;
     dev->read_only = media->ReadOnly;
+    _device_probe_geometry(dev);
 
     dev->path = path;
     // Print(L"Device PATH: %s\n", path);
@@ -281,7 +282,7 @@ static void uefi_probe_all() {
             if (DevicePathType(path) == MEDIA_DEVICE_PATH &&
                 DevicePathSubType(path) == MEDIA_HARDDRIVE_DP) {
                 _ped_device_probe(
-                    (char *)ConvertDevicePathToText(path, FALSE, TRUE));
+                    (char *)ConvertDevicePathToText(path, FALSE, FALSE));
             }
             path = NextDevicePathNode(path);
         }

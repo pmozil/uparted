@@ -41,7 +41,6 @@
 #include <Library/UefiBootServicesTableLib.h>
 #include <Protocol/BlockIo.h>
 
-
 static char const *Version = "3.6.8-e34c";
 
 #define AUTHORS                                                                \
@@ -1156,9 +1155,9 @@ static void _print_disk_info(const PedDevice *dev, const PedDisk *diskp) {
     free(disk_flags);
 }
 
-CHAR16* ConvertToChar16(const char* input) {
+CHAR16 *ConvertToChar16(const char *input) {
     size_t len = strlen(input) + 1;
-    CHAR16* output = malloc(len * sizeof(CHAR16));
+    CHAR16 *output = malloc(len * sizeof(CHAR16));
     if (output) {
         mbstowcs(output, input, len);
     }
@@ -1230,18 +1229,20 @@ static int do_print(PedDevice **dev, PedDisk **diskp) {
         ped_device_probe_all();
 
         while ((current_dev = ped_device_get_next(current_dev))) {
-            // end = ped_unit_format_byte(
-            //     current_dev, current_dev->length * current_dev->sector_size);
+            end = ped_unit_format_byte(
+                current_dev, current_dev->length * current_dev->sector_size);
             // Print(L"%s (%s)\n", current_dev->path, ConvertToChar16(end));
-            EFI_BLOCK_IO_PROTOCOL *block_io;
-            EFI_HANDLE *handle = (EFI_HANDLE *)current_dev->arch_specific;
-            EFI_STATUS status = gBS->HandleProtocol(handle, &gEfiBlockIoProtocolGuid,
-                    (VOID **)&block_io);
-            if (EFI_ERROR(status)) {
-                puts("Failed to open handle to device");
-                return 0;
-            }
-            end = ped_unit_format_byte(current_dev, ((block_io->Media->LastBlock + 1) * block_io->Media->BlockSize));
+            // EFI_BLOCK_IO_PROTOCOL *block_io;
+            // EFI_HANDLE *handle = (EFI_HANDLE *)current_dev->arch_specific;
+            // EFI_STATUS status = gBS->HandleProtocol(handle,
+            // &gEfiBlockIoProtocolGuid,
+            //         (VOID **)&block_io);
+            // if (EFI_ERROR(status)) {
+            //     puts("Failed to open handle to device");
+            //     return 0;
+            // }
+            // end = ped_unit_format_byte(current_dev,
+            // ((block_io->Media->LastBlock + 1) * block_io->Media->BlockSize));
             CHAR16 *endw = ConvertToChar16(end);
             Print(L"%s (%s)\n", current_dev->path, endw);
             free(end);
