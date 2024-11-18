@@ -284,7 +284,72 @@ static void uefi_probe_all() {
 
 static char *uefi_partition_get_path(const PedPartition *part) { return 0; }
 
-static int uefi_partition_is_busy(const PedPartition *part) { return 0; }
+// static char *_device_get_part_path(PedDevice const *dev, int num) {
+//     char *devpath;
+//     size_t path_len;
+//     char *result;
+// #ifdef ENABLE_DEVICE_MAPPER
+//     devpath = (dev->type == PED_DEVICE_DM ? dm_canonical_path(dev) : dev->path);
+// #else
+//     devpath = dev->path;
+// #endif
+//     if (!devpath)
+//         return NULL;
+//
+//     path_len = strlen(devpath);
+//     /* Check for devfs-style /disc => /partN transformation
+//        unconditionally; the system might be using udev with devfs rules,
+//        and if not the test is harmless. */
+//     if (5 < path_len && !strcmp(devpath + path_len - 5, "/disc")) {
+//         /* replace /disc with /part%d */
+//         result = zasprintf("%.*s/part%d", (int)(path_len - 5), devpath, num);
+//     } else {
+//         char const *p = (dev->type == PED_DEVICE_DAC960 ||
+//                                  dev->type == PED_DEVICE_CPQARRAY ||
+//                                  dev->type == PED_DEVICE_ATARAID ||
+//                                  isdigit(devpath[path_len - 1])
+//                              ? "p"
+//                              : "");
+//         result = zasprintf("%s%s%d", devpath, p, num);
+//     }
+// #ifdef ENABLE_DEVICE_MAPPER
+//     if (dev->type == PED_DEVICE_DM)
+//         free(devpath);
+// #endif
+//     return result;
+// }
+//
+// static int _partition_is_mounted_by_path(const char *path) {
+//     return 0;
+// }
+//
+// static int _partition_is_mounted(const PedPartition *part) {
+//     if (!ped_partition_is_active(part))
+//         return 0;
+//     char *part_name = _device_get_part_path(part->disk->dev, part->num);
+//     if (!part_name)
+//         return 1;
+//     int status = _partition_is_mounted_by_path(part_name);
+//     free(part_name);
+//     return !!status;
+// }
+
+static int uefi_partition_is_busy(const PedPartition *part) {
+    return 0; // assume always can edit a partition - don't believe UEFI has any notion of not being available
+    // PedPartition *walk;
+    //
+    // PED_ASSERT(part != NULL);
+    //
+    // if (_partition_is_mounted(part))
+    //     return 1;
+    // if (part->type == PED_PARTITION_EXTENDED) {
+    //     for (walk = part->part_list; walk; walk = walk->next) {
+    //         if (uefi_partition_is_busy(walk))
+    //             return 1;
+    //     }
+    // }
+    // return 0;
+}
 
 static int uefi_disk_commit(PedDisk *disk) {
     return _reread_part_table(disk->dev);
