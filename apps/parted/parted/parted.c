@@ -1245,8 +1245,8 @@ static int do_print(PedDevice **dev, PedDisk **diskp) {
             // ((block_io->Media->LastBlock + 1) * block_io->Media->BlockSize));
             CHAR16 *endw = ConvertToChar16(end);
             Print(L"%s (%s)\n", current_dev->path, endw);
-            free(end);
             free(endw);
+            free(end);
         }
 
         dev_name = xstrdup((*dev)->path);
