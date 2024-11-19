@@ -6,9 +6,9 @@ if [ -z $OVMF_PATH ]; then
 fi
 
 qemu-system-x86_64 -enable-kvm \
+    -drive format=raw,file=./data/image.img \
     -drive if=pflash,format=raw,file=$OVMF_PATH \
     -drive format=raw,file=fat:rw:$1 \
-    -drive format=raw,file=./data/image.img \
     -nographic \
     -net none \
     -m 4096M \
