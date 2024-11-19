@@ -31,7 +31,6 @@
 #include "xalloc.h"
 #include <errno.h>
 #include <fcntl.h>
-#include <iconv.h>
 #include <inttypes.h>
 #include <langinfo.h>
 #include <parted/crc32.h>
@@ -40,6 +39,7 @@
 #include <parted/parted.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
 #include <sys/ioctl.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -1618,44 +1618,46 @@ static void gpt_partition_set_name(PedPartition *part, const char *name) {
 
     free(gpt_part_data->translated_name);
     gpt_part_data->translated_name = xstrdup(name);
-    iconv_t conv = iconv_open("UCS-2LE", nl_langinfo(CODESET));
-    if (conv == (iconv_t)-1)
-        goto err;
+    // iconv_t conv = iconv_open("UCS-2LE", nl_langinfo(CODESET));
+    // if (conv == (iconv_t)-1)
+    //     goto err;
     char *inbuff = gpt_part_data->translated_name;
     char *outbuff = (char *)&gpt_part_data->name;
-    size_t inbuffsize = strlen(inbuff) + 1;
+    // size_t inbuffsize = strlen(inbuff) + 1;
     size_t outbuffsize = 72;
-    if (iconv(conv, &inbuff, &inbuffsize, &outbuff, &outbuffsize) == -1)
-        goto err;
-    iconv_close(conv);
+    strncpy(outbuff, inbuff, outbuffsize);
+    // if (iconv(conv, &inbuff, &inbuffsize, &outbuff, &outbuffsize) == -1)
+    //     goto err;
+    // iconv_close(conv);
     return;
 err:
     ped_exception_throw(PED_EXCEPTION_WARNING, PED_EXCEPTION_IGNORE,
                         _("failed to translate partition name"));
-    iconv_close(conv);
+    // iconv_close(conv);
 }
 
 static const char *gpt_partition_get_name(const PedPartition *part) {
     GPTPartitionData *gpt_part_data = part->disk_specific;
     if (gpt_part_data->translated_name == NULL) {
         char buffer[200];
-        iconv_t conv = iconv_open(nl_langinfo(CODESET), "UCS-2LE");
-        if (conv == (iconv_t)-1)
-            goto err;
+        // iconv_t conv = iconv_open(nl_langinfo(CODESET), "UCS-2LE");
+        // if (conv == (iconv_t)-1)
+        //     goto err;
         char *inbuff = (char *)&gpt_part_data->name;
         char *outbuff = buffer;
-        size_t inbuffsize = 72;
+        // size_t inbuffsize = 72;
         size_t outbuffsize = sizeof(buffer);
-        if (iconv(conv, &inbuff, &inbuffsize, &outbuff, &outbuffsize) == -1)
-            goto err;
-        iconv_close(conv);
+        // if (iconv(conv, &inbuff, &inbuffsize, &outbuff, &outbuffsize) == -1)
+        //     goto err;
+        // iconv_close(conv);
+        strncpy(outbuff, inbuff, outbuffsize);
         *outbuff = 0;
         gpt_part_data->translated_name = xstrdup(buffer);
         return gpt_part_data->translated_name;
     err:
         ped_exception_throw(PED_EXCEPTION_WARNING, PED_EXCEPTION_IGNORE,
                             _("failed to translate partition name"));
-        iconv_close(conv);
+        // iconv_close(conv);
         return "";
     }
     return gpt_part_data->translated_name;

@@ -20,6 +20,7 @@
 
 [Protocols]
     gEfiBlockIoProtocolGuid
+    gEfiRngProtocolGuid
 
 [Packages]
   StdLib/StdLib.dec
@@ -62,3 +63,20 @@
     parted/strutils.c
     lib/version-etc.c
     lib/close-stream.c
+    lib/uuid/uuid_gen.c
+    libparted/labels/bsd.c
+    libparted/labels/dos.c
+    libparted/labels/dvh.c
+    libparted/labels/efi_crc32.c
+    libparted/labels/gpt.c
+    libparted/labels/mac.c
+    libparted/labels/pc98.c
+    libparted/labels/pt-limit.c
+    libparted/labels/pt-tools.c
+    libparted/labels/rdb.c
+    libparted/labels/sun.c
+    libparted/labels/vtoc.c
+    libparted/fs/fat/fat.c
+    libparted/fs/r/fat/table.c
+    libparted/fs/r/fat/bootsector.c
+    libparted/fs/ntfs/ntfs.c

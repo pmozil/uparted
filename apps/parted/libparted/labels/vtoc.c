@@ -1,5 +1,6 @@
 #include <config.h>
 #include <parted/vtoc.h>
+#include <strings.h>
 
 #ifdef DEBUG_DASD
 #define PDEBUG                                                                 \
@@ -10,7 +11,6 @@
 
 #include <parted/parted.h>
 
-#include <libintl.h>
 #if ENABLE_NLS
 #define _(String) dgettext(PACKAGE, String)
 #else
@@ -167,6 +167,13 @@ static void vtoc_error(enum failure why, char const *s1, char const *s2) {
     }
 
     ped_exception_throw(PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL, error);
+}
+
+void bzero(void *mem, unsigned long len) {
+    char *val = (char *)mem;
+    for (unsigned long i = 0; i < len; i++) {
+        val[i] = '\0';
+    }
 }
 
 char *vtoc_ebcdic_enc(char const *source, char *target, int l) {

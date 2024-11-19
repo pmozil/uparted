@@ -34,7 +34,7 @@
 #define NTFS_SIGNATURE "NTFS"
 
 PedGeometry *ntfs_probe(PedGeometry *geom) {
-    uint8_t *buf = alloca(geom->dev->sector_size);
+    uint8_t *buf = malloc(geom->dev->sector_size);
     PedGeometry *newg = NULL;
 
     if (!ped_geometry_read(geom, buf, 0, 1))

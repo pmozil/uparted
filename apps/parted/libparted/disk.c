@@ -131,6 +131,7 @@ PedDiskType *ped_disk_type_get(const char *name) {
  */
 PedDiskType *ped_disk_probe(PedDevice *dev) {
     PedDiskType *walk = NULL;
+    printf("DO PROBE\n\n\n");
 
     PED_ASSERT(dev != NULL);
 
@@ -144,6 +145,7 @@ PedDiskType *ped_disk_probe(PedDevice *dev) {
             fprintf(stderr, "probe label: %s\n", walk->name);
             fflush(stderr);
         }
+        printf("Probing with %s\n\n", walk->name);
         if (walk->ops->probe(dev))
             break;
     }

@@ -13,17 +13,12 @@
 #include <Library/BaseLib.h>
 #include <Library/DevicePathLib.h>
 #include <Library/MemoryAllocationLib.h>
+#include <Library/PrintLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiLib.h>
 #include <Protocol/BlockIo.h>
 
 #include "../architecture.h"
-
-/* Initialize a PedDevice using SOURCE.  The SOURCE will NOT be destroyed;
-   the caller created it, it is the caller's responsilbility to free it
-   after it calls ped_device_destory.  SOURCE is not registered in Parted's
-   list of devices.  */
-PedDevice *ped_device_new_from_store(struct store *source);
 
 static int _device_get_sector_size(PedDevice *dev) {
     EFI_BLOCK_IO_PROTOCOL *block_io;
@@ -85,7 +80,7 @@ static PedDevice *_init_device(const char *path) {
         goto error_free_dev;
 
     dev->arch_specific = NULL;
-    dev->type = PED_DEVICE_UNKNOWN; /* It's deprecated anyway */
+    dev->type = PED_DEVICE_VIRTBLK;
     dev->open_count = 0;
     dev->read_only = 0;
     dev->external_mode = 0;
@@ -132,7 +127,6 @@ static PedDevice *uefi_new_from_handle(EFI_HANDLE *handle, const char *path) {
     EFI_BLOCK_IO_PROTOCOL *block_io;
     EFI_STATUS status;
     EFI_BLOCK_IO_MEDIA *media;
-    UINTN str_size;
 
     status = gBS->HandleProtocol(handle, &gEfiBlockIoProtocolGuid,
                                  (VOID **)&block_io);
@@ -151,15 +145,14 @@ static PedDevice *uefi_new_from_handle(EFI_HANDLE *handle, const char *path) {
     dev->read_only = media->ReadOnly;
     _device_probe_geometry(dev);
 
-    dev->path = path;
-    // Print(L"Device PATH: %s\n", path);
-    // str_size = StrSize((CHAR16 *)path);
-    // dev->path = malloc(2 * str_size + 2);
-    // for (UINTN i = 0; i <= str_size; i++) {
-    //     ((CHAR16 *)dev->path)[i] = ((CHAR16 *)path)[i];
-    // }
-    // memcpy(dev->path, path, 2 * str_size + 1);
-    // dev->path[2 * str_size] = L'\0';
+    // dev->path = (char *)path;
+    UINTN str_size = StrSize((CHAR16 *)path);
+    dev->path = malloc(2 * str_size + 2);
+    for (UINTN i = 0; i <= str_size; i++) {
+        ((CHAR16 *)dev->path)[i] = ((CHAR16 *)path)[i];
+    }
+    memcpy(dev->path, path, 2 * str_size + 1);
+    dev->path[2 * str_size] = L'\0';
 
     return dev;
 }
@@ -228,7 +221,7 @@ static int uefi_write(PedDevice *dev, const void *buffer, PedSector start,
     }
     status = block_io->WriteBlocks(block_io, block_io->Media->MediaId, start,
                                    (UINTN)count * block_io->Media->BlockSize,
-                                   buffer);
+                                   (void *)buffer);
     if (EFI_ERROR(status)) {
         puts("Failed to read from device");
     }
@@ -282,73 +275,19 @@ static void uefi_probe_all() {
     }
 }
 
-static char *uefi_partition_get_path(const PedPartition *part) { return 0; }
+static char *uefi_partition_get_path(const PedPartition *part) {
+    UINTN str_len = StrSize((CHAR16 *)part->disk->dev->path);
+    CHAR16 *buf = (CHAR16 *)malloc(str_len * 2 + 32);
+    CHAR16 *fmt = L"%sp%d";
 
-// static char *_device_get_part_path(PedDevice const *dev, int num) {
-//     char *devpath;
-//     size_t path_len;
-//     char *result;
-// #ifdef ENABLE_DEVICE_MAPPER
-//     devpath = (dev->type == PED_DEVICE_DM ? dm_canonical_path(dev) : dev->path);
-// #else
-//     devpath = dev->path;
-// #endif
-//     if (!devpath)
-//         return NULL;
-//
-//     path_len = strlen(devpath);
-//     /* Check for devfs-style /disc => /partN transformation
-//        unconditionally; the system might be using udev with devfs rules,
-//        and if not the test is harmless. */
-//     if (5 < path_len && !strcmp(devpath + path_len - 5, "/disc")) {
-//         /* replace /disc with /part%d */
-//         result = zasprintf("%.*s/part%d", (int)(path_len - 5), devpath, num);
-//     } else {
-//         char const *p = (dev->type == PED_DEVICE_DAC960 ||
-//                                  dev->type == PED_DEVICE_CPQARRAY ||
-//                                  dev->type == PED_DEVICE_ATARAID ||
-//                                  isdigit(devpath[path_len - 1])
-//                              ? "p"
-//                              : "");
-//         result = zasprintf("%s%s%d", devpath, p, num);
-//     }
-// #ifdef ENABLE_DEVICE_MAPPER
-//     if (dev->type == PED_DEVICE_DM)
-//         free(devpath);
-// #endif
-//     return result;
-// }
-//
-// static int _partition_is_mounted_by_path(const char *path) {
-//     return 0;
-// }
-//
-// static int _partition_is_mounted(const PedPartition *part) {
-//     if (!ped_partition_is_active(part))
-//         return 0;
-//     char *part_name = _device_get_part_path(part->disk->dev, part->num);
-//     if (!part_name)
-//         return 1;
-//     int status = _partition_is_mounted_by_path(part_name);
-//     free(part_name);
-//     return !!status;
-// }
+    UnicodeSPrint(buf, str_len * 2 + 32, fmt, part->disk->dev->path, part->num);
+
+    return (char *)buf;
+}
 
 static int uefi_partition_is_busy(const PedPartition *part) {
-    return 0; // assume always can edit a partition - don't believe UEFI has any notion of not being available
-    // PedPartition *walk;
-    //
-    // PED_ASSERT(part != NULL);
-    //
-    // if (_partition_is_mounted(part))
-    //     return 1;
-    // if (part->type == PED_PARTITION_EXTENDED) {
-    //     for (walk = part->part_list; walk; walk = walk->next) {
-    //         if (uefi_partition_is_busy(walk))
-    //             return 1;
-    //     }
-    // }
-    // return 0;
+    return 0; // assume always can edit a partition - don't believe UEFI has any
+              // notion of not being available
 }
 
 static int uefi_disk_commit(PedDisk *disk) {

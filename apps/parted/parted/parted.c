@@ -2488,9 +2488,11 @@ static PedDevice *_choose_device(int *argc_ptr, char ***argv_ptr) {
     return dev;
 }
 
+extern void libparted_all_init();
+
 static PedDevice *_init(int *argc_ptr, char ***argv_ptr) {
     PedDevice *dev;
-    ped_set_architecture();
+    libparted_all_init();
 
 #ifdef ENABLE_MTRACE
     mtrace();

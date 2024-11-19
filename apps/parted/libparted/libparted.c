@@ -54,27 +54,19 @@ static pointer_size_type dodgy_malloc_list[] = {{0, 0}, {0, 0}, {0, 0}, {0, 0},
 static int dodgy_memory_active[100];
 #endif /* DEBUG */
 
-extern void ped_disk_aix_init();
 extern void ped_disk_bsd_init();
 extern void ped_disk_dvh_init();
 extern void ped_disk_gpt_init();
-extern void ped_disk_loop_init();
 extern void ped_disk_mac_init();
 extern void ped_disk_msdos_init();
 extern void ped_disk_pc98_init();
 extern void ped_disk_sun_init();
-extern void ped_disk_amiga_init();
-extern void ped_disk_dasd_init();
-extern void ped_disk_atari_init();
 
 static void init_disk_types() {
     /* Note that probing is done in the reverse order of init */
-    ped_disk_loop_init(); /* must be last in the probe list */
 
 #if defined __s390__ || defined __s390x__
-    ped_disk_dasd_init();
 #endif
-    ped_disk_atari_init(); /* easy false positives, so probe others first */
     ped_disk_sun_init();
 #ifdef ENABLE_PC98
     ped_disk_pc98_init();
@@ -84,11 +76,8 @@ static void init_disk_types() {
     ped_disk_gpt_init();
     ped_disk_dvh_init();
     ped_disk_bsd_init();
-    ped_disk_amiga_init();
-    ped_disk_aix_init();
 }
 
-extern void ped_file_system_amiga_init(void);
 extern void ped_file_system_xfs_init(void);
 extern void ped_file_system_ufs_init(void);
 extern void ped_file_system_reiserfs_init(void);
@@ -104,38 +93,32 @@ extern void ped_file_system_btrfs_init(void);
 extern void ped_file_system_udf_init(void);
 
 static void init_file_system_types() {
-    ped_file_system_amiga_init();
-    ped_file_system_xfs_init();
-    ped_file_system_ufs_init();
-    ped_file_system_reiserfs_init();
-    ped_file_system_ntfs_init();
-    ped_file_system_linux_swap_init();
-    ped_file_system_jfs_init();
-    ped_file_system_hfs_init();
-    ped_file_system_fat_init();
-    ped_file_system_f2fs_init();
-    ped_file_system_ext2_init();
-    ped_file_system_nilfs2_init();
-    ped_file_system_btrfs_init();
-    ped_file_system_udf_init();
+    // ped_file_system_xfs_init();
+    // ped_file_system_ufs_init();
+    // ped_file_system_reiserfs_init();
+    // ped_file_system_ntfs_init();
+    // ped_file_system_linux_swap_init();
+    // ped_file_system_jfs_init();
+    // ped_file_system_hfs_init();
+    // ped_file_system_fat_init();
+    // ped_file_system_f2fs_init();
+    // ped_file_system_ext2_init();
+    // ped_file_system_nilfs2_init();
+    // ped_file_system_btrfs_init();
+    // ped_file_system_udf_init();
 }
 
 extern void ped_disk_aix_done();
 extern void ped_disk_bsd_done();
 extern void ped_disk_dvh_done();
 extern void ped_disk_gpt_done();
-extern void ped_disk_loop_done();
 extern void ped_disk_mac_done();
 extern void ped_disk_msdos_done();
 extern void ped_disk_pc98_done();
 extern void ped_disk_sun_done();
-extern void ped_disk_amiga_done();
-extern void ped_disk_dasd_done();
-extern void ped_disk_atari_done();
 
 static void done_disk_types() {
 #if defined __s390__ || __s390x__
-    ped_disk_dasd_done();
 #endif
     ped_disk_sun_done();
 #ifdef ENABLE_PC98
@@ -143,18 +126,27 @@ static void done_disk_types() {
 #endif
     ped_disk_msdos_done();
     ped_disk_mac_done();
-    ped_disk_loop_done();
     ped_disk_gpt_done();
     ped_disk_dvh_done();
     ped_disk_bsd_done();
-    ped_disk_amiga_done();
-    ped_disk_aix_done();
-    ped_disk_atari_done();
 }
 
 static void _init() __attribute__((constructor));
 
 static void _init() {
+#ifdef ENABLE_NLS
+    bindtextdomain(PACKAGE, LOCALEDIR);
+#endif
+
+    init_disk_types();
+    // init_file_system_types();
+    ped_set_architecture();
+#ifdef DEBUG
+    memset(dodgy_memory_active, 0, sizeof(dodgy_memory_active));
+#endif
+}
+
+void libparted_all_init() {
 #ifdef ENABLE_NLS
     bindtextdomain(PACKAGE, LOCALEDIR);
 #endif
@@ -178,7 +170,6 @@ extern void ped_file_system_ntfs_done(void);
 extern void ped_file_system_reiserfs_done(void);
 extern void ped_file_system_ufs_done(void);
 extern void ped_file_system_xfs_done(void);
-extern void ped_file_system_amiga_done(void);
 extern void ped_file_system_btrfs_done(void);
 extern void ped_file_system_udf_done(void);
 
@@ -194,7 +185,6 @@ static void done_file_system_types() {
     ped_file_system_reiserfs_done();
     ped_file_system_ufs_done();
     ped_file_system_xfs_done();
-    ped_file_system_amiga_done();
     ped_file_system_btrfs_done();
     ped_file_system_udf_done();
 }

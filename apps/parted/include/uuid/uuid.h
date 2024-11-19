@@ -39,6 +39,7 @@
 #ifndef _WIN32
 #include <sys/time.h>
 #endif
+#include <stdint.h>
 #include <time.h>
 
 typedef unsigned char uuid_t[16];
