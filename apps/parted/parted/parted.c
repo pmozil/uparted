@@ -1073,88 +1073,6 @@ static char *_escape_machine_string(const char *str) {
     return dest;
 }
 
-static void _print_disk_info(const PedDevice *dev, const PedDisk *diskp) {
-    char const *const transport[] = {
-        "unknown",  "scsi", "ide",    "dac960",  "cpqarray", "file",
-        "ataraid",  "i2o",  "ubd",    "dasd",    "viodasd",  "sx8",
-        "dm",       "xvd",  "sd/mmc", "virtblk", "aoe",      "md",
-        "loopback", "nvme", "brd",    "pmem"};
-
-    char *start = ped_unit_format(dev, 0);
-    PedUnit default_unit = ped_unit_get_default();
-    char *end =
-        ped_unit_format_byte(dev, dev->length * dev->sector_size -
-                                      (default_unit == PED_UNIT_CHS ||
-                                       default_unit == PED_UNIT_CYLINDER));
-
-    const char *pt_name = diskp ? diskp->type->name : "unknown";
-    char *disk_flags = disk_print_flags(diskp);
-
-    if (opt_output_mode == MACHINE) {
-        char *escaped_path = _escape_machine_string(dev->path);
-        char *escaped_model = _escape_machine_string(dev->model);
-
-        switch (default_unit) {
-        case PED_UNIT_CHS:
-            puts("CHS;");
-            break;
-        case PED_UNIT_CYLINDER:
-            puts("CYL;");
-            break;
-        default:
-            puts("BYT;");
-            break;
-        }
-        Print(L"%s:%s:%s:%lld:%lld:%s:%s:%s;\n", escaped_path, end,
-              transport[dev->type], dev->sector_size, dev->phys_sector_size,
-              pt_name, escaped_model, disk_flags);
-        free(escaped_path);
-        free(escaped_model);
-    } else if (opt_output_mode == JSON) {
-        ul_jsonwrt_value_s(&json, "path", dev->path);
-        ul_jsonwrt_value_s(&json, "size", end);
-        ul_jsonwrt_value_s(&json, "model", dev->model);
-        ul_jsonwrt_value_s(&json, "transport", transport[dev->type]);
-        ul_jsonwrt_value_u64(&json, "logical-sector-size", dev->sector_size);
-        ul_jsonwrt_value_u64(&json, "physical-sector-size",
-                             dev->phys_sector_size);
-        ul_jsonwrt_value_s(&json, "label", pt_name);
-        if (diskp) {
-            bool has_disk_uuid = ped_disk_type_check_feature(
-                diskp->type, PED_DISK_TYPE_DISK_UUID);
-            if (has_disk_uuid) {
-                uint8_t *uuid = ped_disk_get_uuid(diskp);
-                static char buf[UUID_STR_LEN];
-                uuid_unparse_lower(uuid, buf);
-                ul_jsonwrt_value_s(&json, "uuid", buf);
-                free(uuid);
-            }
-            ul_jsonwrt_value_u64(
-                &json, "max-partitions",
-                ped_disk_get_max_primary_partition_count(diskp));
-            disk_print_flags_json(diskp);
-        }
-    } else {
-        printf(_("Model: %s (%s)\n"), dev->model, transport[dev->type]);
-        printf(_("Disk %s: %s\n"), dev->path, end);
-        printf(_("Sector size (logical/physical): %lldB/%lldB\n"),
-               dev->sector_size, dev->phys_sector_size);
-    }
-
-    free(start);
-    free(end);
-
-    if (ped_unit_get_default() == PED_UNIT_CHS ||
-        ped_unit_get_default() == PED_UNIT_CYLINDER)
-        _print_disk_geometry(dev);
-
-    if (opt_output_mode == HUMAN) {
-        printf(_("Partition Table: %s\n"), pt_name);
-        printf(_("Disk Flags: %s\n"), disk_flags);
-    }
-    free(disk_flags);
-}
-
 CHAR16 *ConvertToChar16(const char *input) {
     size_t len = strlen(input) + 1;
     CHAR16 *output = malloc(len * sizeof(CHAR16));
@@ -1162,6 +1080,33 @@ CHAR16 *ConvertToChar16(const char *input) {
         mbstowcs(output, input, len);
     }
     return output;
+}
+
+static void _print_disk_info(const PedDevice *dev, const PedDisk *diskp) {
+    char const *const transport[] = {
+        "unknown",  "scsi", "ide",    "dac960",  "cpqarray", "file",
+        "ataraid",  "i2o",  "ubd",    "dasd",    "viodasd",  "sx8",
+        "dm",       "xvd",  "sd/mmc", "virtblk", "aoe",      "md",
+        "loopback", "nvme", "brd",    "pmem"};
+
+    PedUnit default_unit = ped_unit_get_default();
+    char *end =
+        ped_unit_format_byte(dev, dev->length * dev->sector_size -
+                                      (default_unit == PED_UNIT_CHS ||
+                                       default_unit == PED_UNIT_CYLINDER));
+    CHAR16 *endw = ConvertToChar16(end);
+
+    printf(_("Model: %s (%s)\n"), dev->model, transport[dev->type]);
+    printf(_("Disk %s: %s\n"), dev->path, endw);
+    printf(_("Sector size (logical/physical): %lldB/%lldB\n"), dev->sector_size,
+           dev->phys_sector_size);
+
+    free(end);
+    free(endw);
+
+    if (ped_unit_get_default() == PED_UNIT_CHS ||
+        ped_unit_get_default() == PED_UNIT_CYLINDER)
+        _print_disk_geometry(dev);
 }
 
 static int do_print(PedDevice **dev, PedDisk **diskp) {
@@ -1269,12 +1214,6 @@ static int do_print(PedDevice **dev, PedDisk **diskp) {
         if (command_line_get_partition("", *diskp, &part))
             status = partition_print(part);
         return status;
-    }
-
-    if (opt_output_mode == JSON) {
-        ul_jsonwrt_init(&json, stdout, 0);
-        ul_jsonwrt_root_open(&json);
-        ul_jsonwrt_object_open(&json, "disk");
     }
 
     _print_disk_info(*dev, *diskp);

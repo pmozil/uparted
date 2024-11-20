@@ -258,6 +258,7 @@ static void uefi_probe_all() {
     EFI_HANDLE *allHandles;
     status = gBS->LocateHandleBuffer(ByProtocol, &gEfiBlockIoProtocolGuid, NULL,
                                      &handleCount, &allHandles);
+
     if (EFI_ERROR(status))
         return;
 
@@ -265,11 +266,29 @@ static void uefi_probe_all() {
         EFI_DEVICE_PATH_PROTOCOL *path =
             DevicePathFromHandle(allHandles[handleIdx]);
         while (path != NULL && !IsDevicePathEndType(path)) {
-            if (DevicePathType(path) == MEDIA_DEVICE_PATH &&
-                DevicePathSubType(path) == MEDIA_HARDDRIVE_DP) {
-                _ped_device_probe(
-                    (char *)ConvertDevicePathToText(path, FALSE, FALSE));
+            EFI_BLOCK_IO_PROTOCOL *blockIo;
+            // Open Block IO protocol on the current handle
+            status = gBS->HandleProtocol(allHandles[handleIdx],
+                                         &gEfiBlockIoProtocolGuid,
+                                         (VOID **)&blockIo);
+            if (EFI_ERROR(status)) {
+                goto next_path;
             }
+
+            // Check if the handle is a physical disk
+            if (blockIo->Media->LogicalPartition) {
+                // Skip logical partitions, as we want disks only
+                goto next_path;
+            }
+
+            if (!blockIo->Media->MediaPresent) {
+                // Skip if no media is present
+                goto next_path;
+            }
+            _ped_device_probe(
+                (char *)ConvertDevicePathToText(path, FALSE, FALSE));
+            break;
+        next_path:
             path = NextDevicePathNode(path);
         }
     }
