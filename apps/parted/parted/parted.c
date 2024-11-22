@@ -1095,8 +1095,9 @@ static void _print_disk_info(const PedDevice *dev, const PedDisk *diskp) {
                                       (default_unit == PED_UNIT_CHS ||
                                        default_unit == PED_UNIT_CYLINDER));
     CHAR16 *endw = ConvertToChar16(end);
+    printf("PRINT DISK INFO\n");
 
-    printf(_("Model: %s (%s)\n"), dev->model, transport[dev->type]);
+    // printf(_("Model: %s (%s)\n"), dev->model, transport[dev->type]);
     printf(_("Disk %s: %s\n"), dev->path, endw);
     printf(_("Sector size (logical/physical): %lldB/%lldB\n"), dev->sector_size,
            dev->phys_sector_size);
@@ -1176,18 +1177,6 @@ static int do_print(PedDevice **dev, PedDisk **diskp) {
         while ((current_dev = ped_device_get_next(current_dev))) {
             end = ped_unit_format_byte(
                 current_dev, current_dev->length * current_dev->sector_size);
-            // Print(L"%s (%s)\n", current_dev->path, ConvertToChar16(end));
-            // EFI_BLOCK_IO_PROTOCOL *block_io;
-            // EFI_HANDLE *handle = (EFI_HANDLE *)current_dev->arch_specific;
-            // EFI_STATUS status = gBS->HandleProtocol(handle,
-            // &gEfiBlockIoProtocolGuid,
-            //         (VOID **)&block_io);
-            // if (EFI_ERROR(status)) {
-            //     puts("Failed to open handle to device");
-            //     return 0;
-            // }
-            // end = ped_unit_format_byte(current_dev,
-            // ((block_io->Media->LastBlock + 1) * block_io->Media->BlockSize));
             CHAR16 *endw = ConvertToChar16(end);
             Print(L"%s (%s)\n", current_dev->path, endw);
             free(endw);
