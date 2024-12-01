@@ -80,3 +80,4 @@
     libparted/fs/r/fat/table.c
     libparted/fs/r/fat/bootsector.c
     libparted/fs/ntfs/ntfs.c
+    libparted/fs/btrfs/btrfs.c

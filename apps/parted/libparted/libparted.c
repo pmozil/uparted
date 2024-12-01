@@ -96,11 +96,11 @@ static void init_file_system_types() {
     // ped_file_system_xfs_init();
     // ped_file_system_ufs_init();
     // ped_file_system_reiserfs_init();
-    // ped_file_system_ntfs_init();
+    ped_file_system_ntfs_init();
     // ped_file_system_linux_swap_init();
     // ped_file_system_jfs_init();
     // ped_file_system_hfs_init();
-    // ped_file_system_fat_init();
+    ped_file_system_fat_init();
     // ped_file_system_f2fs_init();
     // ped_file_system_ext2_init();
     // ped_file_system_nilfs2_init();
@@ -139,7 +139,7 @@ static void _init() {
 #endif
 
     init_disk_types();
-    // init_file_system_types();
+    init_file_system_types();
     ped_set_architecture();
 #ifdef DEBUG
     memset(dodgy_memory_active, 0, sizeof(dodgy_memory_active));
