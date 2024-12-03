@@ -36,7 +36,7 @@ static PedGeometry *_ext2_generic_probe(PedGeometry *geom, int expect_ext_ver) {
     struct ext2_super_block *sb;
     const int sectors =
         (4096 + geom->dev->sector_size - 1) / geom->dev->sector_size;
-    uint8_t *buf = alloca(sectors * geom->dev->sector_size);
+    uint8_t *buf = malloc(sectors * geom->dev->sector_size);
     if (!ped_geometry_read(geom, buf, 0, sectors))
         return NULL;
     sb = (struct ext2_super_block *)(buf + 1024);

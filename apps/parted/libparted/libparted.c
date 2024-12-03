@@ -102,9 +102,9 @@ static void init_file_system_types() {
     // ped_file_system_hfs_init();
     ped_file_system_fat_init();
     // ped_file_system_f2fs_init();
-    // ped_file_system_ext2_init();
+    ped_file_system_ext2_init();
     // ped_file_system_nilfs2_init();
-    // ped_file_system_btrfs_init();
+    ped_file_system_btrfs_init();
     // ped_file_system_udf_init();
 }
 
