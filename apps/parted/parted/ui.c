@@ -848,6 +848,10 @@ char *command_line_get_word(const char *prompt, const char *def,
     do {
         if (command_line_get_word_count()) {
             char *result = command_line_pop_word();
+            CHAR16 *result16 = malloc((strlen(result) + 1) * sizeof(CHAR16));
+            mbstowcs(result16, result, strlen(result) + 1);
+            free(result);
+            result = (char *)result16;
             StrList *result_node;
 
             if (!possibilities)

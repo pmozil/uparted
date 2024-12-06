@@ -1183,7 +1183,9 @@ static int do_print(PedDevice **dev, PedDisk **diskp) {
             free(end);
         }
 
-        dev_name = xstrdup((*dev)->path);
+        // dev_name = xstrdup((*dev)->path);
+        dev_name = malloc((wcslen((CHAR16 *)(*dev)->path) + 1) * sizeof(wchar_t));
+        wcscpy((CHAR16 *)dev_name, (CHAR16 *)(*dev)->path);
         ped_device_free_all();
 
         *dev = ped_device_get(dev_name);

@@ -59,6 +59,7 @@ static PedDevice *devices; /* legal advice says: initialized to NULL,
                               of ISO/EIC 9899:1999 */
 
 static void _device_register(PedDevice *dev) {
+    // Print(L"Register %s\n", (CHAR16 *)dev->path);
     PedDevice *walk;
     for (walk = devices; walk && walk->next; walk = walk->next)
         ;
@@ -141,8 +142,9 @@ void ped_device_free_all() {
  * be added to the list.
  */
 PedDevice *ped_device_get(const char *path) {
+    // Print(L"ped_device_get %s\n", path);
     PedDevice *walk;
-    char *normal_path = NULL;
+    CHAR16 *normal_path = NULL;
 
     PED_ASSERT(path != NULL);
     /* Don't canonicalize /dev/mapper or /dev/md/ paths, see
@@ -150,23 +152,31 @@ PedDevice *ped_device_get(const char *path) {
     */
     // if (strncmp(path, "/dev/mapper/", 12) && strncmp(path, "/dev/md/", 8))
     //     normal_path = canonicalize_file_name(path);
-    if (!normal_path)
+    if (!normal_path) {
         /* Well, maybe it is just that the file does not exist.
          * Try it anyway.  */
-        normal_path = path;
+        normal_path = (CHAR16 *)path;
+    }
     if (!normal_path)
         return NULL;
 
     for (walk = devices; walk != NULL; walk = walk->next) {
-        if (!StrCmp((CHAR16 *)walk->path, (CHAR16 *)normal_path)) {
+        if (!StrCmp((CHAR16 *)walk->path, normal_path)) {
+            // Print(L"Found %s\n", (CHAR16 *)walk->path);
+            free(normal_path);
             return walk;
         }
+        // Print(L"Not found %s\n", (CHAR16 *)walk->path);
     }
 
-    walk = ped_architecture->dev_ops->_new(normal_path);
-    if (!walk)
+    walk = ped_architecture->dev_ops->_new((char *)path);
+    // Print(L"Created %s\n", normal_path);
+    if (!walk) {
+        free(normal_path);
         return NULL;
+    }
     _device_register(walk);
+    free(normal_path);
     return walk;
 }
 
