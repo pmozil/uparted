@@ -1098,7 +1098,7 @@ static void _print_disk_info(const PedDevice *dev, const PedDisk *diskp) {
     printf("PRINT DISK INFO\n");
 
     // printf(_("Model: %s (%s)\n"), dev->model, transport[dev->type]);
-    printf(_("Disk %s: %s\n"), dev->path, endw);
+    Print(L"Disk %s: %s\n", dev->path, endw);
     printf(_("Sector size (logical/physical): %lldB/%lldB\n"), dev->sector_size,
            dev->phys_sector_size);
 
