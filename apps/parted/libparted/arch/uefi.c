@@ -55,6 +55,8 @@ static int _device_probe_geometry(PedDevice *dev) {
     if (!dev->sector_size)
         return 0;
 
+    dev->phys_sector_size = dev->sector_size;
+
     /* XXX: We have no way to get this!  */
     dev->bios_geom.sectors = 63;
     dev->bios_geom.heads = 255;
