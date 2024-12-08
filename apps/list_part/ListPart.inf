@@ -4,8 +4,8 @@
 
 [Defines]
   INF_VERSION                    = 0x00010006
-  BASE_NAME                      = DemoApp
-  FILE_GUID                      = 537f1ebd-657f-4eb4-b882-cd6451803f2e
+  BASE_NAME                      = ListPart
+  FILE_GUID                      = 218ad3dd-5bd0-41bb-a15b-88366df0b150
   MODULE_TYPE                    = UEFI_APPLICATION
   VERSION_STRING                 = 0.1
   ENTRY_POINT                    = ShellCEntryLib
@@ -15,7 +15,7 @@
 #
 
 [Sources]
-  DemoApp.c
+  ListPart.c
 
 [Packages]
   StdLib/StdLib.dec

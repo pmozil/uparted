@@ -106,6 +106,7 @@
   AppPkg/Applications/Enquire/Enquire.inf    #
   AppPkg/Applications/ArithChk/ArithChk.inf  #
   AppPkg/Applications/Parted/Parted.inf      #
+  AppPkg/Applications/ListPart/ListPart.inf      #
   AppPkg/Applications/DemoApp/DemoApp.inf
 
 #### A simple fuzzer for OrderedCollectionLib, in particular for
