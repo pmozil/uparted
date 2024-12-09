@@ -108,7 +108,7 @@
   AppPkg/Applications/Parted/Parted.inf      #
   AppPkg/Applications/ListPart/ListPart.inf      #
   AppPkg/Applications/DemoApp/DemoApp.inf
-  # AppPkg/Applications/MkFsFat/MkFsFat.inf      #
+  AppPkg/Applications/MkFsFat/MkFsFat.inf      #
 
 #### A simple fuzzer for OrderedCollectionLib, in particular for
 #### BaseOrderedCollectionRedBlackTreeLib.

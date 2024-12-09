@@ -19,6 +19,7 @@
 #
 
 [Packages]
+  StdLib/StdLib.dec
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
 
@@ -30,6 +31,8 @@
   MemoryAllocationLib
   BaseMemoryLib
   DevicePathLib
+  LibC
+  LibStdio
   PrintLib
 
 [Protocols]
