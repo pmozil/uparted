@@ -848,19 +848,23 @@ char *command_line_get_word(const char *prompt, const char *def,
     do {
         if (command_line_get_word_count()) {
             char *result = command_line_pop_word();
-            CHAR16 *result16 = malloc((strlen(result) + 1) * sizeof(CHAR16));
-            mbstowcs(result16, result, strlen(result) + 1);
-            free(result);
-            result = (char *)result16;
             StrList *result_node;
 
             if (!possibilities)
                 return result;
 
             result_node = str_list_match(possibilities, result);
-            if (result_node == NULL)
-                printf("Invalid token: %s\n", result);
-            // error(0, 0, _("invalid token: %s"), result);
+            if (result_node == NULL) {
+                CHAR16 *result16 =
+                    malloc((strlen(result) + 1) * sizeof(CHAR16));
+                mbstowcs(result16, result, strlen(result) + 1);
+                free(result);
+                result = (char *)result16;
+                result_node = str_list_match(possibilities, result);
+                if (result_node == NULL) {
+                    printf("Invalid token: %s\n", result);
+                }
+            }
             free(result);
             if (result_node)
                 return str_list_convert_node(result_node);

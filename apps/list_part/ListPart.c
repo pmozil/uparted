@@ -41,7 +41,7 @@ EFI_STATUS GetPartitionHandles(OUT EFI_HANDLE ***disks, OUT UINTN *n_handles) {
             }
 
             // Check if the handle is a physical disk
-            if (blockIo->Media->LogicalPartition) {
+            if (!blockIo->Media->LogicalPartition) {
                 // Skip logical partitions, as we want disks only
                 goto next_path1;
             }
@@ -78,7 +78,7 @@ EFI_STATUS GetPartitionHandles(OUT EFI_HANDLE ***disks, OUT UINTN *n_handles) {
             }
 
             // Check if the handle is a physical disk
-            if (blockIo->Media->LogicalPartition) {
+            if (!blockIo->Media->LogicalPartition) {
                 // Skip logical partitions, as we want disks only
                 goto next_path2;
             }
